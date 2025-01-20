@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, session, Blueprint
+from src.routes.home_bp.templates.form_template import FormTemplate
 from wtforms import SelectField
 from wtforms.validators import InputRequired
 from flask_wtf import FlaskForm
@@ -20,15 +21,8 @@ blue_ruta = Blueprint(
 # ############MOSTRAR HOME################
 @blue_ruta.route('/', methods=['GET'])
 def home():
-    try:
-       pass
+    form_template = FormTemplate()
+    if form_template.validate_on_submit():
+        print("Formulario enviado")
 
-
-
-
-    except Exception as error_home:
-        logger.debug("Exception en home form " + str(error_home) + "/n")
-        return render_template('error.html',
-                               form_error="Error en home " + str(error_home))
-
-    return render_template("home.html")
+    return render_template("home.html", form_template=form_template)

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!--Descripcion de la empresa para busqueda-->
+    <meta name="description" content="Formulario de pago para 2NET">
+     <!--Autor de la pagina-->
+    <meta name="author" content="Jhon Monrroy">
+    <!--Icono de la pestaña-->
+    <link rel="icon" type="image/x-icon" href="/static/img/logo.png">
+    <!-- Bootstrap CSS-->
+    <link rel="stylesheet" href={{url_for('static', filename='bootstrap/css/bootstrap.css')}}>
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+    {% block body %}
+    {% endblock %}
+
+    <script src="{{url_for('static', filename='bootstrap/js/bootstrap.js')}}"></script>
+    <!-- (Pie de Pagina Footer) -->
+    {% include('footer.html') %}
+</body>
+</html>
