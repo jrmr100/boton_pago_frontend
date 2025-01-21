@@ -11,7 +11,7 @@
     <!--Icono de la pestaña-->
     <link rel="icon" type="image/x-icon" href="/static/img/logo.png">
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href={{url_for('static', filename='bootstrap/css/bootstrap.css')}}>
+    <link rel="stylesheet" href={{url_for('static', filename='css/bootstrap.min.css')}}>
     {% block head %}
     {% endblock %}
 </head>
@@ -19,8 +19,8 @@
     {% block body %}
     {% endblock %}
 
-    <script src="{{url_for('static', filename='bootstrap/js/bootstrap.js')}}"></script>
     <!-- (Pie de Pagina Footer) -->
     {% include('footer.html') %}
+    <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
 </body>
 </html>

@@ -134,6 +134,10 @@ INSTALACIÓN CON APACHE2 CON MOD_WSGI:
 
       sudo ufw allow 8000
 
+# TOOLS
+
+[Ejemplo de barra de progreso bootstrap](https://www.cssscript.com/animated-step-progress-bar-pure-javascript/)
+
 # TROUBLESOOTING
 
 - LOG
