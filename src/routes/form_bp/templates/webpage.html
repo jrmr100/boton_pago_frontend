@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <title>2NET-Formulario de pago</title>
+    <title>Titulo de la pagina</title>
 
 {% endblock %}
 
@@ -8,19 +8,22 @@
     {% block body %}
         <div class="container">
             <form method="POST">
-                {{ form_template.hidden_tag() }}
+                {{ form.hidden_tag() }}
                 <div class="form-group">
-                    {{ form_template.email.label }}
-                    {{ form_template.email }}
+                    {{ form.field1.label }}
+                    {{ form.field1 }}
                 </div>
                 <div class="form-group">
-                    {{ form_template.ci.label }}
-                    {{ form_template.ci }}
+                    {{ form.field2.label }}
+                    {{ form.field2 }}
                 </div>
                 <div class="form-floating">
-                    {{ form_template.submit(class="w-100 btn btn-lg btn-primary") }}
+                    {{ form.field3(class="w-100 btn btn-lg btn-primary") }}
                 </div>
             </form>
+            {% include('footer.html') %}
         </div>
+        <!-- (Pie de Pagina Footer) -->
+
     {% endblock %}
 </body>

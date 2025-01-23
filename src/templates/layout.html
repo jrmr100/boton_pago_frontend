@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <!--Descripcion de la empresa para busqueda-->
-    <meta name="description" content="Formulario de pago para 2NET">
+    <meta name="description" content="Objetivo de la empresa">
      <!--Autor de la pagina-->
     <meta name="author" content="Jhon Monrroy">
     <!--Icono de la pestaña-->
-    <link rel="icon" type="image/x-icon" href="/static/img/logo.png">
+    <link rel="icon" type="image/x-icon" href={{url_for('static', filename='img/logo_favicon48x48.png')}}>
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href={{url_for('static', filename='css/bootstrap.min.css')}}>
     {% block head %}
@@ -19,8 +19,6 @@
     {% block body %}
     {% endblock %}
 
-    <!-- (Pie de Pagina Footer) -->
-    {% include('footer.html') %}
     <script src="{{url_for('static', filename='js/bootstrap.bundle.min.js')}}"></script>
 </body>
 </html>

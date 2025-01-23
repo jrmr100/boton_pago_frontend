@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <title>Titulo de la pagina</title>
+
+{% endblock %}
+
+<body>
+    {% block body %}
+        <div class="container">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <!-- EMAIL -->
+                <div class="form-group">
+                    {{ form.field1.label }}
+                    {{ form.field1 }}
+                    {% for error in form.field1.errors %}
+                        <br><span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+
+                <!-- CEDULA-RIF -->
+                <div class="form-group">
+                    {{ form.field2.label }}
+                    {{ form.field2 }}
+                    {% for error in form.field2.errors %}
+                        <br><span style="color: red;">{{ error }}</span><br>
+                    {% endfor %}
+                </div>
+                <div class="form-floating">
+                    {{ form.field3(class="w-100 btn btn-lg btn-primary") }}
+                </div>
+            </form>
+            {% include('footer.html') %}
+        </div>
+        <!-- (Pie de Pagina Footer) -->
+
+    {% endblock %}
+</body>
