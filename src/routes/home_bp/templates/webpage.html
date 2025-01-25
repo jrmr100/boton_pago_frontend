@@ -19,17 +19,21 @@
                         </div>
 
                         <!-- EMAIL -->
-                        <b>{{ form.field1.label }}</b>
-                        {{ form.field1(class="form-control col-2")}}
-                        {% for error in form.field1.errors %}
-                            <span class="text-danger">{{ error }}</span>
-                        {% endfor %}
+                        <div>
+                            <b>{{ form.field1.label }}</b>
+                            {{ form.field1(class="form-control col-2", autofocus=true)}}
+                            {% for error in form.field1.errors %}
+                                <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
 
                         <!-- CÉDULA/RIF -->
-                        <b>{{ form.field2.label }}</b>
-                        <div style="display: flex; align-items: center;">
-                            {{ form.field2(class="form-control") }}
-                            {{ form.field3(class="form-control") }}
+                        <div class="mt-2">
+                            <b>{{ form.field2.label }}</b>
+                            <div style="display: flex; align-items: center;">
+                                {{ form.field2(class="form-control") }}
+                                {{ form.field3(class="form-control") }}
+                            </div>
                         </div>
 
                         <!-- SUBMIT -->
@@ -39,7 +43,7 @@
                     </form>
                 </div>
                 <div class="col-8 px-0">
-                        <img class='img-fluid' alt="imagen home" src={{url_for('static', filename='img/home2.jpg')}}>
+                        <img class='img-fluid' alt="imagen home" src={{url_for('static', filename='img/home.jpg')}}>
                 </div>
             </div>
         </div>
