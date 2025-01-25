@@ -12,8 +12,7 @@ blue_ruta = Blueprint(
     nombre_ruta, __name__,
     template_folder='templates',
     static_folder='static',
-    static_url_path='/',
-    url_prefix="/"
+    static_url_path='/'
 )
 
 
@@ -22,6 +21,7 @@ blue_ruta = Blueprint(
 def home():
     form = FormFields()
     if form.validate_on_submit():
-        print("Formulario enviado")
-
+        print("Adentro del submit")
+    # else:
+        #print(form.errors)
     return render_template("webpage.html", form=form)

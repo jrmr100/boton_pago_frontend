@@ -7,7 +7,6 @@ import os
 
 # IMPORTACIÓN DE RUTAS
 from src.routes.home_bp.route import blue_ruta as home
-from src.routes.form_bp.route import blue_ruta as formulario
 
 
 
@@ -34,7 +33,6 @@ csrf.init_app(app)
 
 # Registros de BLUEPRINT
 app.register_blueprint(home)
-app.register_blueprint(formulario)
 
 
 logger.info("Iniciando el programa...")

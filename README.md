@@ -1,15 +1,14 @@
 # nombre_proyecto
-boton_pago_frontend
+    Plantilla para proyectos Flask
 
 # Objetivo:
-Presentar las opciones para el boton de pago de la empresa 2NET
+    Tener acceso rapido a los codigos iniciales de proyectos web usando flask
 
-# Funciones
-    - Captura de datos iniciales
-    - Enlace para API de Mikrowisp
-    - Enlace para API de VIPPO
-    - Enlace para API de Lukapay
-     
+# Premisas
+    - Reutilizable en cualquier proyecto
+    - Actualizado con las mejores prácticas
+    - Funcional
+
 # INSTALACIÓN:
 - Sistema base: Debian 12
 - Actualizar los repositorios del sistema
@@ -133,10 +132,6 @@ INSTALACIÓN CON APACHE2 CON MOD_WSGI:
 - Agregar regla al UFW
 
       sudo ufw allow 8000
-
-# TOOLS
-
-[Ejemplo de barra de progreso bootstrap](https://www.cssscript.com/animated-step-progress-bar-pure-javascript/)
 
 # TROUBLESOOTING
 

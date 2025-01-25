@@ -1,38 +1,47 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <title>Titulo de la pagina</title>
+    <title>2NET - Pagos </title>
+
+
 
 {% endblock %}
 
+
 <body>
     {% block body %}
-        <div class="container">
-            <form method="POST">
-                {{ form.hidden_tag() }}
-                <!-- EMAIL -->
-                <div class="form-group">
-                    {{ form.field1.label }}
-                    {{ form.field1 }}
-                    {% for error in form.field1.errors %}
-                        <br><span style="color: red;">{{ error }}</span><br>
-                    {% endfor %}
-                </div>
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-4">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div>
+                            <img class=card-img alt="Logo empresa" src={{url_for('static', filename='img/logo-2net.png')}}>
+                        </div>
 
-                <!-- CEDULA-RIF -->
-                <div class="form-group">
-                    {{ form.field2.label }}
-                    {{ form.field2 }}
-                    {% for error in form.field2.errors %}
-                        <br><span style="color: red;">{{ error }}</span><br>
-                    {% endfor %}
+                        <!-- EMAIL -->
+                        <b>{{ form.field1.label }}</b>
+                        {{ form.field1(class="form-control col-2")}}
+                        {% for error in form.field1.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+
+                        <!-- CÉDULA/RIF -->
+                        <b>{{ form.field2.label }}</b>
+                        <div style="display: flex; align-items: center;">
+                            {{ form.field2(class="form-control") }}
+                            {{ form.field3(class="form-control") }}
+                        </div>
+
+                        <!-- SUBMIT -->
+                        <div class="mt-2 d-grid">
+                            {{ form.field4(class="btn btn-primary") }}
+                        </div>
+                    </form>
                 </div>
-                <div class="form-floating">
-                    {{ form.field3(class="w-100 btn btn-lg btn-primary") }}
+                <div class="col-8 px-0">
+                        <img class='img-fluid' alt="imagen home" src={{url_for('static', filename='img/home2.jpg')}}>
                 </div>
-            </form>
-            {% include('footer.html') %}
+            </div>
         </div>
-        <!-- (Pie de Pagina Footer) -->
-
     {% endblock %}
 </body>
