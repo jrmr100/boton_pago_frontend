@@ -9,8 +9,6 @@ class FormFields(FlaskForm):
                               validators=[InputRequired(), Email(),
                                           Length(min=1, max=50)])
     field2 = SelectField('CI/RIF:',
-                          choices=[],
-                          validators=[InputRequired()],
                           render_kw={'style': 'width: 80px; margin-right: 10px;'})
     field3 = StringField('Cédula de identidad',
                              validators=[InputRequired(), Length(min=3, max=40), only_numbers])

@@ -1,7 +1,9 @@
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, session
 from src.routes.home_bp.templates.form_fields import FormFields
 import src.config as config
 import logging
+from dotenv import load_dotenv
+import os
 
 # Creo mi logging del modulo
 logger = logging.getLogger(__name__)
@@ -21,12 +23,33 @@ blue_ruta = Blueprint(
 @blue_ruta.route('/', methods=["GET", "POST"])
 def home():
     form = FormFields()
-    if form.validate_on_submit():
-        print("Adentro del submit")
-    # else:
-        #print(form.errors)
 
     # Carga de los tipos CI/RIF
     form.field2.choices = config.lista_id
+
+    if form.validate_on_submit():
+        # Obtengo los datos del formulario
+        client_email = form.field1.data
+        client_tipo_id = form.field2.data
+        client_id = form.field3.data
+
+        # Almaceno en la session los datos introducidos
+        session["client_email"] = client_email
+        session["client_id"] = client_id
+
+        ################ Conecto con MW ##############
+        token_mw = os.getenv("TOKEN_MW")
+        dict_attr = {"token": token_mw, "cedula": client_id}
+
+        print(dict_attr)
+        # mwisp_var = ConnectMwisp(dict_attr, "GetClientsDetails")
+        # response_client = mwisp_var.conectar_mwisp()
+
+
+
+    #else:
+    #    print(form.errors)
+
+
 
     return render_template("webpage.html", form=form)
