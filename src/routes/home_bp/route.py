@@ -53,3 +53,6 @@ def home():
 
 
     return render_template("webpage.html", form=form)
+
+#TODO: Cambiar imagen de uñas
+#TODO: Terminar API de MW
