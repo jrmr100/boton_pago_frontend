@@ -1,5 +1,6 @@
 from flask import render_template, Blueprint
 from src.routes.home_bp.templates.form_fields import FormFields
+import src.config as config
 import logging
 
 # Creo mi logging del modulo
@@ -24,4 +25,8 @@ def home():
         print("Adentro del submit")
     # else:
         #print(form.errors)
+
+    # Carga de los tipos CI/RIF
+    form.field2.choices = config.lista_id
+
     return render_template("webpage.html", form=form)

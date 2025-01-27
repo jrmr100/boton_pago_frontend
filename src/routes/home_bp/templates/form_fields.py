@@ -8,7 +8,7 @@ class FormFields(FlaskForm):
     field1 = EmailField('Correo electrónico',
                               validators=[InputRequired(), Email(),
                                           Length(min=1, max=50)])
-    field2 = SelectField('CI/RIF del pagador: ',
+    field2 = SelectField('CI/RIF:',
                           choices=[],
                           validators=[InputRequired()],
                           render_kw={'style': 'width: 80px; margin-right: 10px;'})
