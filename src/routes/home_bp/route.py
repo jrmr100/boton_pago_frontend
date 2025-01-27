@@ -56,3 +56,4 @@ def home():
 
 #TODO: Cambiar imagen de uñas
 #TODO: Terminar API de MW
+
