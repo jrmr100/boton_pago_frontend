@@ -1,5 +1,6 @@
-from flask import render_template, Blueprint, session
+from flask import render_template, Blueprint, session, redirect, url_for
 from src.routes.home_bp.templates.form_fields import FormFields
+from src.utils.api_mw import ApiMw
 import src.config as config
 import logging
 from dotenv import load_dotenv
@@ -37,13 +38,20 @@ def home():
         session["client_email"] = client_email
         session["client_id"] = client_id
 
-        ################ Conecto con MW ##############
-        token_mw = os.getenv("TOKEN_MW")
-        dict_attr = {"token": token_mw, "cedula": client_id}
+        ################ Busco cliente en MW ##############
 
-        print(dict_attr)
-        # mwisp_var = ConnectMwisp(dict_attr, "GetClientsDetails")
-        # response_client = mwisp_var.conectar_mwisp()
+        info_cliente = ApiMw(client_id)
+        datos_cliente = info_cliente.buscar_cliente()
+
+        if datos_cliente["estado"] == "exito":
+            nro_cta = datos_cliente['datos'][0]['id']
+            session["nro_cta"] = nro_cta
+
+            # Obtenemos el valor de correo para compararlo
+            email_mw = datos_cliente['datos'][0]['correo']
+            if client_email == email_mw:
+                return redirect(url_for('pagos.pagos'))
+
 
 
 
@@ -52,7 +60,7 @@ def home():
 
 
 
-    return render_template("webpage.html", form=form)
+    return render_template("home.html", form=form)
 
 #TODO: Terminar API de MW
 #TODO: logger y errores
