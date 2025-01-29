@@ -13,7 +13,9 @@
         <div class="col-md-12 col-lg align-content-center  ">
             <form method="POST">
                 {{ form.hidden_tag() }}
+
                 <div>
+
                     <img class="img-fluid m-auto d-block" alt="Logo empresa" src={{url_for('static',
                          filename='img/logo-2net.png' )}}>
                 </div>
@@ -27,6 +29,10 @@
                     </div>
 
                     <div class="col-8">
+                        <div class="mt-3 mb-3">
+                            {% include('_mensajes.html') %}
+                        </div>
+
                         <div>
                             <b>{{ form.field1.label }}</b>
                             {{ form.field1(class="form-control", autofocus=true)}}
@@ -49,6 +55,8 @@
                         <div class="d-grid mt-3">
                             {{ form.field4(class="btn btn-primary") }}
                         </div>
+
+
 
                     </div>
 

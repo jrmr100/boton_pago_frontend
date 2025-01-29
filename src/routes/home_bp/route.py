@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, session, redirect, url_for
+from flask import render_template, Blueprint, session, redirect, url_for, flash
 from src.routes.home_bp.templates.form_fields import FormFields
 from src.utils.api_mw import ApiMw
 import src.config as config
@@ -46,25 +46,18 @@ def home():
 
         if datos_cliente[0] == "except":
             return render_template("error_general.html", msg="Error API - MW", error=datos_cliente[1], type="503")
-        elif datos_cliente[0]["estado"] == "exito":
-                nro_cta = datos_cliente['datos'][0]['id']
+        elif datos_cliente[1]["estado"] == "exito":
+                nro_cta = datos_cliente[1]['datos'][0]['id']
                 session["nro_cta"] = nro_cta
 
                 # Obtenemos el valor de correo para compararlo con el introducido
-                email_mw = datos_cliente['datos'][0]['correo']
+                email_mw = datos_cliente[1]['datos'][0]['correo']
                 if client_email == email_mw:
                     return redirect(url_for('pagos.pagos'))
-
-
-
-
-
-
-
-
-
-
-
+                else:
+                    flash("No existe cliente con los datos suministrados", "failure")
+        else:
+            flash("No existe cliente con los datos suministrados", "failure")
 
     #else:
     #    print(form.errors)
@@ -78,4 +71,5 @@ def home():
 # TODO: Presentar Mensajes de error en pantalla
 # TODO: Contextos en caso de no if
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
+# TODO: Colocar spinner indicando en proceso
 
