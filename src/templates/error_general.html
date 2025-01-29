@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% block head %}
+<style>
+body {
+    background: #dedede;
+}
+.page-wrap {
+    min-height: 100vh;
+}
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="page-wrap d-flex flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12 text-center">
+                <img class="mb-5" src="{{url_for('static', filename='img/error.png')}}" alt="Imagen de error" style="width: 60px; height: 60px;">
+                <span class="display-1 d-block">{{ type }}</span>
+                <div class="mb-4 lead">{{ msg }}</div>
+                <button class="btn btn-secondary" onclick="mostrarMensaje()">Detalles del error</button>
+                <p id="mensaje" style="display: none;">{{ error }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function mostrarMensaje() {
+    document.getElementById("mensaje").style.display = "block";
+    }
+</script>
+
+{% endblock %}

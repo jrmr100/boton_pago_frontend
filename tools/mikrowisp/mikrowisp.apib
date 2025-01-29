@@ -1,0 +1,860 @@
+- Documentacion API (ver desde opera VPN)
+https://mikrowisp.docs.apiary.io/#
+
+FORMAT: 1A
+HOST: https://demo.mikrosystem.net
+
+# Mikrowisp API v1.1
+La API Mikrowisp v1.1. Sigue los principios RESTful, por lo que la API no tiene estado y los métodos http y los códigos de respuesta se usan siempre que sea posible.
+La url para las solicitudes es: http: //IP_MIKROWISP/api/v1
+
+## Ejemplo
+Código ejemplo vía PHP
+```#!php
+<?php
+$ch = curl_init();
+
+curl_setopt($ch, CURLOPT_URL, "https://demo.mikrosystem.net/api/v1/GetClientsDetails");
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_HEADER, FALSE);
+
+curl_setopt($ch, CURLOPT_POST, TRUE);
+
+curl_setopt($ch, CURLOPT_POSTFIELDS, "{
+  \"token\": \"Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09\",
+  \"idcliente\": 6,
+  \"cedula\": \"3434352\"
+}");
+
+curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+  "Content-Type: application/json"
+));
+
+$response = curl_exec($ch);
+curl_close($ch);
+vardump($response);
+?>
+
+```
+
+
+# Group FACTURACION
+
+##Crear factura [/api/v1/CreateInvoice]
+
+### Nueva factura [POST]
+Crea una nueva factura de servicio
+
++ Request (application/json)
+    + Attributes (nueva factura)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                "idfactura": 130,
+                "mensaje": "Nueva factura de servicios creado vía API - Factura ID: 130"
+            }
+
+##Lista facturas [/api/v1/GetInvoices]
+
+### Lista facturas [POST]
+Muestra la lista de todas facturas utilizando filtros.
+
++ Request (application/json)
+    + Attributes (lista facturas )
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                 "facturas": [
+                    {
+                        "id": 210,
+                        "legal": 0,
+                        "idcliente": 6,
+                        "emitido": "2019-05-04",
+                        "vencimiento": "2019-05-10",
+                        "total": "343.75",
+                        "estado": "vencido",
+                        "cobrado": "0.00",
+                        "impuesto": "52.61",
+                        "oxxo_referencia": "",
+                        "barcode_cobro_digital": "73852040377595616051900361438",
+                        "fechapago": "0000-00-00",
+                        "subtotal": "291.14",
+                        "subtotal2": "S/. 291.14",
+                        "total2": "S/. 343.75",
+                        "impuesto2": "S/. 52.61",
+                        "formapago": ""
+                    },...
+                            ]
+            }
+
+##Datos factura [/api/v1/GetInvoice]
+
+### datos factura [POST]
+Recupera los datos de una factura específica.
++ Request (application/json)
+    + Attributes (datos factura)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                "factura": {
+                "id": 1,
+                "legal": 0,
+                "idcliente": 3,
+                "emitido": "2019-05-13",
+                "vencimiento": "2019-05-15",
+                "total": "170.00",
+                "estado": "pagado",
+                "cobrado": "170.00",
+                "impuesto": "25.93",
+                "oxxo_referencia": "",
+                "barcode_cobro_digital": "73852040786931020051900179973",
+                "fechapago": "2019-05-14",
+                "subtotal": "144.07",
+                "subtotal2": "MX$144.07",
+                "total2": "MX$170.00",
+                "impuesto2": "MX$25.93",
+                "formapago": "Depósito bancario"
+                }
+            }
+
+## Pagar factura [/api/v1/PaidInvoice]
+
+### Pagar factura [POST]
+Pagar una factura y Activa al cliente si se encuentra suspendido.
+
++ Request (application/json)
+    + Attributes (pagar factura)
++ Response 200 (application/json)
+    + Body 
+
+            {
+              "estado": "exito",
+              "mensaje": "Pago registrado correctamente."
+            }
+## Eliminar factura [/DeleteInvoice]
+
+### Eliminar factura [POST]
+Eliminar una factura con estado No pagado.
+
++ Request (application/json)
+    + Attributes (eliminar factura)
++ Response 200 (application/json)
+    + Body 
+
+            {
+              "estado": "exito",
+              "mensaje": "Factura eliminado correctamente."
+            }
+            
+## Eliminar pago [/api/v1/DeleteTransaccion]         
+### Eliminar Pago [POST]
+Elimina el pago de una factura.
+
++ Request (application/json)
+    + Attributes (eliminar pago)
++ Response 200 (application/json)
+    + Body 
+
+            {
+              "estado": "exito",
+              "mensaje": "Pago eliminado correctamente."
+            }
+            
+# Group USUARIOS
+##Nuevo cliente [/api/v1/NewUser]
+
+### Nuevo cliente [POST]
+Registra  un cliente
++ Request (application/json)
+    + Attributes (nuevo cliente)
++ Response 200 (application/json)
+    + Body 
+
+            {
+
+              "estado": "exito",
+              "mensaje":"El cliente fué registrado correctamente.",
+              "idcliente":100
+            }
+            
+##Ver cliente [/api/v1/GetClientsDetails]
+
+### Ver cliente [POST]
+Muestra los datos de un cliente
++ Request (application/json)
+    + Attributes (ver cliente)
++ Response 200 (application/json)
+    + Body 
+
+            {
+
+              "estado": "exito",
+              "datos": [
+                {
+                  "id": 6,
+                  "nombre": "ARIEL Perez",
+                  "estado": "ACTIVO",
+                  "correo": "",
+                  "telefono": "45434565",
+                  "movil": "998283745",
+                  "cedula": "65454323",
+                  "pasarela": "",
+                  "codigo": "l4o4gp",
+                  "direccion_principal": "2301 Peger Rd.",
+                  "servicios": [
+                    {
+                      "id": 5,
+                      "idperfil": 2,
+                      "nodo": 2,
+                      "costo": "150.00",
+                      "ipap": "",
+                      "mac": "00:44:56:56:78:17",
+                      "ip": "192.168.33.3",
+                      "instalado": "0000-00-00",
+                      "pppuser": "User6",
+                      "ppppass": "Pass6",
+                      "tiposervicio": "internet",
+                      "status_user": "OFFLINE",
+                      "coordenadas": "-11.984449254433779,-77.0827752259944",
+                      "direccion": "",
+                      "snmp_comunidad": "public",
+                      "perfil": "Plan 4Mbps"
+                    }
+                  ],
+                  "facturacion": {
+                    "facturas_nopagadas": 4,
+                    "total_facturas": "750.00"
+                  }
+                }
+              ]
+            }
+##Actualizar cliente [/api/v1/UpdateUser]
+
+### Actualizar cliente [POST]
+Permite editar datos del cliente como nombre,teléfonos,correo,contraseña portal client,cédula
++ Request (application/json)
+    + Attributes (actualizar cliente)
++ Response 200 (application/json)
+    + Body 
+
+            {
+              "estado": "exito",
+              "mensaje": "Datos actualizados correctamente."
+            }
+
+##Activar cliente [/api/v1/ActiveService]
+
+### Activar cliente [POST]
+Activa los servicios de los clientes cuando se encuentra con estado "SUSPENDIDO".
++ Request (application/json)
+    + Attributes (activar cliente)
++ Response 200 (application/json)
+    + Body 
+
+            {
+              "estado": "exito",
+              "mensaje": "Cliente Activado correctamente."
+            }
+            
+##Suspender cliente [/api/v1/SuspendService]
+
+### Suspender cliente [POST]
+Suspende los servicios de los clientes cuando se encuentra con estado "ACTIVO".
++ Request (application/json)
+    + Attributes (activar cliente)
++ Response 200 (application/json)
+    + Body 
+
+            {
+              "estado": "exito",
+              "mensaje": "Cliente Suspendido correctamente."
+            }
+            
+##Nuevo Pre-Registro [/api/v1/NewPreRegistro]
+
+### Nuevo Pre-Registro (Instalaciones) [POST]
+Registra un Pre-registro en Instalaciones.
++ Request (application/json)
+    + Attributes (pre registro)
++ Response 200 (application/json)
+    + Body 
+
+            {
+              "estado": "exito",
+              "idregistro": 350
+              "mensaje": "Operación exitosa."
+            }
+            
+##Lista de Instalaciones [/api/v1/ListInstall]
+
+### Lista de Pre/Instalaciones [POST]
+Muestra lista de Instalaciones.
++ Request (application/json)
+    + Attributes (install registro)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                "instalaciones": [
+                                    {
+                                        "id": 4,
+                                        "userid": 93,
+                                        "fecha_ingreso": "2018-10-30",
+                                        "fecha_salida": "0000-00-00",
+                                        "idtecnico": 0,
+                                        "direccion": "SAN CRESCENTE 240  101, Las Condes",
+                                        "telefono": "9652368914",
+                                        "movil": "933901439",
+                                        "idnodo": 0,
+                                        "email": "correo@gmail.com",
+                                        "cedula": "995658100",
+                                        "estate": "INSTALADO",
+                                        "cliente": "COMERCIAL C.W. CHILE LIMITADA",
+                                        "notas": "",
+                                        "fecha_instalacion": "0001-11-30 00:00:00",
+                                        "zona": 4,
+                                        "idvendedor": 0,
+                                        "cliente_pruebas": "",
+                                        "gaa": "",
+                                        "colonia": "",
+                                        "tipo_estrato": 0,
+                                        "N_orden": ""
+                                    }
+                                ],
+                "mensaje": "Se ha encontrado 1  Registros."
+            }
+            
+
+# Group TICKET
+
+##Crear nuevo Ticket [/api/v1/NewTicket]
+
+### Crear Nuevo Ticket [POST]
+Permite crear un ticket al area de Soporte,ventas,etc.
+
++ Request (application/json)
+    + Attributes (nuevo ticket)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                "idticket":"100",
+                "mensaje": "Ticket Registrado correctamente."
+            }
+##Cerrar Ticket [/api/v1/CloseTicket]
+
+### Cerrar Ticket [POST]
+Permite cerrar un ticket.
+
++ Request (application/json)
+    + Attributes (cerrar ticket)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                "mensaje": "Ticket cerrado correctamente."
+            }
+##Listar Ticket [/api/v1/ListTicket]
+
+### Listar Ticket [POST]
+Muestra los ticket de soporte de un cliente.
+
++ Request (application/json)
+    + Attributes (listar ticket)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                "mensaje": "Operación exitosa.",
+                "data": {
+                    "abiertos": 1,
+                    "cerrados": 3,
+                    "respondidos": 2,
+                    "respuesta_cliente": 0,
+                    "tickets": [
+                        {
+                            "id": 22,
+                            "idcliente": 3,
+                            "asunto": "tecnico yahoo",
+                            "fecha_soporte": "2019-09-17 18:20:52",
+                            "estado": "abierto",
+                            "fecha_cerrado": "0000-00-00 00:00:00",
+                            "solicitante": "tecnico yahoo",
+                            "fechavisita": "0000-00-00",
+                            "turno": " (TARDE)",
+                            "agendado": "oficina",
+                            "lastdate": "2019-09-17 18:20:52",
+                            "dp": "Soporte técnico",
+                            "motivo_cierre": ""
+                        },
+                        {
+                            "id": 6,
+                            "idcliente": 3,
+                            "asunto": "Ayuda",
+                            "fecha_soporte": "2018-09-21 00:43:44",
+                            "estado": "respondido",
+                            "fecha_cerrado": "0000-00-00 00:00:00",
+                            "solicitante": "",
+                            "fechavisita": "0000-00-00",
+                            "turno": "",
+                            "agendado": "",
+                            "lastdate": "2018-10-17 23:58:00",
+                            "dp": "Soporte técnico",
+                            "motivo_cierre": ""
+                        },
+                        {
+                            "id": 4,
+                            "idcliente": 3,
+                            "asunto": "Ticket de soporte Portal",
+                            "fecha_soporte": "2018-09-18 19:35:59",
+                            "estado": "respondido",
+                            "fecha_cerrado": "0000-00-00 00:00:00",
+                            "solicitante": "",
+                            "fechavisita": "0000-00-00",
+                            "turno": "",
+                            "agendado": "",
+                            "lastdate": "2018-09-21 10:16:07",
+                            "dp": "Soporte técnico",
+                            "motivo_cierre": ""
+                        },
+                        {
+                            "id": 2,
+                            "idcliente": 3,
+                            "asunto": "Ticket nuevo de soporte",
+                            "fecha_soporte": "2018-09-18 16:56:05",
+                            "estado": "cerrado",
+                            "fecha_cerrado": "2018-09-21 10:32:45",
+                            "solicitante": "",
+                            "fechavisita": "0000-00-00",
+                            "turno": " (TARDE)",
+                            "agendado": "oficina",
+                            "lastdate": "2018-09-21 00:46:45",
+                            "dp": "Soporte técnico",
+                            "motivo_cierre": ""
+                        },
+                        {
+                            "id": 3,
+                            "idcliente": 3,
+                            "asunto": "Ticket adjunta imagen",
+                            "fecha_soporte": "2018-09-18 16:57:14",
+                            "estado": "cerrado",
+                            "fecha_cerrado": "2018-09-21 10:32:42",
+                            "solicitante": "",
+                            "fechavisita": "0000-00-00",
+                            "turno": " (TARDE)",
+                            "agendado": "oficina",
+                            "lastdate": "2018-09-21 00:00:52",
+                            "dp": "Soporte técnico",
+                            "motivo_cierre": ""
+                        },
+                        {
+                            "id": 5,
+                            "idcliente": 3,
+                            "asunto": "Ticket soporte",
+                            "fecha_soporte": "2018-09-18 19:46:18",
+                            "estado": "cerrado",
+                            "fecha_cerrado": "2018-09-21 10:32:32",
+                            "solicitante": "",
+                            "fechavisita": "0000-00-00",
+                            "turno": "",
+                            "agendado": "",
+                            "lastdate": "2018-09-20 23:56:37",
+                            "dp": "Soporte técnico",
+                            "motivo_cierre": ""
+                        }
+                    ]
+                }
+            }
+# Group MENSAJERIA
+
+##Enviar SMS [/api/v1/NewSMS]
+
+### Enviar SMS [POST]
+Permite enviar un SMS al cliente, el mensaje es enviado un minuto después de enviado la orden.
+
++ Request (application/json)
+    + Attributes (nuevo sms)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                "mensaje": "SMS generado correctamente."
+            }
+
+# Group ROUTERS
+
+##Lista Routers [/api/v1/GetRouters]
+
+### Lista Routers [POST]
+Permite recuperar todos los Routers ó uno por su ID.
+
++ Request (application/json)
+    + Attributes (lista router)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                "routers": [
+                                {
+                                    "id": 2,
+                                    "nombre": "RB Principal",
+                                    "ip": "192.168.77.1",
+                                    "coordenadas": "",
+                                    "version": "6.47.8 (stable)",
+                                    "estado": "DESCONECTADO",
+                                    "modelo": "RB2011UAS-2HnD",
+                                    "serial": "403456A5618"
+                                }
+                            ]
+            }
+
+# Group MONITOREO
+
+##Lista Equipos [/api/v1/GetMonitoreo]
+
+### Lista Equipos [POST]
+Permite recuperar la lista de equipos en monitoreo.
+
++ Request (application/json)
+    + Attributes (lista monitoreo)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "estado": "exito",
+                "equipos": [
+                                {
+                                    "id": 1,
+                                    "nombre": "Google",
+                                    "equipo": "rb 1100",
+                                    "ip": "8.8.8.8",
+                                    "estado": 1
+                                }
+                            ]
+            }
+
+# Group FACILITO
+
+##Consultar Deuda [/facilito/consultadeuda]
+### Consulta deuda [POST]
+Permite recuperar la facturas pendientes de pago de cliente mediante su Nº de cédula.
+
++ Request (application/json)
+    + Attributes (facilito deuda)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "code": "000",
+                "IDFactura": 2161,
+                "detalle": "Pago de comprobante Nº 00002161 -  Vencimiento: 28/02/2022",
+                "valor": "500.00",
+                "mensaje": "Operación exitosa."
+            }
+
+##Pagar Deuda [/facilito/registrarpago]
+### Pagar deuda [POST]
+El método de pago de deuda es con el que se registra el valor que cliente cancela en la caja.
+
++ Request (application/json)
+    + Attributes (facilito pagar)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "code": "000",
+                "autorizacion": 16401,
+                "valor": "500.00",
+                "mensaje": "Operación exitosa."
+            }
+
+##Reverso [/facilito/reversopago]
+### Reverso [POST]
+El método de reverso es utilizado para los casos en que Facilito no reciba respuesta al
+requerimiento de pago en un tiempo prudente, también se utilizara para realizar ajustes
+automáticos luego del proceso de conciliación.
+
++ Request (application/json)
+    + Attributes (facilito reverso)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "code": "000",
+                "mensaje": "Operación exitosa."
+            }
+            
+##Consultar pagos [/facilito/consultapago]
+### consultar pagos [POST]
+El método de consulta de pagos es con el que se obtendrán todas las transacciones registradas
+para realizar una conciliación automática entre las 2 entidades.
+
++ Request (application/json)
+    + Attributes (facilito consulta)
++ Response 200 (application/json)
+    + Body 
+
+            [
+                {
+                    "IDFactura": 2161,
+                    "valor": "500.00",
+                    "secuencial": "123456789123"
+                }
+            ]
+# Group PUNTOAGIL
+
+##Consultar Deuda [/puntoagil/consultadeuda]
+### Consulta deuda [POST]
+Permite recuperar la facturas pendientes de pago de cliente mediante su Nº de cédula.
+
++ Request (application/json)
+    + Attributes (puntoagil deuda)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "code": "000",
+                "IDFactura": 2161,
+                "detalle": "Pago de comprobante Nº 00002161 -  Vencimiento: 28/02/2022",
+                "valor": "500.00",
+                "mensaje": "Operación exitosa."
+            }
+
+##Pagar Deuda [/puntoagil/registrarpago]
+### Pagar deuda [POST]
+El método de pago de deuda es con el que se registra el valor que cliente cancela en la caja.
+
++ Request (application/json)
+    + Attributes (puntoagil pagar)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "code": "000",
+                "autorizacion": 16401,
+                "valor": "500.00",
+                "mensaje": "Operación exitosa."
+            }
+
+##Reverso [/puntoagil/reversopago]
+### Reverso [POST]
+El método de reverso es utilizado para los casos en que Facilito no reciba respuesta al
+requerimiento de pago en un tiempo prudente, también se utilizara para realizar ajustes
+automáticos luego del proceso de conciliación.
+
++ Request (application/json)
+    + Attributes (puntoagil reverso)
++ Response 200 (application/json)
+    + Body 
+
+            {
+                "code": "000",
+                "mensaje": "Operación exitosa."
+            }
+            
+##Consultar pagos [/puntoagil/consultapago]
+### consultar pagos [POST]
+El método de consulta de pagos es con el que se obtendrán todas las transacciones registradas
+para realizar una conciliación automática entre las 2 entidades.
+
++ Request (application/json)
+    + Attributes (puntoagil consulta)
++ Response 200 (application/json)
+    + Body 
+
+            [
+                {
+                    "IDFactura": 2161,
+                    "valor": "500.00",
+                    "secuencial": "123456789123"
+                }
+            ]
+            
+# Data Structures
+## facilito deuda (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ cedula: `4034567651` (number, required) - Número de cédula a consultar.
+
+## facilito reverso (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ IDFactura: `21619` (number, required) - ID de factura.
++ secuencial: `123456789123` (number, required) - Secuencial facilito.
+
+## facilito consulta (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ fecha: `2022-08-01` (string,required) - Fecha de registro del pago,formato YYYY-MM-DD
+
+
+## facilito pagar (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ IDFactura: `21619` (number, required) - ID de factura.
++ valor: `500.00` (number, required) - Monto a pagar.
++ fecha: `2022-08-01` (string,required) - Fecha de registro del pago,formato YYYY-MM-DD
++ secuencial: `123456789123` (number, required) - Secuencial facilito.
+
+## puntoagil deuda (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ cedula: `4034567651` (number, required) - Número de cédula a consultar.
+
+## puntoagil reverso (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ IDFactura: `21619` (number, required) - ID de factura.
++ secuencial: `123456789123` (number, required) - Secuencial facilito.
+
+## puntoagil consulta (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ fecha: `2022-08-01` (string,required) - Fecha de registro del pago,formato YYYY-MM-DD
+
+
+## puntoagil pagar (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ IDFactura: `21619` (number, required) - ID de factura.
++ valor: `500.00` (number, required) - Monto a pagar.
++ fecha: `2022-08-01` (string,required) - Fecha de registro del pago,formato YYYY-MM-DD
++ secuencial: `123456789123` (number, required) - Secuencial facilito.
+
+
+## lista router (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ id: `2` (number, required) - ID del router, para mostrar todos -1.
+
+## lista monitoreo (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ id: `2` (number, required) - ID del equipo, para mostrar todos -1.
+
+## nuevo sms (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idcliente: `6` (number, required) - ID del cliente al cual se va enviar un mensaje de texto.
++ mensaje: `Mensaje vía API` (string, required) - Mensaje a enviar.
+
+## install registro (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ estado: `PENDIENTE` (string,optional) - Filtrar por Estado PENDIENTE,NO INSTALADO,INSTALADO.
++ cedula: `3434352` (string,optional) - Filtrar por Nº de cedula,Dni,cuit,rut,nit,etc.
+
+## datosupdate (object)
++ nombre: `Cliente API API` (string)
++ correo: `usercliente@correo.com` (string)
++ telefono: `45555655 (string)
++ movil: `999998987` (string)
++ cedula: `554545445` (string)
++ codigo: `Contraseña portal cliente` (string)
++ direccion_principal: `Av. xxxx 4445` (string)
++ campo_personalizado: `Datos personalizado (string)
+
+## actualizar cliente (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idcliente: `6` (number, required) - ID cliente
++ datos (datosupdate) - Datos a actuaizar
+
+## eliminar pago (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ factura: `6` (number, required) - ID de Factura a eliminar el pago.
+
+## eliminar factura (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idfactura: `6` (number, required) - ID de Factura a eliminar.
+
+
+## ver cliente (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idcliente: `6` (number, optional) - Filtra por ID cliente
++ telefono: `10` (number, optional) - Filtra por Número movil o Fijo.
++ cedula: `3434352` (string,optional) - Filtrar por Nº de cedula,Dni,cuit,rut,nit,etc.
+
+## adjunto (object)
++ nombre: `prueba.png` (string) - Nombre del archivo
++ file: `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` (string) - Archivo codificado en base64
+
+## nuevo cliente (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ nombre: `Carlos miguel perez` (string, required) - Nombre completo del cliente. 
++ cedula: `45464534` (string, optional) - Nº Identificación del cliente(Cédula,Cuit,DNI,etc).
++ correo: `correo@correo.com` (string, optional) - Email del cliente). 
++ telefono: `5124345` (string, optional) - Teléfono fijo). 
++ movil: `989898989` (string, optional) - Teléfono celular). 
++ direccion_principal: `Av del aire 333` (string, optional) - Direccion completa del cliente). 
+
+
+## pre registro (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ cliente: `Carlos miguel perez` (string, required) - Nombre completo del cliente. 
++ cedula: `45464534` (string, required) - Nº Identificación del cliente(Cédula,Cuit,DNI,etc). 
++ direccion: `Av luis miguel 3356` (string, required) - Dirección del cliente. 
++ telefono: `5123345` (string, optional) - Teléfono Fijo.
++ movil: `9888877665` (string, optional) - Teléfono Celular. 
++ email: `correo@gmail.com` (string, optional) - Correo electrónico del cliente.
++ notas: `Hola estoy interesando en el servicio ..` (string, optional) - Texto que será agreado como notas en el Pre-Registro.
++ fecha_instalacion: `2020-12-20 10:30:35` (string,optional) - Fecha estimada para su instalación,
+si no se define se registrará la fecha y hora actual en formato YYYY-MM-DD HH:mm:ss
+
+## activar cliente (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idcliente: `33` (number, required) - ID cliente 
+
+## listar ticket (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idcliente: `33` (number, required) - ID cliente 
+
+## cerrar ticket (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idticket: `1` (number, required) - ID ticket
++ motivo_cierre: `trabajo finalizado` (string, optional) - Motivo del cierre del ticket.
+
+## nuevo ticket (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idcliente: `33` (number, required) - ID cliente
++ dp: `1` (number, required) - ID Departamento Por defecto 1: Soporte Técnico
++ asunto: `Nuevo ticket de soporte` (string, required) - Asunto del ticket
++ solicitante: `Luis Miguel` (string, optional) - Nombre de la persona que Abre el ticket en caso que no sea el mismo cliente.
++ fechavisita: `2020-07-10` (string, required) - Fecha Programada de visita YYYY-MM-DD
++ turno: `TARDE` (string, required) - Turno de visita, puede ser TARDE ó MAÑANA.
++ agendado: `PAGINA WEB` (string, required) - Desde donde fue Abierto el ticket puede ser: oficina,cliente,VIA TELEFONICA,PRESENCIAL,PAGINA WEB,RED SOCIAL.
++ contenido: `Hola,<br> Necesito ayuda para mi conexión de internet.` (string, required) - Ingrese los detalles del ticket
++ adjunto (adjunto, optional) - Archivo adjunto
+                        
+## nueva factura (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idcliente: `6` (number, required) - ID cliente
++ vencimiento: `2019-08-01` (string,required) - Fecha de vencimeinto YYYY-MM-DD
+
+## lista facturas (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ limit: `25` (number, optional) - límite de facturas a mostrar, por defecto 25
++ estado: `3` (number, optional) - Filtra por estado de la Factura
+0 = Pagadas, 
+1 = No pagadas, 
+2 = Anuladas, 
+vacio = Cualquier estado
++ idcliente: `6` (number, optional) - Filtra por ID cliente
++ fechapago: `2021-08-09` (string, optional) - Fecha cuando fué pagada la factura YYYY-MM-DD
++ formapago: `Efectivo Oficina/Sucursal` (string, optional) - Formas de pago/pasarela de pago.
+
+## datos factura (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idfactura: `1` (number, required) - ID Factura
+
+## pagar factura (object)
++ token: `Smx2SVdkbUZIdjlCUlkxdFo1cUNMQT09` (string, required) - Contraseña de Acceso API.
++ idfactura: `130` (number, required) - ID Factura a pagar
++ pasarela: `Paypal` (string, required) - Nombre de la pasarela de pago, ejm: Paypal
++ cantidad: `200` (number,optional) - la cantidad pagada, se puede dejar sin definir, 
+para tomar la cantidad total de la factura
++ comision: `10` (number,optional) - El monto que se pagó como comisión para este pago.
++ idtransaccion: `10` (string,optional) - Código o Nº de operación del pago.
++ fecha: `2019-08-01 10:30:35` (string,optional) - Fecha de registro del pago,
+si no se define se registrará la fecha y hora actual en formato YYYY-MM-DD HH:mm:ss
+
+

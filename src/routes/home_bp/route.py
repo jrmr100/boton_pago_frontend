@@ -39,18 +39,29 @@ def home():
         session["client_id"] = client_id
 
         ################ Busco cliente en MW ##############
-
+        logger.info("user: " + str(client_id) +
+                    " TYPE: Iniciando transaccion\n")
         info_cliente = ApiMw(client_id)
         datos_cliente = info_cliente.buscar_cliente()
 
-        if datos_cliente["estado"] == "exito":
-            nro_cta = datos_cliente['datos'][0]['id']
-            session["nro_cta"] = nro_cta
+        if datos_cliente[0] == "except":
+            return render_template("error_general.html", msg="Error API - MW", error=datos_cliente[1], type="503")
+        elif datos_cliente[0]["estado"] == "exito":
+                nro_cta = datos_cliente['datos'][0]['id']
+                session["nro_cta"] = nro_cta
 
-            # Obtenemos el valor de correo para compararlo
-            email_mw = datos_cliente['datos'][0]['correo']
-            if client_email == email_mw:
-                return redirect(url_for('pagos.pagos'))
+                # Obtenemos el valor de correo para compararlo con el introducido
+                email_mw = datos_cliente['datos'][0]['correo']
+                if client_email == email_mw:
+                    return redirect(url_for('pagos.pagos'))
+
+
+
+
+
+
+
+
 
 
 
@@ -66,4 +77,5 @@ def home():
 # TODO: Capturar errores
 # TODO: Presentar Mensajes de error en pantalla
 # TODO: Contextos en caso de no if
+# TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 

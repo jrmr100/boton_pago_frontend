@@ -12,6 +12,7 @@ from src.routes.pagos_bp.route import blue_ruta as pagos
 
 
 
+
 # Cargo la variable de entorno
 load_dotenv()
 
@@ -36,6 +37,7 @@ csrf.init_app(app)
 # Registros de BLUEPRINT
 app.register_blueprint(home)
 app.register_blueprint(pagos)
+
 
 
 
