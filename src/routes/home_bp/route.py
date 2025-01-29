@@ -62,6 +62,8 @@ def home():
 
     return render_template("home.html", form=form)
 
-#TODO: Terminar API de MW
-#TODO: logger y errores
+# TODO: logger
+# TODO: Capturar errores
+# TODO: Presentar Mensajes de error en pantalla
+# TODO: Contextos en caso de no if
 

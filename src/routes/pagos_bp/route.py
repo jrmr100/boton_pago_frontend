@@ -31,3 +31,5 @@ def pagos():
 
     return render_template("pagos.html")
 
+# TODO: Diseñar pagina de pagos
+
