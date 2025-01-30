@@ -21,8 +21,6 @@ blue_ruta = Blueprint(
     static_url_path='/'
 )
 
-
-# ############MOSTRAR HOME################
 @blue_ruta.route('/', methods=["GET", "POST"])
 def home():
     form = FormFields()
@@ -33,12 +31,8 @@ def home():
     if form.validate_on_submit():
         # Obtengo los datos del formulario
         client_email = form.field1.data
-        client_tipo_id = form.field2.data
+        client_tipo_id = form.field2.data  # no usado por ahora
         client_id = form.field3.data
-
-        # Almaceno en la session los datos introducidos
-        session["client_email"] = client_email
-        session["client_id"] = client_id
 
         ################ Busco cliente en MW ##############
         logger.info("user: " + str(client_id) +
@@ -57,7 +51,7 @@ def home():
             valida_email = validaciones.validar_email(client_email, email_mw)
             if valida_email is True:
                 nro_cta = resultado_apimw[1]['datos'][0]['id']
-                session["nro_cta"] = nro_cta
+                session["datos_cliente"] = resultado_apimw[1]
                 return redirect(url_for('pagos.pagos'))
             else:
                 logger.error("user: " + str(client_id) +

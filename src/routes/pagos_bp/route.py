@@ -1,6 +1,4 @@
-from flask import render_template, Blueprint, session, redirect, url_for
-from src.utils.api_mw import ApiMw
-import src.config as config
+from flask import render_template, Blueprint, session
 import logging
 from dotenv import load_dotenv
 import os
@@ -19,17 +17,13 @@ blue_ruta = Blueprint(
 )
 
 
-# ############MOSTRAR HOME################
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 def pagos():
 
 
-    #else:
-    #    print(form.errors)
-
-
-
-    return render_template("pagos.html")
+    datos_cliente = session["datos_cliente"]
+    print(datos_cliente["datos"][0]["nombre"])
+    return render_template("pagos.html", datos_cliente=datos_cliente)
 
 # TODO: Diseñar pagina de pagos
 
