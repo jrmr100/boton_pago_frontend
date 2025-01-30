@@ -40,9 +40,11 @@ def home():
 
         ################ Busco cliente en MW ##############
         logger.info("user: " + str(client_id) +
-                    " TYPE: Iniciando transaccion\n")
+                    " TYPE: Iniciando transacción con el correo: " + client_email + "\n")
         info_cliente = ApiMw(client_id)
         datos_cliente = info_cliente.buscar_cliente()
+        logger.info("user: " + str(client_id) +
+                    " TYPE: resultado de la busqueda de cliente: " + str(datos_cliente) + "\n")
 
         if datos_cliente[0] == "except":
             return render_template("error_general.html", msg="Error API - MW", error=datos_cliente[1], type="503")
@@ -66,9 +68,6 @@ def home():
 
     return render_template("home.html", form=form)
 
-# TODO: logger
-# TODO: Capturar errores
-# TODO: Presentar Mensajes de error en pantalla
 # TODO: Contextos en caso de no if
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Colocar spinner indicando en proceso
