@@ -2,6 +2,8 @@ from flask import render_template, Blueprint, session, redirect, url_for, flash
 from src.routes.home_bp.templates.form_fields import FormFields
 from src.utils.api_mw import ApiMw
 import src.config as config
+import src.routes.home_bp.validaciones as validaciones
+
 import logging
 from dotenv import load_dotenv
 import os
@@ -42,33 +44,34 @@ def home():
         logger.info("user: " + str(client_id) +
                     " TYPE: Iniciando transacción con el correo: " + client_email + "\n")
         info_cliente = ApiMw(client_id)
-        datos_cliente = info_cliente.buscar_cliente()
-        logger.info("user: " + str(client_id) +
-                    " TYPE: resultado de la busqueda de cliente: " + str(datos_cliente) + "\n")
+        resultado_apimw = info_cliente.buscar_cliente()
+        logger.debug("user: " + str(client_id) +
+                    " TYPE: resultado de la busqueda de cliente: " + str(resultado_apimw) + "\n")
 
-        if datos_cliente[0] == "except":
-            return render_template("error_general.html", msg="Error API - MW", error=datos_cliente[1], type="503")
-        elif datos_cliente[1]["estado"] == "exito":
-                nro_cta = datos_cliente[1]['datos'][0]['id']
+        # valido los resultados de la API
+        valida_api = validaciones.resultado_api(resultado_apimw)
+
+        if valida_api == "exito":
+            # Valido el correo
+            email_mw = resultado_apimw[1]['datos'][0]['correo']
+            valida_email = validaciones.validar_email(client_email, email_mw)
+            if valida_email is True:
+                nro_cta = resultado_apimw[1]['datos'][0]['id']
                 session["nro_cta"] = nro_cta
+                return redirect(url_for('pagos.pagos'))
+            else:
+                logger.error("user: " + str(client_id) +
+                            " TYPE: correo no iguales\n")
+                flash("No existe cliente con los datos suministrados", "failure")
+        elif valida_api == "except":
+            return render_template("error_general.html", msg="Error API - MW", error=resultado_apimw[1], type="503")
 
-                # Obtenemos el valor de correo para compararlo con el introducido
-                email_mw = datos_cliente[1]['datos'][0]['correo']
-                if client_email == email_mw:
-                    return redirect(url_for('pagos.pagos'))
-                else:
-                    flash("No existe cliente con los datos suministrados", "failure")
-        else:
+        elif valida_api == "error":
             flash("No existe cliente con los datos suministrados", "failure")
-
-    #else:
-    #    print(form.errors)
-
-
 
     return render_template("home.html", form=form)
 
-# TODO: Contextos en caso de no if
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Colocar spinner indicando en proceso
+# TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
 
