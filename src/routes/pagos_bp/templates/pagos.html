@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% block head %}
 <title>2NET - Pagos </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
 {% endblock %}
@@ -8,15 +9,11 @@
 
 <body>
 {% block body %}
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-        </div>
-    </nav>
+    {% include '_nav-bar.html' %}
 
     <div class="container-fluid bg-secondary-subtle p-0 min-vh-100">
         <div class="row">
-            <h4 class="text-center">Información de su cuenta</h4>
+            <h3 class="text-center">PORTAL DE PAGO</h3>
 
             <div class="col-2">
             </div>
@@ -25,23 +22,25 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <table class="table">
+                        <table class="table text-center">
                             <thead>
                             <tr>
-                                <th scope="col">Numero de cuenta</th>
-                                <th scope="col">Nombre del cliente</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">Número de cuenta</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Fecha de corte</th>
+                                <th scope="col">Facturas no pagadas</th>
+                                <th scope="col">Monto de la deuda ($)</th>
+                                <th scope="col">Monto de la deuda (Bs)</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                                <td>@mdo</td>
+                                <td>{{ datos_cliente["datos"][0]["id"] }}</td>
+                                <td>{{ datos_cliente["datos"][0]["estado"] }}</td>
+                                <td>Fecha de corte</td>
+                                <td>{{ datos_cliente["datos"][0]["facturacion"]["facturas_nopagadas"] }}</td>
+                                <td class="text-danger">{{ datos_cliente["datos"][0]["facturacion"]["total_facturas"] }}</td>
+                                <td class="text-danger">Monto en Bs</td>
                             </tr>
                             </tbody>
                         </table>
@@ -51,7 +50,12 @@
             <div class="col-2">
 
             </div>
-
+        </div>
+        <div class="row">
+            <div class="col-6">
+            </div>
+            <div class="col-6">
+            </div>
         </div>
     </div>
 
