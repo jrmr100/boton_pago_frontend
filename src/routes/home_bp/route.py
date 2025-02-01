@@ -2,14 +2,9 @@ from flask import render_template, Blueprint, session, redirect, url_for, flash
 from src.routes.home_bp.templates.form_fields import FormFields
 from src.utils.api_mw import ApiMw
 import src.config as config
+from src.utils.logger import logger
 import src.routes.home_bp.validaciones as validaciones
 
-import logging
-from dotenv import load_dotenv
-import os
-
-# Creo mi logging del modulo
-logger = logging.getLogger(__name__)
 
 nombre_ruta = "home"
 

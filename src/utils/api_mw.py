@@ -1,11 +1,7 @@
-import requests
-import json
 from dotenv import load_dotenv
 import os
-import logging
 import src.utils.connect_api as connect_api
 
-logger = logging.getLogger(__name__)
 load_dotenv()
 
 
@@ -18,5 +14,5 @@ class ApiMw:
         body = {"token": os.getenv("TOKEN_MW"), "cedula": self.client_id}
         endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_BUSCAR_CLIENTE")
 
-        api_response = connect_api.conectar(headers, body, endpoint)
+        api_response = connect_api.conectar(headers, body, endpoint, "POST")
         return api_response

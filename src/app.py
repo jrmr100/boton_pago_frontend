@@ -1,8 +1,7 @@
 from flask import Flask
 from flask_wtf import CSRFProtect
-import logging
-from datetime import datetime
 from dotenv import load_dotenv
+from src.utils.logger import logger
 import os
 
 # IMPORTACIÓN DE RUTAS
@@ -10,24 +9,8 @@ from src.routes.home_bp.route import blue_ruta as home
 from src.routes.pagos_bp.route import blue_ruta as pagos
 
 
-
-
-
 # Cargo la variable de entorno
 load_dotenv()
-
-# Configuro los parámetros y formatos del logging
-now = datetime.now()
-today = now.strftime('%d%m%Y')
-# Configuro los parámetros y formatos del logging
-logging.basicConfig(handlers=[logging.FileHandler(filename=os.getenv("LOG_FILE") +
-                                                           os.getenv("NOMBRE_PROYECTO") +
-                                                  "-" + today + ".log",
-                    encoding='utf-8', mode='a+')],
-                    level=int(os.getenv("LOG_LEVEL")),
-                    format='%(asctime)s %(levelname)s %(name)s %(message)s')
-logger = logging.getLogger(__name__)
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
@@ -37,8 +20,6 @@ csrf.init_app(app)
 # Registros de BLUEPRINT
 app.register_blueprint(home)
 app.register_blueprint(pagos)
-
-
 
 
 logger.info("Iniciando el programa...")

@@ -1,10 +1,4 @@
 from flask import render_template, Blueprint, session
-import logging
-from dotenv import load_dotenv
-import os
-
-# Creo mi logging del modulo
-logger = logging.getLogger(__name__)
 
 nombre_ruta = "pagos"
 
