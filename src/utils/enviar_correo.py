@@ -9,6 +9,8 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from dotenv import load_dotenv
+import os
 # importamos librerias para adjuntar
 from email.mime.base import MIMEBase
 from email import encoders
@@ -18,10 +20,10 @@ def enviar_correo(correo_destino, subject_email, cuerpo_correo):
     try:
         # Configuro los datos del correo
         addr_to = correo_destino
-        addr_from = 'jmonrroy@ifx.com.ve'
-        smtp_server = 'mail.ifx.com.ve'
-        smtp_user = 'jmonrroy@ifx.com.ve'
-        smtp_pass = 'nunc4R3C04R4RPORC0MPL3JA'
+        addr_from = os.getenv("ADDR_FROM")
+        smtp_server = os.getenv("SMTP_SERVER")
+        smtp_user = os.getenv("SMTP_USER")
+        smtp_pass = os.getenv("SMTP_PASS")
 
         # Construimos el mail
         msg = MIMEMultipart()

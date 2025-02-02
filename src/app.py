@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_wtf import CSRFProtect
-from dotenv import load_dotenv
 from src.utils.logger import logger
+from dotenv import load_dotenv
 import os
 
 # IMPORTACIÓN DE RUTAS
