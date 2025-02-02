@@ -2,7 +2,7 @@
 lista_id = ("V-", "J-", "G-", "E-", "P-")
 
 # Archivo que almacena la tasa BCV obtenida desde el crontab
-file_tasabcv = "tasa_bcv.txt"
+file_tasabcv = "/home/jmonroy/Python/IFX/boton_pago_frontend/src/utils/tasa_bcv.txt"
 
 # Archivo que almacena la lista de bancos obtenida desde el crontab
 file_listabancos = "lista_bancos.txt"

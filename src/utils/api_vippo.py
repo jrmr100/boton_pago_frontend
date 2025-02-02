@@ -63,6 +63,18 @@ def buscar_tasabcv():
             logger.debug("Envio de correo de alerta tasa_bcv: " + str(envio))
         return None
 
+def leer_tasa_bcv():
+    # Funcion llamada desde el programa y busca la tasa en el archivo tasa_bcv.txt
+    try:
+        # Leer la tasa desde el archivo tasa_bcv.txt
+        with open(config.file_tasabcv, 'r') as archivo:
+            lineas_tasa_bcv = archivo.read()
+        lista_tasa_bcv = lineas_tasa_bcv.split(",")
+        tasa_bcv = lista_tasa_bcv[0]
+        return tasa_bcv
+    except Exception as e:
+        return "error tasa_bcv:" + str(e)
+
 def buscar_listabancos():
     archivo_lista_bancos = config.file_listabancos
     endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("ENDPOINT_BANCOS")

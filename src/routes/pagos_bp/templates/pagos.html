@@ -27,7 +27,7 @@
                             <tr>
                                 <th scope="col">Número de cuenta</th>
                                 <th scope="col">Estado</th>
-                                <th scope="col">Fecha de corte</th>
+                                <th scope="col">Plan contratado</th>
                                 <th scope="col">Facturas no pagadas</th>
                                 <th scope="col">Monto de la deuda ($)</th>
                                 <th scope="col">Monto de la deuda (Bs)</th>
@@ -37,10 +37,10 @@
                             <tr>
                                 <td>{{ datos_cliente["datos"][0]["id"] }}</td>
                                 <td>{{ datos_cliente["datos"][0]["estado"] }}</td>
-                                <td>Fecha de corte</td>
+                                <td>{{ datos_cliente["datos"][0]["PlanContratado"] }}</td>
                                 <td>{{ datos_cliente["datos"][0]["facturacion"]["facturas_nopagadas"] }}</td>
                                 <td class="text-danger">{{ datos_cliente["datos"][0]["facturacion"]["total_facturas"] }}</td>
-                                <td class="text-danger">Monto en Bs</td>
+                                <td class="text-danger">{{ monto_bs }}</td>
                             </tr>
                             </tbody>
                         </table>
