@@ -13,12 +13,12 @@
 
     <div class="container-fluid bg-secondary-subtle p-0 min-vh-100">
         <div class="row">
-            <h3 class="text-center">PORTAL DE PAGO</h3>
+            <h3 class="text-center mt-4">INFORMACIÓN DEL PAGO</h3>
 
-            <div class="col-2">
+            <div class="col-1">
             </div>
 
-            <div class="col-8">
+            <div class="col-10">
                 <div class="card">
                     <div class="card-body">
 
@@ -31,6 +31,7 @@
                                 <th scope="col">Facturas no pagadas</th>
                                 <th scope="col">Monto de la deuda ($)</th>
                                 <th scope="col">Monto de la deuda (Bs)</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -41,13 +42,14 @@
                                 <td>{{ datos_cliente["datos"][0]["facturacion"]["facturas_nopagadas"] }}</td>
                                 <td class="text-danger">{{ datos_cliente["datos"][0]["facturacion"]["total_facturas"] }}</td>
                                 <td class="text-danger">{{ monto_bs }}</td>
+                                <td><p><a href="#" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Realizar el pago</a></p>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-1">
 
             </div>
         </div>
