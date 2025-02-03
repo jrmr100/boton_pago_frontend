@@ -11,7 +11,7 @@ load_dotenv()
 fecha_actual = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
 def buscar_tasabcv():
-    archivo_tasa = config.file_tasabcv
+    archivo_tasa = os.getenv("FILE_TASABCV")
     headers = {
         'apikey': os.getenv("APIKEY_VIPPO"),
         'accountMerchant': os.getenv("ACCOUNT_VIPPO")
@@ -67,7 +67,7 @@ def leer_tasa_bcv():
     # Funcion llamada desde el programa y busca la tasa en el archivo tasa_bcv.txt
     try:
         # Leer la tasa desde el archivo tasa_bcv.txt
-        with open(config.file_tasabcv, 'r') as archivo:
+        with open(os.getenv("FILE_TASABCV"), 'r') as archivo:
             lineas_tasa_bcv = archivo.read()
         lista_tasa_bcv = lineas_tasa_bcv.split(",")
         tasa_bcv = lista_tasa_bcv[0]
@@ -76,7 +76,7 @@ def leer_tasa_bcv():
         return "error tasa_bcv:" + str(e)
 
 def buscar_listabancos():
-    archivo_lista_bancos = config.file_listabancos
+    archivo_lista_bancos = os.getenv("FILE_LISTABANCOS")
     endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("ENDPOINT_BANCOS")
     headers = {
         'apikey': os.getenv("APIKEY_VIPPO"),

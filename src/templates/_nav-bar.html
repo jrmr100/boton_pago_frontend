@@ -3,12 +3,12 @@
             <a class="navbar-brand" href="https://admin.2netvzla.com/cliente/login">
                 <img src={{url_for('static', filename='img/logo-2net.png' )}} alt="Bootstrap" width="60" height="60">
             </a>
-
-            <span class="navbar-text me-2 text-white">
-                <b>Bienvenido {{ datos_cliente["datos"][0]["nombre"] }}</b> <i class="fa fa-address-card-o" style="font-size:35px;color:white"></i><br>
+            <span class="navbar-text me-2 text-white ms-auto">
+                <b>{{ datos_cliente["datos"][0]["nombre"] }}</b><br>
                 <b>ID: {{ datos_cliente["datos"][0]["cedula"] }}</b>
-
-
             </span>
+            <div class="text-white">
+                <i class="bi bi-person-circle" style="font-size: 3rem;"></i>
+            </div>
         </div>
 </nav>

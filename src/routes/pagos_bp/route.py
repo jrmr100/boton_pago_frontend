@@ -36,5 +36,5 @@ def pagos():
     return render_template("pagos.html", datos_cliente=datos_cliente, monto_bs=monto_bs)
 
 # TODO: Diseñar pagina de pagos
-# TODO: Validar si se hacen facturas con fecha futuras
+
 
