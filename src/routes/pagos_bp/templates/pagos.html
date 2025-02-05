@@ -9,57 +9,93 @@
 
 <body>
 {% block body %}
-    {% include '_nav-bar.html' %}
+{% include '_nav-bar.html' %}
 
-    <div class="container-fluid bg-secondary-subtle p-0 min-vh-100">
-        <div class="row">
-            <h3 class="text-center mt-4">INFORMACIÓN DEL PAGO</h3>
+<div class="container-fluid bg-secondary-subtle p-0 min-vh-100">
+    <div class="row">
+        <div class="col-1">
+        </div>
 
-            <div class="col-1">
-            </div>
-
-            <div class="col-10">
-                <div class="card">
-                    <div class="card-body">
-
-                        <table class="table text-center">
-                            <thead>
-                            <tr>
-                                <th scope="col">Número de cuenta</th>
-                                <th scope="col">Estado</th>
-                                <th scope="col">Plan contratado</th>
-                                <th scope="col">Facturas no pagadas</th>
-                                <th scope="col">Monto de la deuda en dolares ($)</th>
-                                <th scope="col">Monto de la deuda en bolívares (Bs.)</th>
-                                <th scope="col"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ datos_cliente["datos"][0]["id"] }}</td>
-                                <td>{{ datos_cliente["datos"][0]["estado"] }}</td>
-                                <td>{{ datos_cliente["datos"][0]["PlanContratado"] }}</td>
-                                <td>{{ datos_cliente["datos"][0]["facturacion"]["facturas_nopagadas"] }}</td>
-                                <td><span class="badge text-bg-danger">{{ datos_cliente["datos"][0]["facturacion"]["total_facturas"] }}</span></td>
-                                <td><span class="badge text-bg-danger">{{ monto_bs }}</span></td>
-                                <td><p><a href="#" class="link-primary link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover">Realizar el pago</a></p>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+        <div class="col-10">
+            <h3 class="mt-4">INFORMACIÓN DEL PAGO</h3>
+            <div class="card">
+                <div class="card-body">
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">Número de cuenta</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Plan contratado</th>
+                            <th scope="col">Facturas no pagadas</th>
+                            <th scope="col">Monto de la deuda en dolares ($)</th>
+                            <th scope="col">Monto de la deuda en bolívares (Bs.)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{ datos_cliente["datos"][0]["id"] }}</td>
+                            <td>{{ datos_cliente["datos"][0]["estado"] }}</td>
+                            <td>{{ datos_cliente["datos"][0]["PlanContratado"] }}</td>
+                            <td>{{ datos_cliente["datos"][0]["facturacion"]["facturas_nopagadas"] }}</td>
+                            <td><span class="badge text-bg-danger">{{ datos_cliente["datos"][0]["facturacion"]["total_facturas"] }}</span>
+                            </td>
+                            <td><span class="badge text-bg-danger">{{ monto_bs }}</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="col-1">
-
-            </div>
         </div>
-        <div class="row">
-            <div class="col-6">
-            </div>
-            <div class="col-6">
-            </div>
+        <div class="col-1">
+
         </div>
     </div>
+    <div class="row mt-4">
+        <div class="col-1">
+        </div>
+        <div class="col-10">
+            <h3>MÉTODOS DE PAGO</h3>
+            <h6>Seleccione la opción con la que desea pagar</h6>
+        </div>
+        <div class="col-1">
+        </div>
+    </div>
+    <div class="row mt-4">
 
+        <div class="col-1">
+        </div>
+        <div class="col-5">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <button type="submit"
+                        class="btn btn-outline-dark btn-lg d-flex align-items-center justify-content-center w-100">
+                    <img src="path/to/your/icon.png" alt="Icon" style="margin-right: 10px; width: 20px; height: 20px;">
+                    {{ form.submit1.label.text }}
+                </button>
+            </form>
+
+        </div>
+        <div class="col-5">
+            <button type="submit"
+                    class="btn btn-outline-dark btn-lg d-flex align-items-center justify-content-center w-100">
+                <img src={{url_for('static', filename='img/zelle.svg' )}} alt="Bootstrap" width="64" height="64">
+            </button>
+        </div>
+        <div class="col-1">
+        </div>
+
+    </div>
+</div>
 {% endblock %}
 </body>
+<form method="POST" action="{{ url_for('tu_ruta') }}">
+    {{ form.hidden_tag() }}
+
+    <!-- Otros campos del formulario -->
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> {{ form.submit.label }}
+        </button>
+    </div>
+</form>
