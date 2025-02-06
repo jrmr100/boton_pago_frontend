@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% block head %}
 <title>2NET - Pagos </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 {% endblock %}
@@ -53,49 +53,36 @@
     <div class="row mt-4">
         <div class="col-1">
         </div>
-        <div class="col-10">
+        <div class="col-10 text-center">
             <h3>MÉTODOS DE PAGO</h3>
             <h6>Seleccione la opción con la que desea pagar</h6>
         </div>
         <div class="col-1">
         </div>
     </div>
-    <div class="row mt-4">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="row mt-4">
 
-        <div class="col-1">
-        </div>
-        <div class="col-5">
-            <form method="POST">
-                {{ form.hidden_tag() }}
-                <button type="submit"
-                        class="btn btn-outline-dark btn-lg d-flex align-items-center justify-content-center w-100">
-                    <img src="path/to/your/icon.png" alt="Icon" style="margin-right: 10px; width: 20px; height: 20px;">
-                    {{ form.submit1.label.text }}
-                </button>
-            </form>
+
+            <div class="col-1">
+            </div>
+
+            <div class="col-5 text-center">
+                <img class="" src="{{url_for('static', filename='img/pagomovil.png')}}" alt="Pagomovil" style="width: 80px; height: 80px;"><br>
+                {{ form.submit1(class="btn btn-outline-dark", style="width: 150px; height: 50px;") }}
+            </div>
+
+            <div class="col-5 text-center">
+                <img class="mb-2" src="{{url_for('static', filename='img/zelle.png')}}" alt="Zelle" style="width: 70px; height: 70px;"><br>
+                {{ form.submit2(class="btn btn-outline-dark", style="width: 150px; height: 50px;") }}
+            </div>
+
+            <div class="col-1">
+            </div>
 
         </div>
-        <div class="col-5">
-            <button type="submit"
-                    class="btn btn-outline-dark btn-lg d-flex align-items-center justify-content-center w-100">
-                <img src={{url_for('static', filename='img/zelle.svg' )}} alt="Bootstrap" width="64" height="64">
-            </button>
-        </div>
-        <div class="col-1">
-        </div>
-
-    </div>
+    </form>
 </div>
 {% endblock %}
 </body>
-<form method="POST" action="{{ url_for('tu_ruta') }}">
-    {{ form.hidden_tag() }}
-
-    <!-- Otros campos del formulario -->
-
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">
-            <i class="fas fa-paper-plane"></i> {{ form.submit.label }}
-        </button>
-    </div>
-</form>
