@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, session
+from flask import render_template, Blueprint, session, redirect, url_for
 from src.utils.api_vippo import leer_tasa_bcv
 from src.utils.logger import logger
 from src.routes.pagos_bp.templates.form_fields import FormFields
@@ -38,10 +38,9 @@ def pagos():
 
     if form.validate_on_submit():
         if form.submit1.data:
-            return render_template("pagomovil.html", datos_cliente=datos_cliente, monto_bs=monto_bs, form=form)
+            return redirect(url_for('pagomovil.pagomovil'))
         if form.submit2.data:
-            return render_template("zelle.html", datos_cliente=datos_cliente, monto_bs=monto_bs, form=form)
-
+            return redirect(url_for('zelle.zelle'))
     # Obtengo la tasa BCV desde la funcion
 
 
@@ -53,5 +52,6 @@ def pagos():
     return render_template("pagos.html", datos_cliente=datos_cliente, monto_bs=monto_bs, form=form)
 
 # TODO: Diseñar pagina de pagos
+# TODO: poner verde si no tiene deuda
 
 

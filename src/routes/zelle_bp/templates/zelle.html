@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+{% block head %}
+<title>Pagos-zelle</title>
+    <style>
+        body {
+            background-color: #f8f9fa; /* Gris claro de fondo */
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            flex: 1; /* El contenedor principal ocupa todo el espacio */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .message {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px; /* Ancho máximo del mensaje */
+        }
+
+        .message h2 {
+            color: #343a40; /* Color de texto oscuro */
+            margin-bottom: 20px;
+        }
+
+        .message p {
+            color: #555; /* Color de texto un poco más claro */
+            margin-bottom: 30px;
+        }
+
+        .zelle-info {
+            background-color: #f0f0f0; /* Fondo grisáceo para la información de Zelle */
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .zelle-info p {
+            margin-bottom: 10px;
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* Azul para el botón */
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0069d9;
+            border-color: #0062cc;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+{% endblock %}
+
+<body>
+{% block body %}
+{% include '_nav-bar.html' %}
+
+    <div class="container">
+        <div class="message">
+            <h2>Información Importante sobre Pagos</h2>
+            <p>
+                Hemos actualizado nuestro método de pago. Ahora puedes realizar el pago de tu servicio a través del
+                Zelle.
+            </p>
+            <div class="zelle-info">
+                <p><strong>zelle@ifxnw.com.ve</strong></p>
+            </div>
+            <p>
+                Luego de realizar el pago, por favor, infórmalo en nuestro portal para que podamos validar tu reporte.
+            </p>
+            <a href="https://www.2netvzla.com/" class="btn btn-primary">Informar Pago</a>
+            <p>
+                La validación de tu reporte puede tardar entre 24 y 72 horas.
+            </p>
+        </div>
+    </div>
+{% endblock %}
+</body>
