@@ -35,9 +35,20 @@
                             <td>{{ datos_cliente["datos"][0]["estado"] }}</td>
                             <td>{{ datos_cliente["datos"][0]["PlanContratado"] }}</td>
                             <td>{{ datos_cliente["datos"][0]["facturacion"]["facturas_nopagadas"] }}</td>
-                            <td><span class="badge text-bg-danger">{{ datos_cliente["datos"][0]["facturacion"]["total_facturas"] }}</span>
+                            <td>
+                                {% if monto_dls > 0 %}
+                                <span class="badge text-bg-danger">{{ monto_dls }}</span>
+                                {% else %}
+                                <span class="badge text-bg-success">{{ monto_dls }}</span>
+                                {% endif %}
                             </td>
-                            <td><span class="badge text-bg-danger">{{ monto_bs }}</span></td>
+                            <td>
+                                {% if monto_bs > 0 %}
+                                <span class="badge text-bg-danger">{{ monto_bs }}</span>
+                                {% else %}
+                                <span class="badge text-bg-success">{{ monto_bs }}</span>
+                                {% endif %}
+                            </td>
                         </tr>
                         </tbody>
                     </table>

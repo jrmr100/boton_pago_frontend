@@ -32,9 +32,9 @@ def pagos():
         logger.info("Tasa obtenida del archivo TXT: " + str(tasa_bcv))
 
     # Calculo el monto en Bs
-    montodls = datos_cliente["datos"][0]["facturacion"]["total_facturas"]
-    montobs_long = float(montodls) * float(tasa_bcv)
-    monto_bs = "{:.2f}".format(montobs_long)
+    monto_dls = float(datos_cliente["datos"][0]["facturacion"]["total_facturas"])
+    montobs_long = float(monto_dls) * float(tasa_bcv)
+    monto_bs = float("{:.2f}".format(montobs_long))
 
     if form.validate_on_submit():
         if form.submit1.data:
@@ -46,10 +46,7 @@ def pagos():
 
 
 
-
-
-
-    return render_template("pagos.html", datos_cliente=datos_cliente, monto_bs=monto_bs, form=form)
+    return render_template("pagos.html", datos_cliente=datos_cliente, monto_bs=monto_bs, form=form, monto_dls=monto_dls)
 
 # TODO: Diseñar pagina de pagos
 # TODO: poner verde si no tiene deuda
