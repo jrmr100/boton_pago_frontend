@@ -53,5 +53,6 @@ def pagos():
 
 # TODO: Diseñar pagina de pagos
 # TODO: poner verde si no tiene deuda
+# TODO: Definir si usar CDN o no para los iconos de bootstrap
 
 
