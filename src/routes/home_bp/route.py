@@ -21,13 +21,13 @@ def home():
     form = FormFields()
 
     # Carga de los tipos CI/RIF
-    form.field2.choices = config.lista_id
+    form.tipo_id.choices = config.lista_id
 
     if form.validate_on_submit():
         # Obtengo los datos del formulario
-        client_email = form.field1.data
-        client_tipo_id = form.field2.data  # no usado por ahora
-        client_id = form.field3.data
+        client_email = form.email.data
+        client_tipo_id = form.tipo_id.data  # no usado por ahora
+        client_id = form.ci.data
 
         ################ Busco cliente en MW ##############
         logger.info("user: " + str(client_id) +

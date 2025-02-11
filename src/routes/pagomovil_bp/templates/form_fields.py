@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import EmailField, StringField, SubmitField, SelectField
-from wtforms.validators import InputRequired, Email, Length
-from src.utils.validaciones_form import only_numbers
+from wtforms.validators import InputRequired, Email, Length, DataRequired
+from src.utils.validaciones_form import only_numbers, banco_emisor, passport
 
 
 class FormFields(FlaskForm):

@@ -34,26 +34,26 @@
                         </div>
 
                         <div>
-                            <b>{{ form.field1.label }}</b>
-                            {{ form.field1(class="form-control", autofocus=true)}}
-                            {% for error in form.field1.errors %}
+                            <b>{{ form.email.label }}</b>
+                            {{ form.email(class="form-control", autofocus=true)}}
+                            {% for error in form.email.errors %}
                             <span class="text-danger">{{ error }}</span>
                             {% endfor %}
                         </div>
 
                         <div class="mt-2">
-                            <b>{{ form.field2.label }}</b>
+                            <b>{{ form.tipo_id.label }}</b>
                             <div style="display: flex; align-items: center;">
-                                {{ form.field2(class="form-select") }}
-                                {{ form.field3(class="form-control") }}
+                                {{ form.tipo_id(class="form-select") }}
+                                {{ form.ci(class="form-control") }}
                             </div>
-                            {% for error in form.field3.errors %}
+                            {% for error in form.ci.errors %}
                                 <span class="text-danger">{{ error }}</span>
                             {% endfor %}
                         </div>
 
                         <div class="d-grid mt-2">
-                            {{ form.field4(class="btn btn-primary") }}
+                            {{ form.submit(class="btn btn-primary") }}
                         </div>
                     </div>
 
