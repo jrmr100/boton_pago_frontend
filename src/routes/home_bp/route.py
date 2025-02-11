@@ -3,7 +3,6 @@ from src.routes.home_bp.templates.form_fields import FormFields
 from src.utils.api_mw import ApiMw
 import src.config as config
 from src.utils.logger import logger
-import src.routes.home_bp.validaciones as validaciones
 
 
 nombre_ruta = "home"
@@ -36,27 +35,28 @@ def home():
         resultado_apimw = info_cliente.buscar_cliente()
         logger.debug("user: " + str(client_id) +
                     " TYPE: resultado de la busqueda de cliente: " + str(resultado_apimw) + "\n")
-
-        # valido los resultados de la API
-        valida_api = validaciones.resultado_api(resultado_apimw)
-
-        if valida_api == "exito":
-            # Valido el correo
-            email_mw = resultado_apimw[1]['datos'][0]['correo']
-            valida_email = validaciones.validar_email(client_email, email_mw)
-            if valida_email is True:
-                nro_cta = resultado_apimw[1]['datos'][0]['id']
-                session["datos_cliente"] = resultado_apimw[1]
-                return redirect(url_for('pagos.pagos'))
-            else:
+        if resultado_apimw[0] == "success":
+            if resultado_apimw[1]["estado"] == "exito":
+                # Valido el correo
+                email_mw = resultado_apimw[1]['datos'][0]['correo']
+                if client_email == email_mw:
+                    nro_cta = resultado_apimw[1]['datos'][0]['id']
+                    session["datos_cliente"] = resultado_apimw[1]
+                    return redirect(url_for('pagos.pagos'))
+                else:
+                    logger.error("user: " + str(client_id) +
+                                 " TYPE: correo no iguales\n")
+                    flash("No existe cliente con los datos suministrados", "failure")
+            elif resultado_apimw[1]["estado"] == "error":
                 logger.error("user: " + str(client_id) +
-                            " TYPE: correo no iguales\n")
-                flash("No existe cliente con los datos suministrados", "failure")
-        elif valida_api == "except":
+                             " TYPE: " + resultado_apimw[1]["mensaje"] + "\n")
+                flash(resultado_apimw[1]["mensaje"], "failure")
+        elif resultado_apimw[0] == "except":
+            logger.error("user: " + str(client_id) +
+                         " TYPE: Error API - MW: " + resultado_apimw[1] + "\n")
             return render_template("error_general.html", msg="Error API - MW", error=resultado_apimw[1], type="503")
 
-        elif valida_api == "error":
-            flash("No existe cliente con los datos suministrados", "failure")
+
 
     return render_template("home.html", form=form)
 
