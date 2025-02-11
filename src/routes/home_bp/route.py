@@ -3,6 +3,7 @@ from src.routes.home_bp.templates.form_fields import FormFields
 from src.utils.api_mw import ApiMw
 import src.config as config
 from src.utils.logger import logger
+import src.routes.home_bp.validaciones_home as validaciones_home
 
 
 nombre_ruta = "home"
@@ -47,16 +48,24 @@ def home():
                     logger.error("user: " + str(client_id) +
                                  " TYPE: correo no iguales\n")
                     flash("No existe cliente con los datos suministrados", "failure")
-            elif resultado_apimw[1]["estado"] == "error":
+            else:
+                validar_resultado_apimw = validaciones_home.resultado_apimw(resultado_apimw)
+                if validar_resultado_apimw[0] == "flash":
+                    logger.error("user: " + str(client_id) +
+                                 " TYPE: " + validar_resultado_apimw[1] + "\n")
+                    flash(validar_resultado_apimw[1], "failure")
+                elif validar_resultado_apimw[0] == "error_page":
+                    logger.error("user: " + str(client_id) +
+                                 " TYPE: Error API - MW: " + str(resultado_apimw[1]) + "\n")
+                    return render_template("error_general.html", msg="Error API - MW", error=validar_resultado_apimw[1],
+                                           type="503")
+        else:
+            validar_resultado_apimw = validaciones_home.resultado_apimw(resultado_apimw)
+            if validar_resultado_apimw[0] == "error_page":
                 logger.error("user: " + str(client_id) +
-                             " TYPE: " + resultado_apimw[1]["mensaje"] + "\n")
-                flash(resultado_apimw[1]["mensaje"], "failure")
-        elif resultado_apimw[0] == "except":
-            logger.error("user: " + str(client_id) +
-                         " TYPE: Error API - MW: " + resultado_apimw[1] + "\n")
-            return render_template("error_general.html", msg="Error API - MW", error=resultado_apimw[1], type="503")
-
-
+                             " TYPE: Error API - MW: " + str(resultado_apimw[1]) + "\n")
+                return render_template("error_general.html", msg="Error API - MW", error=validar_resultado_apimw[1],
+                                       type="503")
 
     return render_template("home.html", form=form)
 
