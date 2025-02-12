@@ -117,6 +117,18 @@ def buscar_listabancos():
             logger.debug("Envio de correo de alerta lista de bancos: " + str(envio))
         return None
 
+def leer_listabancos():
+    # Funcion llamada desde el programa y busca la tasa en el archivo lista_bancos.txt
+    try:
+        # Leer la lista de bancos
+        with open(os.getenv("FILE_LISTABANCOS"), 'r') as archivo:
+            linea_lista_bancos = archivo.read()
+            lista_bancos = linea_lista_bancos.split("\n")
+            logger.info(" TYPE: Lista bancos obtenida del archivo TXT: " + str(lista_bancos))
+            return lista_bancos
+    except Exception as e:
+        return "error listabancos - " + str(e)
+
 
 
 

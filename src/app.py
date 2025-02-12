@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_wtf import CSRFProtect
 from src.utils.logger import logger
-from dotenv import load_dotenv
 import os
+
 
 # IMPORTACIÓN DE RUTAS
 from src.routes.home_bp.route import blue_ruta as home
@@ -11,10 +11,6 @@ from src.routes.zelle_bp.route import blue_ruta as zelle
 from src.routes.pagomovil_bp.route import blue_ruta as pagomovil
 
 
-
-
-# Cargo la variable de entorno
-load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")

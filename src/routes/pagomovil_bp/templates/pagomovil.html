@@ -1,17 +1,142 @@
 {% extends 'layout.html' %}
 {% block head %}
-<title>PAGOMOVIL</title>
+<title>2NET - Pagomovil</title>
+
 {% endblock %}
 
 
 <body>
 {% block body %}
-<div class="container-fluid p-0 overflow-hidden">
-    <div class="row min-vh-100">
-        <div class="col-md-12 col-lg align-content-center  ">
-            <h2>PAGOMOVIL yiuju</h2>
+{% include '_nav-bar.html' %}
+
+<div class="container-fluid bg-secondary-subtle p-0 min-vh-100">
+
+    <div class="row">
+        <div class="col-1">
+        </div>
+        <div class="col-10">
+            <!-- FILA 1 -->
+            <div class="row">
+                <div class="col-12 card mt-2">
+                    <h3 class="mt-3 text-center">Datos del pago movil</h3>
+                    <div class="card-body d-flex justify-content-center align-items-center">
+                        <div class="card mb-3" style="max-width: 540px;">
+                            <div class="row g-0">
+                                <div class="col-md-4 d-flex justify-content-center align-items-center">
+                                    <img class="img-fluid rounded-start" alt="Logo home"
+                                         src="{{url_for('pagomovil.static', filename='img/logo_bancoplaza.png' )}}">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><b>{{ pm_bancoplaza[1] }}</b></h5>
+                                        <p class="card-text"><b>TELEFONO:</b> {{ pm_bancoplaza[0] }}<br>
+                                            <b>RIF:</b> {{ pm_bancoplaza[2] }}
+                                        </p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILA 2 -->
+            <div class="row">
+                <form method="POST" class="p-0">
+                    {{ form.hidden_tag() }}
+                    <div class="card mt-2">
+                        <div class="row">
+                            <h3 class="mt-3 ms-4">Indique los datos del pago realizado:</h3>
+                            <div class="col-5">
+                                <!-- CI PAGADOR -->
+                                <div class="ms-4">
+                                    <label><b>{{ form.tipo_id.label }}</b></label>
+                                    <div style="display: flex; align-items: center;">
+                                        {{ form.tipo_id(class="form-select") }}
+                                        {{ form.payerID(class="form-control", autofocus=true) }}
+                                    </div>
+                                    {% for error in form.payerID.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- BANCO EMISOR -->
+                                <div class="ms-4 mt-3">
+                                    <b>{{ form.entity.label }}</b>
+                                    <div style="display: flex; align-items: center;">
+                                        {{ form.entity(class="form-select") }}
+                                    </div>
+                                    {% for error in form.entity.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="col-5">
+                                <!-- TELEFONO PAGADOR -->
+                                <div class="ms-4">
+                                    <label><b>{{ form.tipo_phone.label }}</b></label>
+                                    <div style="display: flex; align-items: center;">
+                                        {{ form.tipo_phone(class="form-select", style="width: 90px;") }}
+                                        {{ form.payerPhone(class="form-control ms-2") }}
+                                    </div>
+                                    {% for error in form.payerPhone.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+
+                                <!-- REFERENCIA -->
+                                <div class="ms-4 mt-3">
+                                    <label><b>{{ form.order.label }}</b></label>
+                                    <div style="display: flex; align-items: center;">
+                                        {{ form.order(class="form-control") }}
+                                    </div>
+                                    {% for error in form.order.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="col-2 d-flex align-content-center align-items-center">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h4 class="text-decoration-underline">Monto a cancelar</h4>
+                                        <h2><b> Bs. </b></h2>
+                                        <h3><b> {{ montobs }} </b></h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- FILA 3 -->
+                            <div class="row">
+                                <!-- REGRESAR -->
+                                <div class="col-5 text-center mt-5">
+                                    <img class="me-2" src="{{url_for('static', filename='img/volver.png')}}"
+                                         alt="Pagomovil" style="width: 50px; height: 50px;">
+                                    {{ form.regresar(class="btn btn-outline-danger", style="width: 150px; height: 50px;") }}
+                                </div>
+
+                                <!-- ENVIAR PAGO -->
+                                <div class="col-5 text-center mt-5 mb-4">
+                                    <img class="me-2" src="{{url_for('static', filename='img/exito.png')}}"
+                                         alt="Pagomovil" style="width: 50px; height: 50px;">
+                                    {{ form.enviar(class="btn btn-outline-success", style="width: 150px; height: 50px;") }}
+                                </div>
+
+                                <div class="col-2">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="col-1">
         </div>
     </div>
 </div>
+
 {% endblock %}
 </body>

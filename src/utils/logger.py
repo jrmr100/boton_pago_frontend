@@ -1,10 +1,11 @@
 import logging
+from datetime import datetime
 from dotenv import load_dotenv
 import os
-from datetime import datetime
 
 
-# Cargo la variable de entorno
+
+# Cargo las variables de entorno para todo el proyecto
 load_dotenv()
 
 # Configuro los parámetros y formatos del logging

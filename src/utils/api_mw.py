@@ -1,8 +1,5 @@
-from dotenv import load_dotenv
 import os
 import src.utils.connect_api as connect_api
-
-load_dotenv()
 
 
 class ApiMw:

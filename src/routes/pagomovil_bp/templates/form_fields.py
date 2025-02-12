@@ -35,15 +35,6 @@ class FormFields(FlaskForm):
                                     Length(min=6, max=6)],
                         render_kw={"title": "Ultimos 6 digitos"})
 
-    submit = SubmitField("Aceptar")
+    enviar = SubmitField("Enviar pago")
 
-
-    field1 = EmailField('Correo electrónico',
-                              validators=[InputRequired(), Email(),
-                                          Length(min=1, max=50)])
-    field2 = SelectField('CI/RIF:',
-                          render_kw={'style': 'width: 80px; margin-right: 10px;'})
-    field3 = StringField('Cédula de identidad',
-                             validators=[InputRequired(), Length(min=3, max=40), only_numbers])
-
-    field4 = SubmitField('Aceptar')
+    regresar = SubmitField("Regresar")
