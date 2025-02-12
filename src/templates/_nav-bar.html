@@ -1,13 +1,13 @@
-<nav class="navbar navbar-expand-lg bg-secondary">
-        <div class="container-fluid text-uppercase">
+<nav class="navbar navbar-expand-lg bg-2net">
+        <div class="container-fluid text-uppercase text-white">
             <a class="navbar-brand" href="https://admin.2netvzla.com/cliente/login">
                 <img src="{{url_for('static', filename='img/logo-2net.png' )}}" alt="Bootstrap" width="60" height="60">
             </a>
-            <span class="navbar-text me-2 text-white ms-auto">
+            <span class="navbar-text me-2 ms-auto text-white">
                 <b>{{ datos_cliente["datos"][0]["nombre"] }}</b><br>
                 <b>ID: {{ datos_cliente["datos"][0]["cedula"] }}</b>
             </span>
-            <div class="text-white">
+            <div>
                 <i class="bi bi-person-circle" style="font-size: 3rem;"></i>
             </div>
         </div>
