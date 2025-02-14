@@ -1,79 +1,73 @@
 {% extends 'layout.html' %}
 {% block head %}
-    <title>2NET - Pagos </title>
-
+<title>2NET - Pagos </title>
 {% endblock %}
-
 
 <body>
 {% block body %}
-    {% include '_nav-bar.html' %}
-
-    <div class="container-fluid bg-secondary-subtle w-100">
+{% include '_nav-bar.html' %}
+<div class="container-fluid bg-secondary-subtle min-vh-100">
     <div class="row">
         <div class="col-1">
         </div>
 
         <div class="col-10">
-            <div class="row">
-
-                <div class="col-lg-6 text-center">
+            <div class="row mt-4">
+                <div class="col-6 text-center">
                     <h3 class="mt-4">INFORMACIÓN DE LA CUENTA</h3>
-                    <div class="d-flex justify-content-center h-75">
-                        <div class="card border-primary mb-3 text-center">
-                            <div class="card-header">ID de la cuenta</div>
-                            <div class="card-body text-primary">
+                    <div class="card-group text-center">
+                        <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card-header"><b>ID de la cuenta</b></div>
+                            <div class="card-body">
                                 <h5 class="card-title">{{ datos_cliente["datos"][0]["id"] }}</h5>
                             </div>
                         </div>
-
-                        <div class="card border-primary mb-3 text-center">
-                            <div class="card-header">Estado</div>
-                            <div class="card-body text-primary">
+                        <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card-header"><b>Estado</b></div>
+                            <div class="card-body">
                                 <h5 class="card-title">{{ datos_cliente["datos"][0]["estado"] }}</h5>
                             </div>
                         </div>
-
-                        <div class="card border-primary mb-3 text-center">
-                            <div class="card-header">Plan contratado</div>
-                            <div class="card-body text-primary">
+                        <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card-header"><b>Plan contratado</b></div>
+                            <div class="card-body">
                                 <h5 class="card-title">{{ datos_cliente["datos"][0]["PlanContratado"] }}</h5>
                             </div>
                         </div>
                     </div>
 
                 </div>
-                <div class="col-lg-6 text-center">
+
+                <div class="col-6 text-center">
                     <h3 class="mt-4">INFORMACIÓN DEL PAGO</h3>
-                    <div class="d-flex justify-content-center h-75">
-                        <div class="card border-primary mb-3 text-center">
-                            <div class="card-header">Facturas no pagadas</div>
-                            <div class="card-body text-primary">
-                                <h5 class="card-title">{{ datos_cliente["datos"][0]["facturacion"]["facturas_nopagadas"] }}</h5>
+                    <div class="card-group text-center">
+                        <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card-header"><b>Facturas no pagadas</b></div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ datos_cliente["datos"][0]["facturacion"]["facturas_nopagadas"]
+                                    }}</h5>
                             </div>
                         </div>
-
-                        <div class="card border-primary mb-3 text-center">
-                            <div class="card-header">Deuda en dólares ($)</div>
-                            <div class="card-body text-primary">
+                        <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card-header"><b>Deuda en dólares ($)</b></div>
+                            <div class="card-body">
                                 <h5 class="card-title">
                                     {% if monto_dls > 0 %}
-                                        <span class="badge text-bg-danger">{{ monto_dls }}</span>
+                                    <span class="badge text-bg-danger">{{ monto_dls }}</span>
                                     {% else %}
-                                        <span class="badge text-bg-success">{{ monto_dls }}</span>
+                                    <span class="badge text-bg-success">{{ monto_dls }}</span>
                                     {% endif %}
                                 </h5>
                             </div>
                         </div>
-
-                        <div class="card border-primary mb-3 text-center">
-                            <div class="card-header">Deuda en Bolívares (Bs.)</div>
-                            <div class="card-body text-primary">
+                        <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card-header"><b>Deuda en Bolívares (Bs.)</b></div>
+                            <div class="card-body">
                                 <h5 class="card-title">
                                     {% if monto_bs > 0 %}
-                                        <span class="badge text-bg-danger">{{ monto_bs }}</span>
+                                    <span class="badge text-bg-danger">{{ monto_bs }}</span>
                                     {% else %}
-                                        <span class="badge text-bg-success">{{ monto_bs }}</span>
+                                    <span class="badge text-bg-success">{{ monto_bs }}</span>
                                     {% endif %}
                                 </h5>
                             </div>
@@ -81,46 +75,54 @@
                     </div>
 
                 </div>
+
+
             </div>
 
             <div class="col-1">
 
             </div>
         </div>
-        <div class="row mt-4">
-            <div class="col-1">
-            </div>
-            <div class="col-10 text-center">
+
+        <div class="col-1">
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-1">
+        </div>
+
+        <div class="col-10">
+            <div class="text-center">
                 <h3>MÉTODOS DE PAGO</h3>
                 <h6>Seleccione la opción con la que desea pagar</h6>
             </div>
-            <div class="col-1">
+            <div class="card">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="row p-4">
+                        <div class="col-sm-6 d-flex justify-content-center align-items-center flex-column p-2">
+                            <img src="{{ url_for('static', filename='img/pagomovil.png') }}"
+                                 alt="Pagomovil" style="width: 80px; height: 80px;"><br>
+                            {{ form.submit1(class="btn btn-outline-primary", style="width: 150px; height: 50px;") }}
+                        </div>
+
+                        <div class="col-sm-6 d-flex justify-content-center align-items-center flex-column p-2">
+                            <img src="{{ url_for('static', filename='img/zelle.png') }}" alt="Zelle"
+                                 style="width: 80px; height: 80px;"><br>
+                            {{ form.submit2(class="btn btn-outline-dark", style="width: 150px; height: 50px;") }}
+                        </div>
+                    </div>
+                </form>
             </div>
+
         </div>
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <div class="row mt-4">
 
-                <div class="col-1">
-                </div>
-
-                <div class="col-5 text-center">
-                    <img class="mb-2" src="{{ url_for('static', filename='img/pagomovil.png') }}" alt="Pagomovil"
-                         style="width: 80px; height: 80px;"><br>
-                    {{ form.submit1(class="btn btn-outline-dark", style="width: 150px; height: 50px;") }}
-                </div>
-
-                <div class="col-5 text-center mb-2">
-                    <img class="mb-2" src="{{ url_for('static', filename='img/zelle.png') }}" alt="Zelle"
-                         style="width: 80px; height: 80px;"><br>
-                    {{ form.submit2(class="btn btn-outline-dark", style="width: 150px; height: 50px;") }}
-                </div>
-
-                <div class="col-1">
-                </div>
-
-            </div>
-        </form>
+        <div class="col-1">
+        </div>
     </div>
+
+
+</div>
 {% endblock %}
 </body>
