@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!--Icono de la pestaña-->
+  <link rel="icon" type="image/x-icon" href="/static/img/logo.png">
+  <title>Resultado del pago</title>
+  <style>
+    body {
+      background-color: #f2f2f2;
+      color: #000000;
+      font-family: Arial, sans-serif;
+    }
+
+    form {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }    
+    
+    h1 {
+      font-size: 36px;
+      margin-top: 10px;
+    }
+    
+    img {
+      width: 200px;
+      margin: 50px auto;
+    }
+    
+    p {
+      font-size: 24px;
+    }
+    
+    .logo {
+      width: 349px;
+      margin-top: 0px;
+    }
+    
+    .info {
+      width: 80px;
+      height: 80;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <form method="GET">
+    <div style="text-align: center;">
+      <img src="{{ url_for('static', filename='img/logofactura.png') }}" alt="Logo 2NET" width="349" height="147" align="center" class="logo"><br>
+      {% if aprobado == 1 %}
+            <img src={{ url_for('static', filename='img/exito.png') }} alt="Imagen de exito" align="center" class="info">
+      {% else %}
+            <img src={{ url_for('static', filename='img/error.png') }} alt="Imagen de error" align="center" class="info">
+      {% endif %}
+
+      <h2>RESULTADO DE LA OPERACIÓN!</h2>
+      <table style="text-align: left;">
+        <tr>
+          <th>ID del Cliente: </th>
+          <td>{{ ci_cliente }}</td>
+        </tr>
+        <tr>
+          <th>Email del Cliente: </th>
+          <td>{{ email_cliente }}</td>
+        </tr>
+        <tr>
+          <th>Número de Cliente: </th>
+          <td>{{ id_cliente }}</td>
+        </tr>
+        <tr>
+          <th>Número de referencia: </th>
+          <td>{{ reference }}</td>
+        </tr>
+        <tr>
+          <th>Monto de la operación (Bs.): </th>
+          <td>{{ amount_bs }}</td>
+        </tr>
+        <tr>
+          <th>Resultado: </th>
+          <td>{{ result }}</td>
+        </tr>
+        <tr>
+          <th>Facturas canceladas: </th>
+          <td>{{ facturas }}</td>
+        </tr>
+      </table>
+    </div>
+  </form>
+</body>
+</html>

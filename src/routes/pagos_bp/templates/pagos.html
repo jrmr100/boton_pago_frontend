@@ -13,7 +13,7 @@
 
         <div class="col-10">
             <div class="row mt-4">
-                <div class="col-6 text-center">
+                <div class="col-md-6 text-center">
                     <h3 class="mt-4">INFORMACIÓN DE LA CUENTA</h3>
                     <div class="card-group text-center">
                         <div class="card border-primary" style="overflow: hidden; height: 120px;">
@@ -38,7 +38,7 @@
 
                 </div>
 
-                <div class="col-6 text-center">
+                <div class="col-md-6 text-center">
                     <h3 class="mt-4">INFORMACIÓN DEL PAGO</h3>
                     <div class="card-group text-center">
                         <div class="card border-primary" style="overflow: hidden; height: 120px;">
@@ -97,7 +97,7 @@
                 <h3>MÉTODOS DE PAGO</h3>
                 <h6>Seleccione la opción con la que desea pagar</h6>
             </div>
-            <div class="card">
+            <div class="card border-primary">
                 <form method="POST">
                     {{ form.hidden_tag() }}
                     <div class="row p-4">
@@ -110,7 +110,7 @@
                         <div class="col-sm-6 d-flex justify-content-center align-items-center flex-column p-2">
                             <img src="{{ url_for('static', filename='img/zelle.png') }}" alt="Zelle"
                                  style="width: 80px; height: 80px;"><br>
-                            {{ form.submit2(class="btn btn-outline-dark", style="width: 150px; height: 50px;") }}
+                            {{ form.submit2(class="btn btn-outline-primary", style="width: 150px; height: 50px;") }}
                         </div>
                     </div>
                 </form>

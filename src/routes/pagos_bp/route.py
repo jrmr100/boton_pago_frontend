@@ -60,5 +60,6 @@ def pagos():
 # TODO: Imagenes en static del folder
 # TODO: Limpiar la session y poner tiempo
 # TODO: Validar el trackid diferido
+# TODO: Rehacer boton de cancelar
 
 
