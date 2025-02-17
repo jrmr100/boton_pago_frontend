@@ -1,6 +1,7 @@
 from flask import render_template, Blueprint, session, redirect, url_for
 from src.routes.pagomovil_bp.templates.form_fields import FormFields
 from src.utils.api_vippo import leer_listabancos, validar_pago
+from src.utils.api_mw import buscar_facturas
 from src.utils.logger import logger
 import src.config as config
 import os
@@ -27,11 +28,9 @@ def pagomovil():
     # Carga la lista de bancos desde el archivo TXT
     listabancos = leer_listabancos()
     if "error listabancos" in listabancos:
-        logger.error("Error obteniendo la lista de bancos desde el archivo TXT: " + str(listabancos) + "\n")
         return render_template("error_general.html", msg="Error obteniendo la lista de bancos, intente mas tarde",
                                error="No es posible acceder a la lista de bancos emisores", type="500")
     else:
-        logger.info("Lista banco obtenida desde el archivo TXT: " + str(listabancos))
         form.entity.choices = listabancos
 
     # Carga de los tipos de ID al selectfield ID
@@ -50,7 +49,6 @@ def pagomovil():
         montobs = session["monto_bs"]
         datos_cliente = session["datos_cliente"]
 
-
         resultado_val = validar_pago(id_customer, phone_payer, entity, order, montobs )
         logger.debug("user: " + str(datos_cliente) + "Resultado de validacion del pago: " + str(resultado_val))
 
@@ -58,6 +56,15 @@ def pagomovil():
             if resultado_val[1]["message"] == "Operación realizada con éxito.":
                 img_entity = 'img/logo_bancoplaza.png'
                 img_result = 'img/exito.png'
+                id_cliente = str(datos_cliente["datos"][0]["id"])
+
+
+                facturas_cliente = buscar_facturas(id_cliente,
+                                                   datos_cliente["datos"][0]["id"], montobs)
+                resultado_apimw = facturas_cliente.buscar_facturas()
+                logger.debug("user: " + str(datos_cliente) +
+                             " TYPE: Respuesta MW buscando facturas: " + str(resultado_apimw))
+
                 return render_template('pay_result.html', msg=resultado_val[1]["message"],
                                        datos_cliente=datos_cliente, img_entity=img_entity,
                                        id_customer=id_customer,

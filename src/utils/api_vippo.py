@@ -159,7 +159,7 @@ def validar_pago(id_customer, phone_payer, entity, order, montobs):
                 "amount": montobs,
             }
             }
-
+    logger.info("Validando el pago: " + str(body))
     api_response = connect_api.conectar(headers, body, endpoint, "POST")
     if api_response[0] == "success":
         try:
