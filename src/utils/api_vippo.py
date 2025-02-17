@@ -80,7 +80,7 @@ def leer_tasa_bcv():
 
 def buscar_listabancos():
     archivo_lista_bancos = os.getenv("FILE_LISTABANCOS")
-    endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("ENDPOINT_BANCOS")
+    endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_BANCOS")
     headers = {
         'apikey': os.getenv("APIKEY_VIPPO"),
         'accountMerchant': os.getenv("ACCOUNT_VIPPO")
@@ -135,7 +135,7 @@ def leer_listabancos():
 
 
 def validar_pago(id_customer, phone_payer, entity, order, montobs):
-    url_validate = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_VALIDATE")
+    endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_VALIDATE")
 
     # Creo el header y el body para validar el pago movil
     headers = {"apikey": os.getenv("APIKEY_VIPPO"),
@@ -159,3 +159,18 @@ def validar_pago(id_customer, phone_payer, entity, order, montobs):
                 "amount": montobs,
             }
             }
+
+    api_response = connect_api.conectar(headers, body, endpoint, "POST")
+    if api_response[0] == "success":
+        try:
+            logger.info("Respuesta obtenida de VIPPO validando el pago " + str(api_response[1]))
+            return "success", api_response[1]
+
+        except Exception as error:
+            logger.error("TYPE: except, error de datos recibidos de VIPPO validando el pago:" + str(error))
+
+            return "except", str(error)
+    else:
+        logger.error("Error al validar pago en VIPPO: " + str(api_response[1]))
+        # Envio el correo con la alerta
+        return None, api_response
