@@ -31,7 +31,7 @@ def pagomovil():
         return render_template("error_general.html", msg="Error obteniendo la lista de bancos, intente mas tarde",
                                error="No es posible acceder a la lista de bancos emisores", type="500")
     else:
-        logger.info("Lista banco obtenida del archivo TXT: " + str(listabancos))
+        logger.info("Lista banco obtenida desde el archivo TXT: " + str(listabancos))
         form.entity.choices = listabancos
 
     # Carga de los tipos de ID al selectfield ID
@@ -41,7 +41,8 @@ def pagomovil():
     form.tipo_phone.choices = config.lista_phone
 
 
-    if form.enviar.data and form.validate_on_submit():
+    if form.enviar.data and form.validate_on_submit(): # Boton de aceptar
+
         id_customer = form.tipo_id.data + form.payerID.data
         phone_payer = form.tipo_phone.data[1:] + form.payerPhone.data
         entity = form.entity.data[:4]
@@ -52,8 +53,35 @@ def pagomovil():
 
         resultado_val = validar_pago(id_customer, phone_payer, entity, order, montobs )
         logger.debug("user: " + str(datos_cliente) + "Resultado de validacion del pago: " + str(resultado_val))
-        return render_template('pay_result.html')
-    elif form.regresar.data:
+
+        if resultado_val[0] == "success":
+            if resultado_val[1]["message"] == "Operación realizada con éxito.":
+                img_entity = 'img/logo_bancoplaza.png'
+                img_result = 'img/exito.png'
+                return render_template('pay_result.html', msg=resultado_val[1]["message"],
+                                       datos_cliente=datos_cliente, img_entity=img_entity,
+                                       id_customer=id_customer,
+                                       phone_payer=form.tipo_phone.data + form.payerPhone.data,
+                                       entity=form.entity.data[6:], order=order, monto_bs=montobs,
+                                       img_result=img_result)
+            else:
+                img_entity = 'img/logo_bancoplaza.png'
+                img_result = 'img/error.png'
+                return render_template('pay_result.html', msg=resultado_val[1]["result"]["label"],
+                                       datos_cliente=datos_cliente, img_entity=img_entity,
+                                       id_customer=id_customer,
+                                       phone_payer=form.tipo_phone.data + form.payerPhone.data,
+                                       entity=form.entity.data[6:], order=order, monto_bs=montobs,
+                                       img_result=img_result)
+        elif resultado_val[0] == "except":
+            return render_template("error_general.html", msg="Error validando el pago, intente mas tarde",
+                                   error="No es posible validar el pago:" + str(resultado_val[1]), type="500")
+        else:
+            return render_template("error_general.html", msg="Error validando el pago, intente mas tarde",
+                                   error="No es posible validar el pago:" + str(resultado_val[1]), type="500")
+
+
+    elif form.regresar.data: # boton de cancelar
         return redirect(url_for('pagos.pagos'))
 
     else:
@@ -61,5 +89,5 @@ def pagomovil():
 
 
 
-
+# TODO: Revisar el token_generator en .env, se usa?
 

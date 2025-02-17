@@ -1,0 +1,24 @@
+ - Seleccione un banco
+0007 - Banco Bicentenario
+0102 - Banco De Venezuela
+0104 - Venezolano De Credito
+0105 - Banco Mercantil
+0108 - Banco Provincial
+0114 - Banco Caribe
+0115 - Banco Exterior
+0116 - Bod
+0128 - Banco Caroni
+0134 - Banesco
+0137 - Banco Sofitasa
+0138 - Banco Plaza
+0151 - Fondo Comun
+0156 - 100% Banco
+0157 - Del Sur
+0163 - Banco Del Tesoro
+0168 - Bancrecer
+0169 - Mi Banco
+0171 - Banco Activo
+0172 - Banca Amiga
+0174 - Banplus
+0177 - Banco Banfanb
+0191 - Nacional De Credito
