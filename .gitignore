@@ -1,5 +1,7 @@
 # MIS IGNORE
 .idea/
+/src/utils/lista_bancos.txt
+/src/utils/tasa_bcv.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
