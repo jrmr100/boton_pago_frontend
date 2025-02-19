@@ -24,7 +24,7 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
     elif float(monto_pagado_bs) < float(monto_deuda):
         logger.error("user: " + str(id_cliente) +
                      " TYPE: Monto pagado inferior a la deuda")
-        return "error", "El monto " + monto_pagado_bs + " esta por debajo de la deuda (Bs." + str(monto_deuda) + ")"
+        return "error", "El monto pagado (Bs." + monto_pagado_bs + ") esta por debajo de la deuda (Bs." + str(monto_deuda) + ")"
     else:
         # Obtengo los codigos de las facturas pendientes por el cliente
         headers = {"content-type": "application/json", "token": os.getenv("TOKEN_MW"), "idcliente": id_cliente, "estado": "1"}
@@ -34,4 +34,4 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
         logger.debug("user: " + str(id_cliente) +
                      " TYPE: Respuesta MW buscando facturas: " + str(api_response))
 
-        return api_response
+        return "success", api_response

@@ -34,6 +34,8 @@
 <body>
 {% block body %}
 {% include '_nav-bar.html' %}
+{% include '_modal_zelle.html' %}
+
 <div class="container-fluid bg-secondary-subtle min-vh-100">
     <div class="row">
         <div class="col-1">
@@ -155,42 +157,7 @@
     </div>
 </div>
 
-<!-- Modal zelle -->
-<div class="modal fade" id="modal_zelle" tabindex="-1" aria-labelledby="exampleModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5 text-uppercase" id="ModalLabel"><b>Información importante</b></h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body text-center">
-                <p>
-                    Hemos actualizado nuestro método de pago. Ahora puedes realizar el pago de tu servicio a través del
-                    Zelle.
-                </p>
-                <div class="zelle-info">
-                    <p><strong>zelle@ifxnw.com.ve</strong></p>
-                </div>
-                <p>
-                    Luego de realizar el pago, por favor infórmalo en nuestro portal para que podamos validar tu
-                    reporte.
-                </p>
-                <a href="https://admin.2netvzla.com/cliente/login" class="btn btn-primary">Informar Pago</a>
-                <p>
-                    La validación de tu reporte puede tardar entre 24 y 72 horas.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Cerrar
-                </button>
-            </div>
-        </div>
 
-    </div>
-</div>
 </div>
 {% endblock %}
 </body>
