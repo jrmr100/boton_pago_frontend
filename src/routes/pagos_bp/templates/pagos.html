@@ -1,6 +1,34 @@
 {% extends 'layout.html' %}
 {% block head %}
 <title>2NET - Pagos </title>
+<style>
+    .message h2 {
+        color: #343a40; /* Color de texto oscuro */
+        margin-bottom: 20px;
+    }
+
+    .zelle-info {
+        background-color: #f0f0f0; /* Fondo grisáceo para la información de Zelle */
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .zelle-info p {
+        margin-bottom: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Azul para el botón */
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0069d9;
+        border-color: #0062cc;
+    }
+
+</style>
 {% endblock %}
 
 <body>
@@ -110,7 +138,11 @@
                         <div class="col-sm-6 d-flex justify-content-center align-items-center flex-column p-2">
                             <img src="{{ url_for('static', filename='img/zelle.png') }}" alt="Zelle"
                                  style="width: 80px; height: 80px;"><br>
-                            {{ form.submit2(class="btn btn-outline-primary", style="width: 150px; height: 50px;") }}
+                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                    data-bs-target="#modal_zelle" style="width: 150px; height: 50px;">ZELLE
+                            </button>
+
+
                         </div>
                     </div>
                 </form>
@@ -121,8 +153,44 @@
         <div class="col-1">
         </div>
     </div>
+</div>
 
+<!-- Modal zelle -->
+<div class="modal fade" id="modal_zelle" tabindex="-1" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5 text-uppercase" id="ModalLabel"><b>Información importante</b></h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <p>
+                    Hemos actualizado nuestro método de pago. Ahora puedes realizar el pago de tu servicio a través del
+                    Zelle.
+                </p>
+                <div class="zelle-info">
+                    <p><strong>zelle@ifxnw.com.ve</strong></p>
+                </div>
+                <p>
+                    Luego de realizar el pago, por favor infórmalo en nuestro portal para que podamos validar tu
+                    reporte.
+                </p>
+                <a href="https://admin.2netvzla.com/cliente/login" class="btn btn-primary">Informar Pago</a>
+                <p>
+                    La validación de tu reporte puede tardar entre 24 y 72 horas.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
 
+    </div>
+</div>
 </div>
 {% endblock %}
 </body>
