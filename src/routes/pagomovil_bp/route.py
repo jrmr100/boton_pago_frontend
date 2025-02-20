@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, session, redirect, url_for
 from src.routes.pagomovil_bp.templates.form_fields import FormFields
 from src.utils.api_vippo import leer_listabancos, validar_pago
-from src.utils.api_mw import buscar_facturas
+from src.utils.api_mw import buscar_facturas, pagar_facturas
 from src.utils.logger import logger
 import src.config as config
 import os
@@ -99,6 +99,33 @@ def pagomovil():
 
             # PAGO LAS FACTURAS PENDIENTES
             if facturas_ubicadas:
+                facturas = result_buscarfacturas[1]["facturas"]
+                medio_pago = "pm_vippo"
+                codigo_auth = form.order.data
+
+                pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago)
+                if pago_facturas[0] == "success":
+                    if pago_facturas[1]["estado"] == "exito":
+                        img_result = 'img/exito.png'
+                        return render_template('pay_result.html', msg="Pago realizado con éxito",
+                                               datos_cliente=datos_cliente, img_entity=img_entity,
+                                               id_customer=id_customer,
+                                               phone_payer=form.tipo_phone.data + form.payerPhone.data,
+                                               entity=form.entity.data[6:], order=order, monto_bs=montobs,
+                                               img_result=img_result)
+                    else:
+                        img_result = 'img/error.png'
+                        return render_template('pay_result.html', msg="Error pagando factura",
+                                               datos_cliente=datos_cliente, img_entity=img_entity,
+                                               id_customer=id_customer,
+                                               phone_payer=form.tipo_phone.data + form.payerPhone.data,
+                                               entity=form.entity.data[6:], order=order, monto_bs=montobs,
+                                               img_result=img_result)
+                else:
+                    return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
+                                           error=pago_facturas[1], type="500")
+
+
                 img_result = 'img/exito.png'
                 return render_template('pay_result.html', msg="Pago realizado con éxito",
                                        datos_cliente=datos_cliente, img_entity=img_entity,

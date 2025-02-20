@@ -40,9 +40,12 @@ def home():
                 # Valido el correo
                 email_mw = resultado_apimw[1]['datos'][0]['correo']
                 if client_email == email_mw:
-                    nro_cta = resultado_apimw[1]['datos'][0]['id']
                     session["datos_cliente"] = resultado_apimw[1]
-                    return redirect(url_for('pagos.pagos'))
+                    total_facturas = resultado_apimw[1]["datos"][0]["facturacion"]["total_facturas"]
+                    if float(total_facturas) > 0:
+                        return redirect(url_for('pagos.pagos'))
+                    else:
+                        flash("No tiene facturas pendientes para cancelar", "sucess")
                 else:
                     logger.error("user: " + str(client_id) +
                                  " TYPE: correo no iguales\n")

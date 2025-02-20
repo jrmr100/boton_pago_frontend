@@ -27,3 +27,18 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
         endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_BUSCAR_FACTURAS")
         api_response = connect_api.conectar(headers, body, endpoint, "POST")
         return api_response
+
+def pagar_facturas(facturas, codigo_auth, medio_pago):
+    cant_fact = len(facturas)
+    headers = {"Content-Type": "application/json"}
+    endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_PAGAR")
+
+    for factura in facturas:
+        body = {"token": os.getenv("TOKEN_MW"),
+                   "idfactura": factura["id"],
+                   "pasarela": "API-" + medio_pago,
+                   "idtransaccion": codigo_auth}
+        api_response = connect_api.conectar(headers, body, endpoint, "POST")
+
+        return api_response
+
