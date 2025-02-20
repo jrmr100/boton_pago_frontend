@@ -1,7 +1,8 @@
 import os
 import src.utils.connect_api as connect_api
+from src.utils.logger import now
 
-
+today = now.strftime('%Y%m%d%H%M%S')
 
 
 def buscar_cliente(client_id):
@@ -29,7 +30,7 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
         return api_response
 
 def pagar_facturas(facturas, codigo_auth, medio_pago):
-    cant_fact = len(facturas)
+    cod_factura = 1
     headers = {"Content-Type": "application/json"}
     endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_PAGAR")
 
@@ -37,8 +38,9 @@ def pagar_facturas(facturas, codigo_auth, medio_pago):
         body = {"token": os.getenv("TOKEN_MW"),
                    "idfactura": factura["id"],
                    "pasarela": "API-" + medio_pago,
-                   "idtransaccion": codigo_auth}
+                   "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
         api_response = connect_api.conectar(headers, body, endpoint, "POST")
+        cod_factura = cod_factura + 1
 
-        return api_response
+    return api_response
 

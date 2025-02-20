@@ -111,7 +111,7 @@ def pagomovil():
                                                datos_cliente=datos_cliente, img_entity=img_entity,
                                                id_customer=id_customer,
                                                phone_payer=form.tipo_phone.data + form.payerPhone.data,
-                                               entity=form.entity.data[6:], order=order, monto_bs=montobs,
+                                               entity=form.entity.data[6:], order=order, monto_bs=0,
                                                img_result=img_result)
                     else:
                         img_result = 'img/error.png'
@@ -125,18 +125,6 @@ def pagomovil():
                     return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
                                            error=pago_facturas[1], type="500")
 
-
-                img_result = 'img/exito.png'
-                return render_template('pay_result.html', msg="Pago realizado con éxito",
-                                       datos_cliente=datos_cliente, img_entity=img_entity,
-                                       id_customer=id_customer,
-                                       phone_payer=form.tipo_phone.data + form.payerPhone.data,
-                                       entity=form.entity.data[6:], order=order, monto_bs="0",
-                                       img_result=img_result)
-
-
-
-
     elif form.regresar.data:  # boton de cancelar
         return redirect(url_for('pagos.pagos'))
 
@@ -145,3 +133,4 @@ def pagomovil():
                            montobs=montobs)
 
 # TODO: Revisar el token_generator en .env, se usa?
+# TODO: Validar con joseph si el numero los numeros de transaccion de las facturas, se puede poner fecha?
