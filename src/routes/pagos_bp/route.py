@@ -36,13 +36,9 @@ def pagos():
     monto_bs = float("{:.2f}".format(montobs_long))
 
     if form.validate_on_submit():
-        if form.submit1.data:
+        if form.submit1.data:  # Si se presiona el boton de submit1
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil.pagomovil'))
-        if form.submit2.data:
-            return redirect(url_for('zelle.zelle'))
-    # Obtengo la tasa BCV desde la funcion
-
 
 
 
@@ -60,5 +56,6 @@ def pagos():
 # TODO: Imagenes en static del folder
 # TODO: Limpiar la session y poner tiempo
 # TODO: Validar el trackid diferido
+# TODO: Rehacer boton de cancelar
 
 

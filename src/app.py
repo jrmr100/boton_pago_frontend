@@ -7,7 +7,6 @@ import os
 # IMPORTACIÓN DE RUTAS
 from src.routes.home_bp.route import blue_ruta as home
 from src.routes.pagos_bp.route import blue_ruta as pagos
-from src.routes.zelle_bp.route import blue_ruta as zelle
 from src.routes.pagomovil_bp.route import blue_ruta as pagomovil
 
 
@@ -20,7 +19,6 @@ csrf.init_app(app)
 # Registros de BLUEPRINT
 app.register_blueprint(home)
 app.register_blueprint(pagos)
-app.register_blueprint(zelle)
 app.register_blueprint(pagomovil)
 
 

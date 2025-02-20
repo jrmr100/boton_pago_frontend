@@ -1,14 +1,15 @@
 from dotenv import load_dotenv
-from src.utils.logger import logger
+from src.utils.logger import logger, now
 from src.utils.enviar_correo import enviar_correo
 import os
 import src.utils.connect_api as connect_api
 import src.config as config
 import datetime
 
-
 load_dotenv()
-fecha_actual = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+fecha_actual: str = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+today = now.strftime('%Y%m%d')  # Requerido en este formato para validar el pago
+
 
 def buscar_tasabcv():
     archivo_tasa = os.getenv("FILE_TASABCV")
@@ -63,6 +64,7 @@ def buscar_tasabcv():
             logger.debug("Envio de correo de alerta tasa_bcv: " + str(envio))
         return None
 
+
 def leer_tasa_bcv():
     # Funcion llamada desde el programa y busca la tasa en el archivo tasa_bcv.txt
     try:
@@ -75,9 +77,10 @@ def leer_tasa_bcv():
     except Exception as e:
         return "error tasa_bcv:" + str(e)
 
+
 def buscar_listabancos():
     archivo_lista_bancos = os.getenv("FILE_LISTABANCOS")
-    endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("ENDPOINT_BANCOS")
+    endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_BANCOS")
     headers = {
         'apikey': os.getenv("APIKEY_VIPPO"),
         'accountMerchant': os.getenv("ACCOUNT_VIPPO")
@@ -117,6 +120,7 @@ def buscar_listabancos():
             logger.debug("Envio de correo de alerta lista de bancos: " + str(envio))
         return None
 
+
 def leer_listabancos():
     # Funcion llamada desde el programa y busca la tasa en el archivo lista_bancos.txt
     try:
@@ -130,5 +134,43 @@ def leer_listabancos():
         return "error listabancos - " + str(e)
 
 
+def validar_pago(id_customer, phone_payer, entity, order, montobs):
+    endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_VALIDATE")
 
+    # Creo el header y el body para validar el pago movil
+    headers = {"apikey": os.getenv("APIKEY_VIPPO"),
+               "account": os.getenv("ACCOUNT_VIPPO")}
 
+    # Body produccion
+    body = {"branchCommerce": os.getenv("BRANCH_COMMERCE"),
+            "channelCode": os.getenv("CHANNEL_CODE"),
+            "issuingEntity": os.getenv("BANCO_RECEPTOR_PAGOMOVIL"),
+            "ipAddress": os.getenv("IP_ADDRESS"),
+            "data": {
+                "dates": {
+                    "startDate": today,
+                    "endDate": today,
+                },
+                "customerID": id_customer,
+                "customerPhone": phone_payer,
+                "entity": entity,
+                "reference": order,
+                "bill": os.getenv("BILL"),
+                "amount": montobs,
+            }
+            }
+    logger.info("Validando el pago: " + str(body))
+    api_response = connect_api.conectar(headers, body, endpoint, "POST")
+    if api_response[0] == "success":
+        try:
+            logger.info("Respuesta obtenida de VIPPO validando el pago " + str(api_response[1]))
+            return "success", api_response[1]
+
+        except Exception as error:
+            logger.error("TYPE: except, error de datos recibidos de VIPPO validando el pago:" + str(error))
+
+            return "except", str(error)
+    else:
+        logger.error("Error al validar pago en VIPPO: " + str(api_response[1]))
+        # Envio el correo con la alerta
+        return None, api_response

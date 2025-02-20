@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, session, redirect, url_for, flash
 from src.routes.home_bp.templates.form_fields import FormFields
-from src.utils.api_mw import ApiMw
+from src.utils.api_mw import buscar_cliente
 import src.config as config
 from src.utils.logger import logger
 import src.routes.home_bp.validaciones_home as validaciones_home
@@ -32,8 +32,7 @@ def home():
         ################ Busco cliente en MW ##############
         logger.info("user: " + str(client_id) +
                     " TYPE: Iniciando transacción con el correo: " + client_email + "\n")
-        info_cliente = ApiMw(client_id)
-        resultado_apimw = info_cliente.buscar_cliente()
+        resultado_apimw = buscar_cliente(client_id)
         logger.debug("user: " + str(client_id) +
                     " TYPE: resultado de la busqueda de cliente: " + str(resultado_apimw) + "\n")
         if resultado_apimw[0] == "success":
