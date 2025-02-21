@@ -5,7 +5,7 @@ import os
 
 
 
-# Cargo las variables de entorno para todo el proyecto
+# Cargo las variables de entorno para el proyecto
 load_dotenv()
 
 # Configuro los parámetros y formatos del logging

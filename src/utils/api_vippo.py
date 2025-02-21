@@ -159,11 +159,8 @@ def validar_pago(id_customer, phone_payer, entity, order, montobs):
                 "amount": montobs,
             }
             }
-    logger.info("Validando el pago: " + str(body))
     api_response = connect_api.conectar(headers, body, endpoint, "POST")
     if api_response[0] == "success":
-            logger.info("Respuesta obtenida de VIPPO validando el pago " + str(api_response[1]))
             return "success", api_response[1]
     elif api_response[0] == "except":
-        logger.error("TYPE: except, error de datos recibidos de VIPPO validando el pago:" + str(api_response[1]))
         return "except", api_response[1]

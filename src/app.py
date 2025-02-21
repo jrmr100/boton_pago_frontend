@@ -1,6 +1,8 @@
 from flask import Flask
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required
 from flask_wtf import CSRFProtect
 from src.utils.logger import logger
+from datetime import timedelta
 import os
 
 
@@ -13,6 +15,11 @@ from src.routes.pagomovil_bp.route import blue_ruta as pagomovil
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
+app.config['ENV'] = '.venv'
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=float(os.getenv("SESSION_TIME")))
+# login_manager = LoginManager()
+# login_manager.init_app(app)
 csrf = CSRFProtect()
 csrf.init_app(app)
 

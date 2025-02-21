@@ -28,7 +28,7 @@ def pagos():
         return render_template("error_general.html", msg="Error obteniendo tasa BCV, intente mas tarde",
                                error="No es posible acceder al valor de la tasa BCV", type="500")
     else:
-        logger.info("Tasa obtenida del archivo TXT: " + str(tasa_bcv))
+        logger.info("Tasa BCV obtenida del archivo TXT: " + str(tasa_bcv))
 
     # Calculo el monto en Bs
     monto_dls = float(datos_cliente["datos"][0]["facturacion"]["total_facturas"])
@@ -47,15 +47,12 @@ def pagos():
 
 # TODO: Definir si usar CDN o no para los iconos de bootstrap
 # TODO: Proteger acceso directo a paginas - login
-# TODO: Modulo de vippo pagomovil - con idtraza -id
 # TODO: Modulo de Lukapay pago movil - apagable
 # TODO: Modulo de Lukapay zelle - apagable
 # TODO: Icono de pestaña con temas claros
-# TODO: Fields que se recuerden automatico
 # TODO: script tasa bcv activo en la instalacion
-# TODO: Imagenes en static del folder
-# TODO: Limpiar la session y poner tiempo
 # TODO: Validar el trackid diferido
-# TODO: Rehacer boton de cancelar
-
+# TODO: botones en el resultado de pago?
+# TODO: Mostrar monto de la deuda luego del pago exitoso?
+# TODO: En home al no tener factura mostrar solo flash o formulario
 

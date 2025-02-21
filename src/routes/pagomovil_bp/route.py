@@ -4,7 +4,6 @@ from src.utils.api_vippo import leer_listabancos, validar_pago
 from src.utils.api_mw import buscar_facturas, pagar_facturas
 from src.utils.logger import logger
 import src.config as config
-import os
 
 nombre_ruta = "pagomovil"
 
@@ -47,12 +46,17 @@ def pagomovil():
         montobs = session["monto_bs"]
         datos_cliente = session["datos_cliente"]
         img_entity = 'img/logo_bancoplaza.png'
+        id_cliente = str(datos_cliente["datos"][0]["id"])
+        client_id = str(datos_cliente["datos"][0]["cedula"])
+
+
 
 
         # VALIDO EL PAGO EN VIPPO
-
+        logger.info("user: " + str(client_id) + " Validando el pago en vippo: " + id_customer +
+                    "-" + phone_payer + "-" + entity + "-" + order + "-" + str(montobs))
         resultado_val = validar_pago(id_customer, phone_payer, entity, order, montobs)
-        logger.debug("user: " + str(datos_cliente) + "Resultado de validacion del pago: " + str(resultado_val))
+        logger.debug("user: " + str(client_id) + " Resultado de validacion del pago: " + str(resultado_val))
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Operación realizada con éxito.":
@@ -71,11 +75,10 @@ def pagomovil():
 
         # BUSCO LAS FACTURAS EN MW SI SE VALIDA EL PAGO
         if pago_validado is True:
-            id_cliente = str(datos_cliente["datos"][0]["id"])
             monto_pagado = resultado_val[1]['result']['validatedPayments'][0]['amount']
 
             result_buscarfacturas = buscar_facturas(id_cliente, str(monto_pagado), montobs)
-            logger.debug("user: " + str(datos_cliente) +
+            logger.debug("user: " + str(client_id) +
                          " TYPE: Respuesta MW buscando facturas: " + str(result_buscarfacturas))
 
             if result_buscarfacturas[0] == "success":
@@ -103,10 +106,18 @@ def pagomovil():
                 medio_pago = "pm_vippo"
                 codigo_auth = form.order.data
 
+                logger.debug("user: " + str(client_id) + " TYPE: pagando facturas: " + str(facturas) + "-" + codigo_auth + "-" + medio_pago)
+
                 pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago)
+
+                logger.debug("user: " + str(
+                    client_id) + " TYPE: Resultado del pago de facturas: " + str(pago_facturas))
+
+
                 if pago_facturas[0] == "success":
                     if pago_facturas[1]["estado"] == "exito":
                         img_result = 'img/exito.png'
+                        session.clear()
                         return render_template('pay_result.html', msg="Pago realizado con éxito",
                                                datos_cliente=datos_cliente, img_entity=img_entity,
                                                id_customer=id_customer,
@@ -131,6 +142,3 @@ def pagomovil():
     else:
         return render_template('pagomovil.html', form=form, datos_cliente=datos_cliente, pm_bancoplaza=config.pm_bancoplaza,
                            montobs=montobs)
-
-# TODO: Revisar el token_generator en .env, se usa?
-# TODO: Validar con joseph si el numero los numeros de transaccion de las facturas, se puede poner fecha?
