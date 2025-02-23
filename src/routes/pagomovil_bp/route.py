@@ -25,8 +25,11 @@ def cargar_listabancos():
         listabancos = leer_listabancos()
         # Carga de los bancos emisores al selectfield ENTITY
         if "error listabancos" in listabancos:
+            logger.error("Error obteniendo la lista de bancos desde el archivo TXT: " + str(listabancos) + "\n")
             return render_template("error_general.html", msg="Error obteniendo la lista de bancos, intente mas tarde",
                                    error="No es posible acceder a la lista de bancos emisores", type="500")
+        else:
+            logger.info(" TYPE: Lista bancos obtenida del archivo TXT: " + str(listabancos))
 
 
 

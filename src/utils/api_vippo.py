@@ -73,7 +73,6 @@ def leer_tasa_bcv():
             lineas_tasa_bcv = archivo.read()
         lista_tasa_bcv = lineas_tasa_bcv.split(",")
         tasa_bcv = lista_tasa_bcv[0]
-        logger.info("Tasa BCV obtenida del archivo TXT: " + str(tasa_bcv))
         return tasa_bcv
     except Exception as e:
         return "error tasa_bcv:" + str(e)
@@ -129,7 +128,6 @@ def leer_listabancos():
         with open(os.getenv("PATH_BASE") + os.getenv("FILE_LISTABANCOS"), 'r') as archivo:
             linea_lista_bancos = archivo.read()
             lista_bancos = linea_lista_bancos.split("\n")
-            logger.info(" TYPE: Lista bancos obtenida del archivo TXT: " + str(lista_bancos))
             return lista_bancos
     except Exception as e:
         return "error listabancos - " + str(e)
