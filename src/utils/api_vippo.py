@@ -12,7 +12,7 @@ today = now.strftime('%Y%m%d')  # Requerido en este formato para validar el pago
 
 
 def buscar_tasabcv():
-    archivo_tasa = os.getenv("FILE_TASABCV")
+    archivo_tasa = os.getenv("PATH_BASE") + os.getenv("FILE_TASABCV")
     headers = {
         'apikey': os.getenv("APIKEY_VIPPO"),
         'accountMerchant': os.getenv("ACCOUNT_VIPPO")
@@ -69,7 +69,7 @@ def leer_tasa_bcv():
     # Funcion llamada desde el programa y busca la tasa en el archivo tasa_bcv.txt
     try:
         # Leer la tasa desde el archivo tasa_bcv.txt
-        with open(os.getenv("FILE_TASABCV"), 'r') as archivo:
+        with open(os.getenv("PATH_BASE") + os.getenv("FILE_TASABCV"), 'r') as archivo:
             lineas_tasa_bcv = archivo.read()
         lista_tasa_bcv = lineas_tasa_bcv.split(",")
         tasa_bcv = lista_tasa_bcv[0]
@@ -79,7 +79,7 @@ def leer_tasa_bcv():
 
 
 def buscar_listabancos():
-    archivo_lista_bancos = os.getenv("FILE_LISTABANCOS")
+    archivo_lista_bancos = os.getenv("PATH_BASE") + os.getenv("FILE_LISTABANCOS")
     endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_BANCOS")
     headers = {
         'apikey': os.getenv("APIKEY_VIPPO"),
@@ -125,7 +125,7 @@ def leer_listabancos():
     # Funcion llamada desde el programa y busca la tasa en el archivo lista_bancos.txt
     try:
         # Leer la lista de bancos
-        with open(os.getenv("FILE_LISTABANCOS"), 'r') as archivo:
+        with open(os.getenv("PATH_BASE") + os.getenv("FILE_LISTABANCOS"), 'r') as archivo:
             linea_lista_bancos = archivo.read()
             lista_bancos = linea_lista_bancos.split("\n")
             logger.info(" TYPE: Lista bancos obtenida del archivo TXT: " + str(lista_bancos))

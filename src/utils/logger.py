@@ -12,7 +12,7 @@ load_dotenv()
 now = datetime.now()
 today = now.strftime('%d%m%Y')
 
-logging.basicConfig(handlers=[logging.FileHandler(filename=os.getenv("LOG_FILE") +
+logging.basicConfig(handlers=[logging.FileHandler(filename=os.getenv("PATH_BASE") + os.getenv("LOG_FILE") +
                                                            os.getenv("NOMBRE_PROYECTO") +
                                                   "_" + today + ".log",
                     encoding='utf-8', mode='a+')],
