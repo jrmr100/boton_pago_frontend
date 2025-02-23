@@ -15,20 +15,24 @@ blue_ruta = Blueprint(
     static_url_path='/' + nombre_ruta
 )
 
+# Cargo la lista de bancos solo una vez cuando se acceda a la ruta pagomovil
+tasa_bcv = None
+@blue_ruta.before_request
+def cargar_tasa_bcv():
+    global tasa_bcv
+    if tasa_bcv is None:
+        tasa_bcv = leer_tasa_bcv()
+        if "error tasa_bcv" in tasa_bcv:
+            logger.error("Error obteniendo la tasa BCV desde el archivo TXT: " + str(tasa_bcv) + "\n")
+            return render_template("error_general.html", msg="Error obteniendo tasa BCV, intente mas tarde",
+                                   error="No es posible acceder al valor de la tasa BCV", type="500")
+
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 def pagos():
     form = FormFields()
 
     datos_cliente = session["datos_cliente"]
-
-    tasa_bcv = leer_tasa_bcv()
-    if "error tasa_bcv" in tasa_bcv:
-        logger.error("Error obteniendo la tasa BCV desde el archivo TXT: " + str(tasa_bcv) + "\n")
-        return render_template("error_general.html", msg="Error obteniendo tasa BCV, intente mas tarde",
-                               error="No es posible acceder al valor de la tasa BCV", type="500")
-    else:
-        logger.info("Tasa BCV obtenida del archivo TXT: " + str(tasa_bcv))
 
     # Calculo el monto en Bs
     monto_dls = float(datos_cliente["datos"][0]["facturacion"]["total_facturas"])

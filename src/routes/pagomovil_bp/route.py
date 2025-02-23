@@ -15,6 +15,20 @@ blue_ruta = Blueprint(
     static_url_path='/' + nombre_ruta
 )
 
+# Cargo la lista de bancos solo una vez cuando se acceda a la ruta pagomovil
+listabancos = None
+
+@blue_ruta.before_request
+def cargar_listabancos():
+    global listabancos
+    if listabancos is None:
+        listabancos = leer_listabancos()
+        # Carga de los bancos emisores al selectfield ENTITY
+        if "error listabancos" in listabancos:
+            return render_template("error_general.html", msg="Error obteniendo la lista de bancos, intente mas tarde",
+                                   error="No es posible acceder a la lista de bancos emisores", type="500")
+
+
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 def pagomovil():
@@ -22,14 +36,7 @@ def pagomovil():
 
     datos_cliente = session["datos_cliente"]
     montobs = session["monto_bs"]
-
-    # Carga la lista de bancos desde el archivo TXT
-    listabancos = leer_listabancos()
-    if "error listabancos" in listabancos:
-        return render_template("error_general.html", msg="Error obteniendo la lista de bancos, intente mas tarde",
-                               error="No es posible acceder a la lista de bancos emisores", type="500")
-    else:
-        form.entity.choices = listabancos
+    form.entity.choices = listabancos
 
     # Carga de los tipos de ID al selectfield ID
     form.tipo_id.choices = config.lista_id
@@ -48,9 +55,6 @@ def pagomovil():
         img_entity = 'img/logo_bancoplaza.png'
         id_cliente = str(datos_cliente["datos"][0]["id"])
         client_id = str(datos_cliente["datos"][0]["cedula"])
-
-
-
 
         # VALIDO EL PAGO EN VIPPO
         logger.info("user: " + str(client_id) + " Validando el pago en vippo: " + id_customer +
@@ -97,7 +101,8 @@ def pagomovil():
                                        entity=form.entity.data[6:], order=order, monto_bs=montobs,
                                        img_result=img_result)
             else:
-                return render_template("error_general.html", msg="Error buscando facturas del cliente, intente mas tarde",
+                return render_template("error_general.html",
+                                       msg="Error buscando facturas del cliente, intente mas tarde",
                                        error=resultado_val[1], type="500")
 
             # PAGO LAS FACTURAS PENDIENTES
@@ -106,13 +111,13 @@ def pagomovil():
                 medio_pago = "pm_vippo"
                 codigo_auth = form.order.data
 
-                logger.debug("user: " + str(client_id) + " TYPE: pagando facturas: " + str(facturas) + "-" + codigo_auth + "-" + medio_pago)
+                logger.debug("user: " + str(client_id) + " TYPE: pagando facturas: " + str(
+                    facturas) + "-" + codigo_auth + "-" + medio_pago)
 
                 pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago)
 
                 logger.debug("user: " + str(
                     client_id) + " TYPE: Resultado del pago de facturas: " + str(pago_facturas))
-
 
                 if pago_facturas[0] == "success":
                     if pago_facturas[1]["estado"] == "exito":
@@ -140,5 +145,6 @@ def pagomovil():
         return redirect(url_for('pagos.pagos'))
 
     else:
-        return render_template('pagomovil.html', form=form, datos_cliente=datos_cliente, pm_bancoplaza=config.pm_bancoplaza,
-                           montobs=montobs)
+        return render_template('pagomovil.html', form=form, datos_cliente=datos_cliente,
+                               pm_bancoplaza=config.pm_bancoplaza,
+                               montobs=montobs)

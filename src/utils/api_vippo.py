@@ -73,6 +73,7 @@ def leer_tasa_bcv():
             lineas_tasa_bcv = archivo.read()
         lista_tasa_bcv = lineas_tasa_bcv.split(",")
         tasa_bcv = lista_tasa_bcv[0]
+        logger.info("Tasa BCV obtenida del archivo TXT: " + str(tasa_bcv))
         return tasa_bcv
     except Exception as e:
         return "error tasa_bcv:" + str(e)
