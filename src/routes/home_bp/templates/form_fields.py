@@ -12,5 +12,3 @@ class FormFields(FlaskForm):
                           render_kw={'style': 'width: 80px; margin-right: 10px;'})
     ci = StringField('Cédula de identidad',
                              validators=[InputRequired(), Length(min=3, max=40), only_numbers])
-
-    submit = SubmitField('Aceptar')

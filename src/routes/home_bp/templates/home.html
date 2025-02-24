@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block head %}
-<title>2NET - Pagos </title>
+    <title>2NET - Pagos </title>
 
 
 {% endblock %}
@@ -8,66 +8,75 @@
 
 <body>
 {% block body %}
-<div class="container-fluid p-0 overflow-hidden">
-    <div class="row min-vh-100">
-        <div class="col-md-12 col-lg align-content-center  ">
-            <form method="POST">
-                {{ form.hidden_tag() }}
+    {% include '_modal_spinner.html' %}
 
-                <div>
+    <div class="container-fluid p-0 overflow-hidden">
+        <div class="row min-vh-100">
+            <div class="col-md-12 col-lg align-content-center  ">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
 
-                    <img class="img-fluid m-auto d-block" alt="Logo empresa" src="{{url_for('static',
-                         filename='img/logo-2net.png' )}}">
-                </div>
+                    <div>
 
-                <div class="text-center">
-                    <h4><b>Ingresa los datos de tu cuenta</b></h4>
-                </div>
-
-                <div class="row">
-                    <div class=col-2>
+                        <img class="img-fluid m-auto d-block" alt="Logo empresa" src="{{ url_for('static',
+                         filename='img/logo-2net.png' ) }}">
                     </div>
 
-                    <div class="col-8">
-                        <div class="mt-2 mb-2">
-                            {% include('_mensajes.html') %}
+                    <div class="text-center">
+                        <h4><b>Ingresa los datos de tu cuenta</b></h4>
+                    </div>
+
+                    <div class="row">
+                        <div class=col-2>
                         </div>
 
-                        <div>
-                            <b>{{ form.email.label }}</b>
-                            {{ form.email(class="form-control", autofocus=true)}}
-                            {% for error in form.email.errors %}
-                            <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
-                        </div>
-
-                        <div class="mt-2">
-                            <b>{{ form.tipo_id.label }}</b>
-                            <div style="display: flex; align-items: center;">
-                                {{ form.tipo_id(class="form-select") }}
-                                {{ form.ci(class="form-control") }}
+                        <div class="col-8">
+                            <div class="mt-2 mb-2">
+                                {% include('_mensajes.html') %}
                             </div>
-                            {% for error in form.ci.errors %}
-                                <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
+
+                            <div>
+                                <b>{{ form.email.label }}</b>
+                                {{ form.email(class="form-control", autofocus=true) }}
+                                {% for error in form.email.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-2">
+                                <b>{{ form.tipo_id.label }}</b>
+                                <div style="display: flex; align-items: center;">
+                                    {{ form.tipo_id(class="form-select") }}
+                                    {{ form.ci(class="form-control") }}
+                                </div>
+                                {% for error in form.ci.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="d-grid mt-3">
+                                <button type="submit"
+                                        class="btn btn-outline-primary justify-content-center d-flex align-items-center text-center">
+                                    <span class="fs-2 me-2"><i class="bi bi-check-circle"></i></span>
+                                    Aceptar
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="d-grid mt-2">
-                            {{ form.submit(class="btn btn-primary") }}
+                        <div class=col-2>
                         </div>
                     </div>
 
-                    <div class=col-2>
-                    </div>
-                </div>
+                </form>
+            </div>
 
-            </form>
-        </div>
-
-        <div class="col-lg-7 d-none d-lg-block d-flex align-items-center justify-content-center">
-            <img class="img-fluid h-100 w-100" alt="imagen home" src="{{url_for('home.static', filename='img/home.jpg' )}}">
+            <div class="col-lg-7 d-none d-lg-block d-flex align-items-center justify-content-center">
+                <img class="img-fluid h-100 w-100" alt="imagen home"
+                     src="{{ url_for('home.static', filename='img/home.jpg' ) }}">
+            </div>
         </div>
     </div>
-</div>
+
+    <script src="{{ url_for('static', filename='js/spinner_modal.js') }}"></script>
 {% endblock %}
 </body>
