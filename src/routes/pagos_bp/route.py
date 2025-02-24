@@ -2,7 +2,7 @@ from flask import render_template, Blueprint, session, redirect, url_for
 from src.utils.api_vippo import leer_tasa_bcv
 from src.utils.logger import logger
 from src.routes.pagos_bp.templates.form_fields import FormFields
-
+from flask_login import current_user
 
 
 nombre_ruta = "pagos"
@@ -17,6 +17,8 @@ blue_ruta = Blueprint(
 
 # Cargo la lista de bancos solo una vez cuando se acceda a la ruta pagomovil
 tasa_bcv = None
+
+
 @blue_ruta.before_request
 def cargar_tasa_bcv():
     global tasa_bcv
@@ -33,8 +35,7 @@ def cargar_tasa_bcv():
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 def pagos():
     form = FormFields()
-
-    datos_cliente = session["datos_cliente"]
+    datos_cliente = current_user[1]
 
     # Calculo el monto en Bs
     monto_dls = float(datos_cliente["datos"][0]["facturacion"]["total_facturas"])
@@ -46,10 +47,8 @@ def pagos():
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil.pagomovil'))
 
-
-
-    return render_template("pagos.html", datos_cliente=datos_cliente, monto_bs=monto_bs, form=form, monto_dls=monto_dls)
-
+    return render_template("pagos.html", datos_cliente=datos_cliente, monto_bs=monto_bs, form=form,
+                               monto_dls=monto_dls)
 
 # TODO: Definir si usar CDN o no para los iconos de bootstrap
 # TODO: Proteger acceso directo a paginas - login
@@ -61,4 +60,3 @@ def pagos():
 # TODO: botones en el resultado de pago?
 # TODO: Mostrar monto de la deuda luego del pago exitoso?
 # TODO: En home al no tener factura mostrar solo flash o formulario
-
