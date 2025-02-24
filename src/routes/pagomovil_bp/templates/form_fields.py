@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import EmailField, StringField, SubmitField, SelectField
-from wtforms.validators import InputRequired, Email, Length, DataRequired
+from wtforms import StringField, SubmitField, SelectField
+from wtforms.validators import InputRequired, Length, DataRequired
 from src.utils.validaciones_form import only_numbers, banco_emisor, passport
 
 
@@ -36,5 +36,3 @@ class FormFields(FlaskForm):
                         render_kw={"title": "Ultimos 6 digitos"})
 
     enviar = SubmitField("Enviar pago")
-
-    regresar = SubmitField("Regresar")

@@ -144,9 +144,6 @@ def pagomovil():
                     return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
                                            error=pago_facturas[1], type="500")
 
-    elif form.regresar.data:  # boton de cancelar
-        return redirect(url_for('pagos.pagos'))
-
     else:
         return render_template('pagomovil.html', form=form, datos_cliente=datos_cliente,
                                pm_bancoplaza=config.pm_bancoplaza,
