@@ -47,7 +47,7 @@ def pagomovil():
     # Carga de los tipos de telefonos al selectfield PHONE
     form.tipo_phone.choices = config.lista_phone
 
-    if form.enviar.data and form.validate_on_submit():  # Boton de aceptar
+    if form.validate_on_submit():  # Boton de aceptar
 
         id_customer = form.tipo_id.data + form.payerID.data
         phone_payer = form.tipo_phone.data[1:] + form.payerPhone.data

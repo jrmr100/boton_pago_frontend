@@ -34,5 +34,3 @@ class FormFields(FlaskForm):
                         validators=[DataRequired(),
                                     Length(min=6, max=6)],
                         render_kw={"title": "Ultimos 6 digitos"})
-
-    enviar = SubmitField("Enviar pago")
