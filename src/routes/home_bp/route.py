@@ -4,8 +4,9 @@ from src.utils.api_mw import buscar_cliente
 import src.config as config
 from src.utils.logger import logger
 import src.routes.home_bp.validaciones_home as validaciones_home
-from flask_login import current_user, login_user
+from flask_login import login_required, logout_user, login_user
 from src.routes.home_bp.templates.form_fields import User
+
 
 nombre_ruta = "home"
 
@@ -16,7 +17,6 @@ blue_ruta = Blueprint(
     static_folder='static',
     static_url_path='/'
 )
-
 
 @blue_ruta.route('/', methods=["GET", "POST"])
 def home():
@@ -31,58 +31,56 @@ def home():
         client_tipo_id = form.tipo_id.data  # no usado por ahora
         client_id = form.ci.data
 
+        ################ Busco cliente en MW ##############
+        logger.info("user: " + str(client_id) +
+                    " TYPE: Iniciando transacción con el correo: " + client_email + "\n")
         resultado_apimw = buscar_cliente(client_id)
+        logger.debug("user: " + str(client_id) +
+                    " TYPE: resultado de la busqueda de cliente: " + str(resultado_apimw) + "\n")
 
-
+        ############ VALIDO LA RESPUESTA DE MW ############
         if resultado_apimw[0] == "success":
             if resultado_apimw[1]["estado"] == "exito":
-                user = User(client_id)
-                login_user(user)
-                return redirect(url_for('pagos.pagos'))
-
-            """
-                ################ Busco cliente en MW ##############
-            logger.info("user: " + str(client_id) +
-                        " TYPE: Iniciando transacción con el correo: " + client_email + "\n")
-            resultado_apimw = buscar_cliente(client_id)
-            logger.debug("user: " + str(client_id) +
-                         " TYPE: resultado de la busqueda de cliente: " + str(resultado_apimw) + "\n")
-            if resultado_apimw[0] == "success":
-                if resultado_apimw[1]["estado"] == "exito":
-                    # Valido el correo
-                    email_mw = resultado_apimw[1]['datos'][0]['correo']
-                    if client_email == email_mw:
+                ###### VALIDO EL CORREO DEL CLIENTE ######
+                email_mw = resultado_apimw[1]['datos'][0]['correo']
+                if client_email == email_mw:
+                    total_facturas = resultado_apimw[1]["datos"][0]["facturacion"]["total_facturas"]
+                    if float(total_facturas) > 0:
+                        #### USUARIO AUTENTICADO ####
+                        user = User(client_id)
+                        login_user(user)
+                        session.permanent = True  # Permite utilizar el tiempo de vida de la session
                         session["datos_cliente"] = resultado_apimw[1]
-                        total_facturas = resultado_apimw[1]["datos"][0]["facturacion"]["total_facturas"]
-                        if float(total_facturas) > 0:
-                            return redirect(url_for('pagos.pagos'))
-                        else:
-                            flash("No tiene facturas pendientes para cancelar", "sucess")
+                        return redirect(url_for('pagos.pagos'))
                     else:
-                        logger.error("user: " + str(client_id) +
-                                     " TYPE: correo no iguales\n")
-                        flash("No existe cliente con los datos suministrados", "failure")
+                        flash("No tiene facturas pendientes para cancelar", "sucess")
                 else:
-                    validar_resultado_apimw = validaciones_home.resultado_apimw(resultado_apimw)
-                    if validar_resultado_apimw[0] == "flash":
-                        logger.error("user: " + str(client_id) +
-                                     " TYPE: " + validar_resultado_apimw[1] + "\n")
-                        flash(validar_resultado_apimw[1], "failure")
-                    elif validar_resultado_apimw[0] == "error_page":
-                        logger.error("user: " + str(client_id) +
-                                     " TYPE: Error API - MW: " + str(resultado_apimw[1]) + "\n")
-                        return render_template("error_general.html", msg="Error API - MW", error=validar_resultado_apimw[1],
-                                               type="503")
+                    logger.error("user: " + str(client_id) +
+                                 " TYPE: correo no iguales\n")
+                    flash("No existe cliente con los datos suministrados", "failure")
             else:
                 validar_resultado_apimw = validaciones_home.resultado_apimw(resultado_apimw)
-                if validar_resultado_apimw[0] == "error_page":
+                if validar_resultado_apimw[0] == "flash":
+                    logger.error("user: " + str(client_id) +
+                                 " TYPE: " + validar_resultado_apimw[1] + "\n")
+                    flash(validar_resultado_apimw[1], "failure")
+                elif validar_resultado_apimw[0] == "error_page":
                     logger.error("user: " + str(client_id) +
                                  " TYPE: Error API - MW: " + str(resultado_apimw[1]) + "\n")
                     return render_template("error_general.html", msg="Error API - MW", error=validar_resultado_apimw[1],
                                            type="503")
-                                           """
+        else:
+            validar_resultado_apimw = validaciones_home.resultado_apimw(resultado_apimw)
+            if validar_resultado_apimw[0] == "error_page":
+                logger.error("user: " + str(client_id) +
+                             " TYPE: Error API - MW: " + str(resultado_apimw[1]) + "\n")
+                return render_template("error_general.html", msg="Error API - MW", error=validar_resultado_apimw[1],
+                                       type="503")
 
     return render_template("home.html", form=form)
 
-# TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
-# TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
+@blue_ruta.route('/logout/', methods=['GET', 'POST'])
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('home.home'))

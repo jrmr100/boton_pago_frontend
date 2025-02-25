@@ -3,6 +3,7 @@ from src.routes.pagomovil_bp.templates.form_fields import FormFields
 from src.utils.api_vippo import leer_listabancos, validar_pago
 from src.utils.api_mw import buscar_facturas, pagar_facturas
 from src.utils.logger import logger
+from flask_login import login_required
 import src.config as config
 
 nombre_ruta = "pagomovil"
@@ -34,6 +35,7 @@ def cargar_listabancos():
 
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
+@login_required
 def pagomovil():
     form = FormFields()
 

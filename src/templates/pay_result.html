@@ -1,59 +1,83 @@
 {% extends 'layout.html' %}
 {% block head %}
-<title>2NET - Pagomovil </title>
+    <title>2NET - Pagomovil </title>
 {% endblock %}
 
 <body>
 {% block body %}
-{% include '_nav-bar.html' %}
-<div class="container-fluid bg-secondary-subtle min-vh-100">
-    <div class="row">
-        <div class="col-1">
-        </div>
-
-        <div class="col-10">
-            <div class="text-center mt-4">
-                <h3>RESULTADOS DE LA VALIDACIÓN DEL PAGO</h3>
+    {% include '_nav-bar.html' %}
+    <div class="container-fluid bg-secondary-subtle min-vh-100">
+        <div class="row">
+            <div class="col-1">
             </div>
-            <div class="card border-primary d-flex justify-content-center align-items-center">
-                <img class="mt-3" src="{{url_for('static', filename=img_result)}}" alt="Imagen de exito"
-                     style="width: 80px; height: 80px;">
-                <h5 class="text-uppercase mt-2 text-center"><b>{{ msg }}</b></h5>
-                <div class="card-body d-flex justify-content-center align-items-center">
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <div class="row g-0">
-                            <div class="col-4 d-flex justify-content-center align-items-center">
-                                <img class="img-fluid rounded-start" alt="logo_bancoplaza"
-                                     src="{{ url_for('pagomovil.static', filename=img_entity) }}">
-                            </div>
-                            <div class="col-8">
-                                <div class="card-body">
-                                    <h5 class="card-title text-uppercase text-decoration-underline"><b>INFORMACIÓN DEL PAGO</b></h5>
-                                    <p class="card-text">
-                                        <b>ID CLIENTE:</b> {{ id_customer }}<br>
-                                        <b>TELÉFONO DEL PAGADOR:</b> {{ phone_payer }}<br>
-                                        <b>BANCO EMISOR:</b> {{ entity }}<br>
-                                        <b>NÚMERO DE REFERENCIA:</b> {{ order }}<br>
-                                    </p>
-                                    <div class="card bg-secondary bg-opacity-10">
-                                        <div class="card-body text-center">
-                                            <h4 class="text-decoration-underline">Monto  deuda</h4>
-                                            <h3><b> Bs. </b></h3>
-                                            <h3><b> {{ monto_bs }} </b></h3>
+
+            <div class="col-10">
+                <div class="text-center mt-4">
+                    <h3>RESULTADOS DE LA VALIDACIÓN DEL PAGO</h3>
+                </div>
+                <div class="card border-primary d-flex justify-content-center align-items-center">
+                    <img class="mt-3" src="{{ url_for('static', filename=img_result) }}" alt="Imagen de exito"
+                         style="width: 80px; height: 80px;">
+                    <h5 class="text-uppercase mt-2 text-center"><b>{{ msg }}</b></h5>
+                    <div class="card-body d-flex justify-content-center align-items-center">
+                        <div class="card mb-3" style="max-width: 540px;">
+                            <div class="row g-0">
+                                <div class="col-4 d-flex justify-content-center align-items-center">
+                                    <img class="img-fluid rounded-start" alt="logo_bancoplaza"
+                                         src="{{ url_for('pagomovil.static', filename=img_entity) }}">
+                                </div>
+                                <div class="col-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title text-uppercase text-decoration-underline"><b>INFORMACIÓN
+                                            DEL PAGO</b></h5>
+                                        <p class="card-text">
+                                            <b>ID CLIENTE:</b> {{ id_customer }}<br>
+                                            <b>TELÉFONO DEL PAGADOR:</b> {{ phone_payer }}<br>
+                                            <b>BANCO EMISOR:</b> {{ entity }}<br>
+                                            <b>NÚMERO DE REFERENCIA:</b> {{ order }}<br>
+                                        </p>
+                                        <div class="card bg-secondary bg-opacity-10">
+                                            <div class="card-body text-center">
+                                                <h4 class="text-decoration-underline">Monto deuda</h4>
+                                                <h3><b> Bs. </b></h3>
+                                                <h3><b> {{ monto_bs }} </b></h3>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <!-- REALIZAR OTRO REPORTE DE PAGO -->
+                                <div class="col-6 justify-content-center d-flex text-center mt-2">
+                                    <button type="button"
+                                            class="btn btn-outline-primary justify-content-center d-flex align-items-center text-center"
+                                            style="width: 170px; height: 50px;"
+                                            onclick="window.location.href='{{ url_for('pagos.pagos') }}'">
+                                        <span class="fs-2 me-2"><i class="bi bi-arrow-return-left"></i></span>
+                                        Reportar otro pago
+                                    </button>
+                                </div>
+
+                                <!-- TERMINAR REPORTE DE PAGO -->
+                                <div class="col-6 justify-content-center d-flex text-center mt-2 mb-4">
+                                    <button type="button"
+                                            class="btn btn-outline-success justify-content-center d-flex align-items-center text-center"
+                                            style="width: 170px; height: 50px;"
+                                            onclick="window.location.href='{{ url_for('home.logout') }}'">
+                                        <span class="fs-2 me-2"><i class="bi bi-box-arrow-right"></i></span>
+                                        Terminar reporte
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
 
-        </div>
-
-        <div class="col-1">
+            <div class="col-1">
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 </body>

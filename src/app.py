@@ -1,11 +1,10 @@
 from flask import Flask
 from flask_login import LoginManager
+from src.routes.home_bp.templates.form_fields import User
 from flask_wtf import CSRFProtect
 from src.utils.logger import logger
 from datetime import timedelta
 import os
-from src.utils.api_mw import buscar_cliente
-
 
 # IMPORTACIÓN DE RUTAS
 from src.routes.home_bp.route import blue_ruta as home
@@ -19,24 +18,19 @@ app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
 app.config['ENV'] = '.venv'
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=float(os.getenv("SESSION_TIME")))
+
+csrf = CSRFProtect()
+csrf.init_app(app)
+
+########## FLASK-LOGIN ##############
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'home.home'
 
 @login_manager.user_loader
-def load_user(client_id):
-    try:
-        resultado_apimw = buscar_cliente(client_id)
-        if resultado_apimw[0] == "success":
-            if resultado_apimw[1]["estado"] == "exito":
-                return resultado_apimw
-            else:
-                return None
+def load_user(user_id):
+    return User(user_id)
 
-
-
-csrf = CSRFProtect()
-csrf.init_app(app)
 
 # Registros de BLUEPRINT
 app.register_blueprint(home)

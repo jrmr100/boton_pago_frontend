@@ -2,9 +2,7 @@ from flask import render_template, Blueprint, session, redirect, url_for
 from src.utils.api_vippo import leer_tasa_bcv
 from src.utils.logger import logger
 from src.routes.pagos_bp.templates.form_fields import FormFields
-from flask_login import current_user
-
-
+from flask_login import login_required
 nombre_ruta = "pagos"
 
 # Defino el Blueprint
@@ -33,9 +31,11 @@ def cargar_tasa_bcv():
 
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
+@login_required
 def pagos():
     form = FormFields()
-    datos_cliente = current_user[1]
+    datos_cliente = session["datos_cliente"]
+
 
     # Calculo el monto en Bs
     monto_dls = float(datos_cliente["datos"][0]["facturacion"]["total_facturas"])
@@ -60,3 +60,6 @@ def pagos():
 # TODO: botones en el resultado de pago?
 # TODO: Mostrar monto de la deuda luego del pago exitoso?
 # TODO: En home al no tener factura mostrar solo flash o formulario
+# TODO: Si esta retirado mensaje de comunicarse al callcenter
+# TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
+# TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
