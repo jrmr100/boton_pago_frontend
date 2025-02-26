@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask_login import LoginManager
 from src.routes.home_bp.templates.form_fields import User
 from flask_wtf import CSRFProtect
@@ -15,6 +15,7 @@ app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=float(os.getenv("SE
 csrf = CSRFProtect()
 csrf.init_app(app)
 
+
 ########## FLASK-LOGIN ##############
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -22,7 +23,7 @@ login_manager.login_view = 'home.home'
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User(user_id)
+    return User(user_id, session.get('datos_cliente'))
 
 # IMPORTACIÓN DE RUTAS
 from src.routes.home_bp.route import blue_ruta as home

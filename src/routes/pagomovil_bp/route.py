@@ -3,7 +3,7 @@ from src.routes.pagomovil_bp.templates.form_fields import FormFields
 from src.utils.api_vippo import leer_listabancos, validar_pago
 from src.utils.api_mw import buscar_facturas, pagar_facturas
 from src.utils.logger import logger
-from flask_login import login_required
+from flask_login import login_required, current_user
 import src.config as config
 
 nombre_ruta = "pagomovil"
@@ -39,7 +39,7 @@ def cargar_listabancos():
 def pagomovil():
     form = FormFields()
 
-    datos_cliente = session["datos_cliente"]
+    datos_cliente = current_user.datos_cliente
     montobs = session["monto_bs"]
     form.entity.choices = listabancos
 
@@ -56,10 +56,10 @@ def pagomovil():
         entity = form.entity.data[:4]
         order = form.order.data
         montobs = session["monto_bs"]
-        datos_cliente = session["datos_cliente"]
+        datos_cliente = current_user.datos_cliente
         img_entity = 'img/logo_bancoplaza.png'
-        id_cliente = str(datos_cliente["datos"][0]["id"])
-        client_id = str(datos_cliente["datos"][0]["cedula"])
+        id_cliente = str(datos_cliente["id"])
+        client_id = str(datos_cliente["cedula"])
 
         # VALIDO EL PAGO EN VIPPO
         logger.info("user: " + str(client_id) + " Validando el pago en vippo: " + id_customer +

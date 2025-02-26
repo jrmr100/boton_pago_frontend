@@ -4,8 +4,8 @@
                 <img src="{{url_for('static', filename='img/logo-2net.png' )}}" alt="Bootstrap" width="60" height="60">
             </a>
             <span class="navbar-text me-2 ms-auto text-white">
-                <b>Bienvenido(a): {{ datos_cliente["datos"][0]["nombre"] }}</b><br>
-                <b>ID: {{ datos_cliente["datos"][0]["cedula"] }}</b>
+                <b>Bienvenido(a): {{ datos_cliente["nombre"] }}</b><br>
+                <b>ID: {{ datos_cliente["cedula"] }}</b>
             </span>
             <div class="d-none d-md-flex">
                 <i class="bi bi-person-circle" style="font-size: 3rem;"></i>

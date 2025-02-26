@@ -2,7 +2,7 @@ from flask import render_template, Blueprint, session, redirect, url_for
 from src.utils.api_vippo import leer_tasa_bcv
 from src.utils.logger import logger
 from src.routes.pagos_bp.templates.form_fields import FormFields
-from flask_login import login_required
+from flask_login import login_required, current_user
 nombre_ruta = "pagos"
 
 # Defino el Blueprint
@@ -34,11 +34,11 @@ def cargar_tasa_bcv():
 @login_required
 def pagos():
     form = FormFields()
-    datos_cliente = session["datos_cliente"]
+    datos_cliente = current_user.datos_cliente
 
 
     # Calculo el monto en Bs
-    monto_dls = float(datos_cliente["datos"][0]["facturacion"]["total_facturas"])
+    monto_dls = float(datos_cliente["total_facturas"])
     montobs_long = float(monto_dls) * float(tasa_bcv)
     monto_bs = float("{:.2f}".format(montobs_long))
 
@@ -47,8 +47,8 @@ def pagos():
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil.pagomovil'))
 
-    return render_template("pagos.html", datos_cliente=datos_cliente, monto_bs=monto_bs, form=form,
-                               monto_dls=monto_dls)
+    return render_template("pagos.html", datos_cliente=datos_cliente,
+                           monto_bs=monto_bs, form=form, monto_dls=monto_dls)
 
 # TODO: Definir si usar CDN o no para los iconos de bootstrap
 # TODO: Proteger acceso directo a paginas - login

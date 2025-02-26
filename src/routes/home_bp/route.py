@@ -1,4 +1,5 @@
-from flask import render_template, Blueprint, session, redirect, url_for, flash
+from flask import render_template, Blueprint, session, redirect, url_for
+
 from src.routes.home_bp.templates.form_fields import FormFields
 from src.utils.api_mw import buscar_cliente
 import src.config as config
@@ -38,6 +39,7 @@ def home():
         logger.debug("user: " + str(client_id) +
                     " TYPE: resultado de la busqueda de cliente: " + str(resultado_apimw) + "\n")
 
+
         ############ VALIDO LA RESPUESTA DE MW ############
         if resultado_apimw[0] == "success":
             if resultado_apimw[1]["estado"] == "exito":
@@ -47,18 +49,19 @@ def home():
                     total_facturas = resultado_apimw[1]["datos"][0]["facturacion"]["total_facturas"]
                     if float(total_facturas) > 0:
                         #### USUARIO AUTENTICADO ####
-                        user = User(client_id)
-                        login_user(user)
                         session.permanent = True  # Permite utilizar el tiempo de vida de la session
-                        session["nombre"] = resultado_apimw[1]["datos"][0]["nombre"]
-                        session["id"] = resultado_apimw[1]["datos"][0]["id"]
-                        session["cedula"] = resultado_apimw[1]["datos"][0]["cedula"]
-                        session["estado"] = resultado_apimw[1]["datos"][0]["estado"]
-                        session["PlanContratado"] = resultado_apimw[1]["datos"][0]["PlanContratado"]
-                        session["facturas_nopagadas"] = resultado_apimw[1]["datos"][0]["facturacion"]["facturas_nopagadas"]
-                        session["datos_cliente"] = resultado_apimw[1]
+                        datos_cliente = {"nombre": resultado_apimw[1]["datos"][0]["nombre"],
+                                 "id": resultado_apimw[1]["datos"][0]["id"],
+                                 "cedula": resultado_apimw[1]["datos"][0]["cedula"],
+                                 "estado": resultado_apimw[1]["datos"][0]["estado"],
+                                 "PlanContratado": resultado_apimw[1]["datos"][0]["PlanContratado"],
+                                 "facturas_nopagadas": resultado_apimw[1]["datos"][0]["facturacion"]["facturas_nopagadas"],
+                                 "total_facturas": resultado_apimw[1]["datos"][0]["facturacion"]["total_facturas"]
+                                 }
 
-
+                        session["datos_cliente"] = datos_cliente
+                        user = User(client_id, datos_cliente)
+                        login_user(user)
                         return redirect(url_for('pagos.pagos'))
                     else:
                         flash("No tiene facturas pendientes para cancelar", "sucess")

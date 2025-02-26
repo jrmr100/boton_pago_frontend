@@ -16,8 +16,9 @@ class FormFields(FlaskForm):
 
 
 class User(UserMixin):
-    def __init__(self, id):
+    def __init__(self, id, datos_cliente):
         self.id = id
+        self.datos_cliente = datos_cliente
 
 
 
