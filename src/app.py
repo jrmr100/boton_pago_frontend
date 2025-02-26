@@ -6,13 +6,6 @@ from src.utils.logger import logger
 from datetime import timedelta
 import os
 
-# IMPORTACIÓN DE RUTAS
-from src.routes.home_bp.route import blue_ruta as home
-from src.routes.pagos_bp.route import blue_ruta as pagos
-from src.routes.pagomovil_bp.route import blue_ruta as pagomovil
-
-
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
 app.config['ENV'] = '.venv'
@@ -31,6 +24,10 @@ login_manager.login_view = 'home.home'
 def load_user(user_id):
     return User(user_id)
 
+# IMPORTACIÓN DE RUTAS
+from src.routes.home_bp.route import blue_ruta as home
+from src.routes.pagos_bp.route import blue_ruta as pagos
+from src.routes.pagomovil_bp.route import blue_ruta as pagomovil
 
 # Registros de BLUEPRINT
 app.register_blueprint(home)

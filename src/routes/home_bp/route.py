@@ -50,7 +50,15 @@ def home():
                         user = User(client_id)
                         login_user(user)
                         session.permanent = True  # Permite utilizar el tiempo de vida de la session
+                        session["nombre"] = resultado_apimw[1]["datos"][0]["nombre"]
+                        session["id"] = resultado_apimw[1]["datos"][0]["id"]
+                        session["cedula"] = resultado_apimw[1]["datos"][0]["cedula"]
+                        session["estado"] = resultado_apimw[1]["datos"][0]["estado"]
+                        session["PlanContratado"] = resultado_apimw[1]["datos"][0]["PlanContratado"]
+                        session["facturas_nopagadas"] = resultado_apimw[1]["datos"][0]["facturacion"]["facturas_nopagadas"]
                         session["datos_cliente"] = resultado_apimw[1]
+
+
                         return redirect(url_for('pagos.pagos'))
                     else:
                         flash("No tiene facturas pendientes para cancelar", "sucess")
