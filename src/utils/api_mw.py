@@ -1,18 +1,59 @@
+
+from flask import render_template, Blueprint, session, redirect, url_for, flash
+from src.routes.home_bp.templates.form_fields import User
 import os
 import src.utils.connect_api as connect_api
-from src.utils.logger import now
-from flask_login import current_user
+from src.utils.logger import now, logger
+from flask_login import current_user, login_user
+
+
+
 
 today = now.strftime('%Y%m%d%H%M%S')
 
 
-def buscar_cliente(client_id):
+def buscar_cliente(client_id, client_email):
     headers = {"content-type": "application/json"}
     body = {"token": os.getenv("TOKEN_MW"), "cedula": client_id}
     endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_BUSCAR_CLIENTE")
 
     api_response = connect_api.conectar(headers, body, endpoint,"POST", client_id)
-    return api_response
+
+    if api_response[0] == "success":
+        if api_response[1]["estado"] == "exito":  # Cliente obtenido
+            ###### VALIDO EL CORREO DEL CLIENTE ######
+            email_mw = api_response[1]['datos'][0]['correo']
+            if client_email == email_mw:
+                total_facturas = api_response[1]["datos"][0]["facturacion"]["total_facturas"]
+                # Valido si tiene deuda
+                if float(total_facturas) > 0:
+                    # Almaceno la session
+                    session.permanent = True  # Permite utilizar el tiempo de vida de la session
+                    datos_cliente = {"nombre": api_response[1]["datos"][0]["nombre"],
+                                     "id": api_response[1]["datos"][0]["id"],
+                                     "cedula": api_response[1]["datos"][0]["cedula"],
+                                     "estado": api_response[1]["datos"][0]["estado"],
+                                     "PlanContratado": api_response[1]["datos"][0]["PlanContratado"],
+                                     "facturas_nopagadas": api_response[1]["datos"][0]["facturacion"][
+                                         "facturas_nopagadas"],
+                                     "total_facturas": api_response[1]["datos"][0]["facturacion"]["total_facturas"]
+                                     }
+                    session["datos_cliente"] = datos_cliente
+                    user = User(client_id, datos_cliente)
+                    login_user(user)
+                    return api_response
+                else:
+                    logger.info("user: " + str(client_id) + " TYPE: No hay facturas para cancelar" + "\n")
+                    return "info", "No tiene facturas para cancelar"
+            else:
+                logger.error("user: " + str(client_id) + " TYPE: No coinciden los correos " + "\n")
+                return "error", "No existe el cliente con el filtro indicado."
+        elif api_response[1]["estado"] == "error":
+            # log se muestra desde respuesta de la api
+            return "error", api_response[1]["mensaje"]
+    else:
+        return "except", api_response[1]
+
 
 def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
     # Valido la longitud del ID del cliente
