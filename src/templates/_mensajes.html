@@ -1,5 +1,5 @@
 <!-- Enviado -->
-{% with messages = get_flashed_messages(category_filter=["sucess"]) %}
+{% with messages = get_flashed_messages(category_filter=["success"]) %}
   {% if messages %}
         {% for message in messages %}
             <div class="alert alert-success text-center col-12 container alert-dismissible fade show" role="alert">
@@ -15,6 +15,18 @@
   {% if messages %}
   {% for message in messages %}
       <div class="alert alert-danger text-center col-12 container alert-dismissible fade show" role="alert">
+        {{message}} <i class="fa-sharp fa-solid fa-circle-xmark"></i>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+  {% endfor %}
+{% endif %}
+{% endwith %}
+
+<!-- INFO -->
+{% with messages = get_flashed_messages(category_filter=["info"]) %}
+  {% if messages %}
+  {% for message in messages %}
+      <div class="alert alert-info text-center col-12 container alert-dismissible fade show" role="alert">
         {{message}} <i class="fa-sharp fa-solid fa-circle-xmark"></i>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
