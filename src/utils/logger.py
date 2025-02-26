@@ -11,7 +11,6 @@ load_dotenv()
 # Configuro los parámetros y formatos del logging
 now = datetime.now()
 today = now.strftime('%d%m%Y')
-print(os.getenv("PATH_BASE") + os.getenv("LOG_FILE") + os.getenv("NOMBRE_PROYECTO") + "_" + today + ".log")
 logging.basicConfig(handlers=[logging.FileHandler(filename=os.getenv("PATH_BASE") + os.getenv("LOG_FILE") + os.getenv("NOMBRE_PROYECTO") + "_" + today + ".log",
                     encoding='utf-8', mode='a+')],
                     level=int(os.getenv("LOG_LEVEL")),
