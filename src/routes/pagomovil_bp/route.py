@@ -26,11 +26,8 @@ def cargar_listabancos():
         listabancos = leer_listabancos()
         # Carga de los bancos emisores al selectfield ENTITY
         if "error listabancos" in listabancos:
-            logger.error("Error obteniendo la lista de bancos desde el archivo TXT: " + str(listabancos) + "\n")
             return render_template("error_general.html", msg="Error obteniendo la lista de bancos, intente mas tarde",
                                    error="No es posible acceder a la lista de bancos emisores", type="500")
-        else:
-            logger.info(" TYPE: Lista bancos obtenida del archivo TXT: " + str(listabancos))
 
 
 
@@ -62,10 +59,7 @@ def pagomovil():
         client_id = str(datos_cliente["cedula"])
 
         # VALIDO EL PAGO EN VIPPO
-        logger.info("user: " + str(client_id) + " Validando el pago en vippo: " + id_customer +
-                    "-" + phone_payer + "-" + entity + "-" + order + "-" + str(montobs))
         resultado_val = validar_pago(id_customer, phone_payer, entity, order, montobs)
-        logger.debug("user: " + str(client_id) + " Resultado de validacion del pago: " + str(resultado_val))
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Operación realizada con éxito.":

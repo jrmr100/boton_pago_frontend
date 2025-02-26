@@ -5,6 +5,7 @@ import os
 import src.utils.connect_api as connect_api
 import src.config as config
 import datetime
+from flask_login import current_user
 
 load_dotenv()
 fecha_actual: str = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
@@ -21,7 +22,7 @@ def buscar_tasabcv():
     endpoint = os.getenv("ENDPOINT_TASABCV")
 
     # Busco la tasa usando el modulo conectar
-    api_response = connect_api.conectar(headers, body, endpoint, "GET")
+    api_response = connect_api.conectar(headers, body, endpoint, "GET", current_user.id)
     if api_response[0] == "success":
         try:
             logger.info("Respuesta obtenida de tasa BCV " + str(api_response[1]))
@@ -73,8 +74,10 @@ def leer_tasa_bcv():
             lineas_tasa_bcv = archivo.read()
         lista_tasa_bcv = lineas_tasa_bcv.split(",")
         tasa_bcv = lista_tasa_bcv[0]
+        logger.debug("USER: " + current_user.id + " - Tasa BCV leida del archivo TXT: " + str(tasa_bcv) + "\n")
         return tasa_bcv
     except Exception as e:
+        logger.debug("USER: " + current_user.id + " - Except de la lectura de tasa BCV desde el archivo: " + str(e) + "\n")
         return "error tasa_bcv:" + str(e)
 
 
@@ -88,7 +91,7 @@ def buscar_listabancos():
     body = {}
 
     # Busco la lista de bancos usando el modulo conectar
-    api_response = connect_api.conectar(headers, body, endpoint, "GET")
+    api_response = connect_api.conectar(headers, body, endpoint, "GET", current_user.id)
     lista_bancos = []
     if api_response[0] == "success":
         try:
@@ -128,8 +131,10 @@ def leer_listabancos():
         with open(os.getenv("PATH_BASE") + os.getenv("FILE_LISTABANCOS"), 'r') as archivo:
             linea_lista_bancos = archivo.read()
             lista_bancos = linea_lista_bancos.split("\n")
+            logger.debug("USER: " + current_user.id + " - Lista de bancos leida del archivo TXT: " + str(lista_bancos) + "\n")
             return lista_bancos
     except Exception as e:
+        logger.debug("USER: " + current_user.id + " - Except de la lectura de la lista de bancos desde el archivo: " + str(e) + "\n")
         return "error listabancos - " + str(e)
 
 
@@ -158,7 +163,7 @@ def validar_pago(id_customer, phone_payer, entity, order, montobs):
                 "amount": montobs,
             }
             }
-    api_response = connect_api.conectar(headers, body, endpoint, "POST")
+    api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
     if api_response[0] == "success":
             return "success", api_response[1]
     elif api_response[0] == "except":

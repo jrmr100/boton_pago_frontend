@@ -36,9 +36,6 @@ def home():
         logger.info("user: " + str(client_id) +
                     " TYPE: Iniciando transacción con el correo: " + client_email + "\n")
         resultado_apimw = buscar_cliente(client_id)
-        logger.debug("user: " + str(client_id) +
-                    " TYPE: resultado de la busqueda de cliente: " + str(resultado_apimw) + "\n")
-
 
         ############ VALIDO LA RESPUESTA DE MW ############
         if resultado_apimw[0] == "success":

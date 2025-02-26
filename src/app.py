@@ -35,9 +35,6 @@ app.register_blueprint(home)
 app.register_blueprint(pagos)
 app.register_blueprint(pagomovil)
 
-
-
-logger.info("Iniciando el programa...")
 if __name__ == '__main__':
     context = ('src/cert.pem', 'src/key.pem')
     app.run(debug=True, host='0.0.0.0', port=8000, ssl_context=context)

@@ -1,6 +1,7 @@
 import os
 import src.utils.connect_api as connect_api
 from src.utils.logger import now
+from flask_login import current_user
 
 today = now.strftime('%Y%m%d%H%M%S')
 
@@ -10,7 +11,7 @@ def buscar_cliente(client_id):
     body = {"token": os.getenv("TOKEN_MW"), "cedula": client_id}
     endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_BUSCAR_CLIENTE")
 
-    api_response = connect_api.conectar(headers, body, endpoint, "POST")
+    api_response = connect_api.conectar(headers, body, endpoint,"POST", client_id)
     return api_response
 
 def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
@@ -26,7 +27,7 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
         headers = {}
         body = {"token": os.getenv("TOKEN_MW"), "idcliente": id_cliente, "estado": "1"}
         endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_BUSCAR_FACTURAS")
-        api_response = connect_api.conectar(headers, body, endpoint, "POST")
+        api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
         return api_response
 
 def pagar_facturas(facturas, codigo_auth, medio_pago):
@@ -39,7 +40,7 @@ def pagar_facturas(facturas, codigo_auth, medio_pago):
                    "idfactura": factura["id"],
                    "pasarela": "API-" + medio_pago,
                    "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
-        api_response = connect_api.conectar(headers, body, endpoint, "POST")
+        api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
         cod_factura = cod_factura + 1
 
     return api_response
