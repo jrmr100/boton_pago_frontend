@@ -39,7 +39,7 @@ Crear un boton de pago cliente, que se conecte a las plataformas de pago y permi
       sudo chown -R www-data:www-data boton_pago_frontend
 - Ejecutar el script crontab.py
 
-      sudo .venv/bin/python3 src/utils/crontab.py
+      sudo .venv/bin/python3 src/crontab.py
 
 
 INSTALACIÓN CON APACHE2 CON MOD_WSGI:
@@ -93,24 +93,24 @@ INSTALACIÓN CON APACHE2 CON MOD_WSGI:
 
       sudo nano /etc/apache2/sites-available/boton_pago_frontend-ssl.conf
 
-      <VirtualHost 181.225.41.12:443>
-              ServerName 181.225.41.12
+      <VirtualHost 181.225.41.13:443>
+              ServerName 181.225.41.13
               ServerAdmin jmonroy@ifx.com.ve
-              DocumentRoot /var/www/nombre_proyecto
+              DocumentRoot /var/www/boton_pago_frontend
               # DirectoryIndex index.html
               ErrorLog ${APACHE_LOG_DIR}/error.log
               CustomLog ${APACHE_LOG_DIR}/access.log combined
 
               SSLEngine on
-              SSLCertificateFile /var/www/nombre_proyecto/cert.pem
-              SSLCertificateKeyFile /var/www/nombre_proyecto/key.pem
+              SSLCertificateFile /var/www/boton_pago_frontend/src/cert.pem
+              SSLCertificateKeyFile /var/www/boton_pago_frontend/src/key.pem
 
-              WSGIDaemonProcess nombre_proyecto-ssl user=www-data group=www-data threads=10 python-home=/var/www/nombre_proyecto/venv/ processes=2 graceful-timeout=30 maximum-requests=1000 restart-interval=30
-              WSGIProcessGroup nombre_proyecto
+              WSGIDaemonProcess boton_pago_frontend-ssl user=www-data group=www-data threads=10 python-home=/var/www/boton_pago_frontend/.venv/ processes=2 graceful-timeout=30 maximum-requests=1000 restart-interval=30
+              WSGIProcessGroup boton_pago_frontend
               WSGIApplicationGroup %{GLOBAL}
-              WSGIScriptAlias / /var/www/nombre_proyecto/nombre_proyecto.wsgi
-              Alias /static/ /var/www/nombre_proyecto/static/
-              <Directory /var/www/nombre_proyecto/>
+              WSGIScriptAlias / /var/www/boton_pago_frontend/src/boton_pago_frontend.wsgi
+              Alias /static/ /var/www/boton_pago_frontend/src/static/
+              <Directory /var/www/boton_pago_frontend/>
                       Options FollowSymLinks
                       AllowOverride None
                       Require all granted
