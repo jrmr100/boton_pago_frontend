@@ -32,11 +32,14 @@ Crear un boton de pago cliente, que se conecte a las plataformas de pago y permi
       sudo .venv/bin/pip3 install -r requirements.txt
       sudo .venv/bin/pip3 install gunicorn (si usa nginx)
 
-- Configurar .env y mi_config.py con los datos y rutas del sistema
+- Configurar .env con los datos y rutas del sistema
 
 - Cambiar el propietario de toda la carpeta en caso de producción
 
       sudo chown -R www-data:www-data boton_pago_frontend
+- Ejecutar el script crontab.py
+
+      sudo .venv/bin/python3 src/utils/crontab.py
 
 
 INSTALACIÓN CON APACHE2 CON MOD_WSGI:

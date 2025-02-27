@@ -1,10 +1,8 @@
-from flask import render_template, Blueprint, session, redirect, url_for, flash
-
+from flask import render_template, Blueprint, redirect, url_for, flash
 from src.routes.home_bp.templates.form_fields import FormFields
 from src.utils.api_mw import buscar_cliente
 import src.config as config
 from src.utils.logger import logger
-import src.routes.home_bp.validaciones_home as validaciones_home
 from flask_login import login_required, logout_user
 
 

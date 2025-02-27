@@ -22,7 +22,7 @@ def buscar_tasabcv():
     endpoint = os.getenv("ENDPOINT_TASABCV")
 
     # Busco la tasa usando el modulo conectar
-    api_response = connect_api.conectar(headers, body, endpoint, "GET", current_user.id)
+    api_response = connect_api.conectar(headers, body, endpoint, "GET", "crontab")
     if api_response[0] == "success":
         try:
             logger.info("Respuesta obtenida de tasa BCV " + str(api_response[1]))
@@ -91,7 +91,7 @@ def buscar_listabancos():
     body = {}
 
     # Busco la lista de bancos usando el modulo conectar
-    api_response = connect_api.conectar(headers, body, endpoint, "GET", current_user.id)
+    api_response = connect_api.conectar(headers, body, endpoint, "GET", "crontab")
     lista_bancos = []
     if api_response[0] == "success":
         try:

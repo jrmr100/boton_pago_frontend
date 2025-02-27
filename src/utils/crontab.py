@@ -1,6 +1,6 @@
 from src.utils.logger import logger
-from src.utils.api_vippo import buscar_tasabcv
-from src.utils.api_vippo import buscar_listabancos
+from api_vippo import buscar_tasabcv
+from api_vippo import buscar_listabancos
 
 
 from dotenv import load_dotenv
