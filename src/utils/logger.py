@@ -1,12 +1,6 @@
 import logging
 from datetime import datetime
-from dotenv import load_dotenv
 import os
-
-
-
-# Cargo las variables de entorno para el proyecto
-load_dotenv()
 
 # Configuro los parámetros y formatos del logging
 now = datetime.now()
