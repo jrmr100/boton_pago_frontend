@@ -125,15 +125,39 @@
                 <div class="text-center">
                     <h3>MÉTODOS DE PAGO</h3>
                     <h6>Seleccione la opción con la que desea pagar</h6>
+                    {% include('_mensajes.html') %}
                 </div>
-                <div class="card border-primary">
+                {% if card_disable == True %}
+                    <div class="card border-secondary">
                     <form method="POST">
                         {{ form.hidden_tag() }}
                         <div class="row p-4">
                             <div class="col-sm-6 d-flex justify-content-center align-items-center flex-column p-2">
                                 <img src="{{ url_for('static', filename='img/pagomovil.png') }}"
+                                     alt="Pagomovil" style="width: 80px; height: 80px; filter: grayscale(100%) opacity(0.5);"><br>
+                                    {{ form.submit1(class="btn btn-outline-secondary disabled", style="width: 150px; height: 50px;") }}
+                            </div>
+
+                            <div class="col-sm-6 d-flex justify-content-center align-items-center flex-column p-2">
+                                <img src="{{ url_for('static', filename='img/zelle.png') }}" alt="Zelle"
+                                     style="width: 80px; height: 80px; filter: grayscale(100%) opacity(0.5);"><br>
+                                <button type="button" class="btn btn-outline-secondary disabled" data-bs-toggle="modal"
+                                        data-bs-target="#modal_zelle" style="width: 150px; height: 50px;">ZELLE
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% else %}
+                    <div class="card border-primary">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row p-4">
+                            <div class="col-sm-6 d-flex justify-content-center align-items-center flex-column p-2">
+
+                                <img src="{{ url_for('static', filename='img/pagomovil.png') }}"
                                      alt="Pagomovil" style="width: 80px; height: 80px;"><br>
-                                {{ form.submit1(class="btn btn-outline-primary", style="width: 150px; height: 50px;") }}
+                                    {{ form.submit1(class="btn btn-outline-primary", style="width: 150px; height: 50px;") }}
                             </div>
 
                             <div class="col-sm-6 d-flex justify-content-center align-items-center flex-column p-2">
@@ -146,6 +170,8 @@
                         </div>
                     </form>
                 </div>
+                {% endif %}
+
             </div>
 
             <div class="col-1">

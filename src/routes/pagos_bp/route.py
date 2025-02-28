@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, session, redirect, url_for
+from flask import render_template, Blueprint, session, redirect, url_for, flash
 from src.utils.api_vippo import leer_tasa_bcv
 from src.utils.logger import logger
 from src.routes.pagos_bp.templates.form_fields import FormFields
@@ -45,8 +45,13 @@ def pagos():
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil.pagomovil'))
 
+    if datos_cliente["estado"] == "RETIRADO":
+        card_disable = True
+        flash("Cuenta \"RETIRADA\" debe contactar a nuestro centro de atención", "failure")
+    else:
+        card_disable = False
     return render_template("pagos.html", datos_cliente=datos_cliente,
-                           monto_bs=monto_bs, form=form, monto_dls=monto_dls)
+                           monto_bs=monto_bs, form=form, monto_dls=monto_dls, card_disable=card_disable)
 
 # TODO: Definir si usar CDN o no para los iconos de bootstrap
 # TODO: Modulo de Lukapay pago movil - apagable
