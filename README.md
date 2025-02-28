@@ -38,9 +38,13 @@ Crear un boton de pago cliente, que se conecte a las plataformas de pago y permi
 
       sudo chown -R www-data:www-data boton_pago_frontend
 - Ejecutar el script crontab.py
-
-      sudo .venv/bin/python3 src/crontab.py
-
+      
+        De forma local: 
+        sudo .venv/bin/python3 src/crontab.py
+        
+        Desde crontab:
+        sudo crontab -e
+        0 1,5,9,13,17 * * 1-5 cd /var/www/boton_pago_frontend/ && sudo -u www-data .venv/bin/python3 src/crontab.py
 
 INSTALACIÓN CON APACHE2 CON MOD_WSGI:
 

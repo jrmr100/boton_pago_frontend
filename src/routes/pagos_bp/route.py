@@ -49,15 +49,17 @@ def pagos():
                            monto_bs=monto_bs, form=form, monto_dls=monto_dls)
 
 # TODO: Definir si usar CDN o no para los iconos de bootstrap
-# TODO: Proteger acceso directo a paginas - login
 # TODO: Modulo de Lukapay pago movil - apagable
 # TODO: Modulo de Lukapay zelle - apagable
 # TODO: Icono de pestaña con temas claros
-# TODO: script tasa bcv activo en la instalacion
 # TODO: Validar el trackid diferido
 # TODO: botones en el resultado de pago?
 # TODO: Mostrar monto de la deuda luego del pago exitoso?
-# TODO: En home al no tener factura mostrar solo flash o formulario
-# TODO: Si esta retirado mensaje de comunicarse al callcenter
+# TODO: En home al no tener factura mostrar en gris en las opciopnes de pago
+# TODO: Si esta retirado mensaje de comunicarse al callcenter y poner en gris
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
+# TODO: Eliminar spinner al regresar en home
+# TODO: que hacer con el campo plan contratado?
+# TODO: Agregar lista de correos en config
+
