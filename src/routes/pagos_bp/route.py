@@ -1,8 +1,10 @@
 from flask import render_template, Blueprint, session, redirect, url_for, flash
 from src.utils.api_vippo import leer_tasa_bcv
-from src.utils.logger import logger
 from src.routes.pagos_bp.templates.form_fields import FormFields
 from flask_login import login_required, current_user
+import src.config as config
+
+
 nombre_ruta = "pagos"
 
 # Defino el Blueprint
@@ -47,7 +49,7 @@ def pagos():
 
     if datos_cliente["estado"] == "RETIRADO":
         card_disable = True
-        flash("Cuenta \"RETIRADA\" debe contactar a nuestro centro de atención", "failure")
+        flash("Cuenta \"RETIRADA\" debe contactar a nuestro centro de atención por WhatsApp - " + config.contacto_WhatsApp, "failure")
     else:
         card_disable = False
     return render_template("pagos.html", datos_cliente=datos_cliente,
