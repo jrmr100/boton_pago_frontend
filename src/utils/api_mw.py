@@ -24,27 +24,22 @@ def buscar_cliente(client_id, client_email):
             ###### VALIDO EL CORREO DEL CLIENTE ######
             email_mw = api_response[1]['datos'][0]['correo']
             if client_email == email_mw:
-                total_facturas = api_response[1]["datos"][0]["facturacion"]["total_facturas"]
-                # Valido si tiene deuda
-                if float(total_facturas) > 0:
-                    # Almaceno la session
-                    session.permanent = True  # Permite utilizar el tiempo de vida de la session
-                    datos_cliente = {"nombre": api_response[1]["datos"][0]["nombre"],
-                                     "id": api_response[1]["datos"][0]["id"],
-                                     "cedula": api_response[1]["datos"][0]["cedula"],
-                                     "estado": api_response[1]["datos"][0]["estado"],
-                                     "PlanContratado": api_response[1]["datos"][0]["PlanContratado"],
-                                     "facturas_nopagadas": api_response[1]["datos"][0]["facturacion"][
-                                         "facturas_nopagadas"],
-                                     "total_facturas": api_response[1]["datos"][0]["facturacion"]["total_facturas"]
-                                     }
-                    session["datos_cliente"] = datos_cliente
-                    user = User(client_id, datos_cliente)
-                    login_user(user)
-                    return api_response
-                else:
-                    logger.info("user: " + str(client_id) + " TYPE: No hay facturas para cancelar" + "\n")
-                    return "info", "No tiene facturas para cancelar"
+                # Almaceno la session
+                session.permanent = True  # Permite utilizar el tiempo de vida de la session
+                datos_cliente = {"nombre": api_response[1]["datos"][0]["nombre"],
+                                 "id": api_response[1]["datos"][0]["id"],
+                                 "cedula": api_response[1]["datos"][0]["cedula"],
+                                 "estado": api_response[1]["datos"][0]["estado"],
+                                 "PlanContratado": api_response[1]["datos"][0]["PlanContratado"],
+                                 "facturas_nopagadas": api_response[1]["datos"][0]["facturacion"][
+                                     "facturas_nopagadas"],
+                                 "total_facturas": api_response[1]["datos"][0]["facturacion"]["total_facturas"]
+                                 }
+                session["datos_cliente"] = datos_cliente
+                user = User(client_id, datos_cliente)
+                login_user(user)
+                return api_response
+
             else:
                 logger.error("user: " + str(client_id) + " TYPE: No coinciden los correos " + "\n")
                 return "error", "No existe el cliente con el filtro indicado."

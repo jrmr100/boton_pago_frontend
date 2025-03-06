@@ -39,8 +39,8 @@ def home():
                 return redirect(url_for('pagos.pagos'))
         elif resultado_apimw[0] == "error":
             flash(resultado_apimw[1], "failure")
-        elif resultado_apimw[0] == "info":
-            flash(resultado_apimw[1], "info")
+        #elif resultado_apimw[0] == "info":
+        #    flash(resultado_apimw[1], "info")
         elif resultado_apimw[0] == "except":
             return render_template("error_general.html", msg="Error API - MW", error=resultado_apimw[1],
                                    type="503")

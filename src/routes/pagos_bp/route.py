@@ -36,6 +36,17 @@ def pagos():
     form = FormFields()
     datos_cliente = current_user.datos_cliente
 
+    # VALIDO CONDICIONES DEL CLIENTE
+    if datos_cliente["estado"] == "RETIRADO":
+        card_disable = True
+        flash("Cuenta \"RETIRADA\" debe contactar a nuestro centro de atención por WhatsApp - " +
+              config.contacto_WhatsApp, "failure")
+    elif float(datos_cliente["total_facturas"]) <= 0:
+        card_disable = True
+        flash("La cuenta no presenta deudas", "info")
+    else:
+        card_disable = False
+
 
     # Calculo el monto en Bs
     monto_dls = float(datos_cliente["total_facturas"])
@@ -47,11 +58,7 @@ def pagos():
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil.pagomovil'))
 
-    if datos_cliente["estado"] == "RETIRADO":
-        card_disable = True
-        flash("Cuenta \"RETIRADA\" debe contactar a nuestro centro de atención por WhatsApp - " + config.contacto_WhatsApp, "failure")
-    else:
-        card_disable = False
+
     return render_template("pagos.html", datos_cliente=datos_cliente,
                            monto_bs=monto_bs, form=form, monto_dls=monto_dls, card_disable=card_disable)
 
@@ -62,11 +69,12 @@ def pagos():
 # TODO: Validar el trackid diferido
 # TODO: botones en el resultado de pago?
 # TODO: Mostrar monto de la deuda luego del pago exitoso?
-# TODO: En home al no tener factura mostrar en gris en las opciopnes de pago
+# TODO: En home al no tener factura mostrar en gris en las opciones de pago
 # TODO: Si esta retirado mensaje de comunicarse al callcenter y poner en gris
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
 # TODO: Eliminar spinner al regresar en home
 # TODO: que hacer con el campo plan contratado?
 # TODO: Agregar lista de correos en config
-
+# TODO revisar donde matar la session
+# TODO: botones de salir de la sesion
