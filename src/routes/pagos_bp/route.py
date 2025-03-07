@@ -73,4 +73,5 @@ def pagos():
 # TODO: Agregar lista de correos en config
 # TODO: check para recordar datos en home
 # TODO: Revisar si se cobra el IGTF
-# TODO: Validar imagen bancoplaza en reporte de pago
+# TODO: Donde cerrar la session session automatico clear()
+# TODO: Agregar a boton regresar solo si la trasaccion da fallida
