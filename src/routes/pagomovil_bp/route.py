@@ -121,7 +121,6 @@ def pagomovil():
                 if pago_facturas[0] == "success":
                     if pago_facturas[1]["estado"] == "exito":
                         img_result = 'img/exito.png'
-                        session.clear()
                         return render_template('pay_result.html', msg="Pago realizado con éxito",
                                                datos_cliente=datos_cliente, img_entity=img_entity,
                                                id_customer=id_customer,
