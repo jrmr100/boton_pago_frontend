@@ -62,16 +62,12 @@ def pagos():
     return render_template("pagos.html", datos_cliente=datos_cliente,
                            monto_bs=monto_bs, form=form, monto_dls=monto_dls, card_disable=card_disable)
 
-# TODO: Definir si usar CDN o no para los iconos de bootstrap
 # TODO: Modulo de Lukapay pago movil - apagable
 # TODO: Modulo de Lukapay zelle - apagable
 # TODO: Icono de pestaña con temas claros
 # TODO: Validar el trackid diferido
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
-# TODO: Eliminar spinner al regresar en home
 # TODO: Agregar lista de correos en config
 # TODO: check para recordar datos en home
-# TODO: Revisar si se cobra el IGTF
 # TODO: Donde cerrar la session session automatico clear()
-# TODO: Agregar a boton regresar solo si la trasaccion da fallida
