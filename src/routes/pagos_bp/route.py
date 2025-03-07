@@ -67,10 +67,10 @@ def pagos():
 # TODO: Modulo de Lukapay zelle - apagable
 # TODO: Icono de pestaña con temas claros
 # TODO: Validar el trackid diferido
-# TODO: Mostrar monto de la deuda luego del pago exitoso?
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
 # TODO: Eliminar spinner al regresar en home
-# TODO: que hacer con el campo plan contratado?
 # TODO: Agregar lista de correos en config
 # TODO: check para recordar datos en home
+# TODO: Revisar si se cobra el IGTF
+# TODO: Validar imagen bancoplaza en reporte de pago

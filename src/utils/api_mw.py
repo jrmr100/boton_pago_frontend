@@ -30,7 +30,7 @@ def buscar_cliente(client_id, client_email):
                                  "id": api_response[1]["datos"][0]["id"],
                                  "cedula": api_response[1]["datos"][0]["cedula"],
                                  "estado": api_response[1]["datos"][0]["estado"],
-                                 "PlanContratado": api_response[1]["datos"][0]["PlanContratado"],
+                                 "movil": api_response[1]["datos"][0]["movil"],
                                  "facturas_nopagadas": api_response[1]["datos"][0]["facturacion"][
                                      "facturas_nopagadas"],
                                  "total_facturas": api_response[1]["datos"][0]["facturacion"]["total_facturas"]
