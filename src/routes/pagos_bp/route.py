@@ -64,10 +64,8 @@ def pagos():
 
 # TODO: Modulo de Lukapay pago movil - apagable
 # TODO: Modulo de Lukapay zelle - apagable
-# TODO: Icono de pestaña con temas claros
 # TODO: Validar el trackid diferido
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
 # TODO: Agregar lista de correos en config
-# TODO: check para recordar datos en home
-# TODO: Donde cerrar la session session automatico clear()
+
