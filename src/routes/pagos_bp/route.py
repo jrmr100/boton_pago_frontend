@@ -73,3 +73,4 @@ def pagos():
 # TODO: Eliminar spinner al regresar en home
 # TODO: que hacer con el campo plan contratado?
 # TODO: Agregar lista de correos en config
+# TODO: check para recordar datos en home
