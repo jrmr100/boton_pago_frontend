@@ -44,21 +44,21 @@
             <div class="col-10">
                 <div class="row mt-4">
                     <div class="col-md-6 text-center">
-                        <h3 class="mt-4">INFORMACIÓN DE LA CUENTA</h3>
+                        <h3>INFORMACIÓN DE LA CUENTA</h3>
                         <div class="card-group text-center">
-                            <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card border-primary" style="overflow: hidden; height: 130px;">
                                 <div class="card-header"><b>ID de la cuenta</b></div>
                                 <div class="card-body">
                                     <h5 class="card-title">{{ datos_cliente["id"] }}</h5>
                                 </div>
                             </div>
-                            <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card border-primary" style="overflow: hidden; height: 130px;">
                                 <div class="card-header"><b>Estado</b></div>
                                 <div class="card-body">
                                     <h5 class="card-title">{{ datos_cliente["estado"] }}</h5>
                                 </div>
                             </div>
-                            <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card border-primary" style="overflow: hidden; height: 130px;">
                                 <div class="card-header"><b>Plan contratado</b></div>
                                 <div class="card-body">
                                     <h5 class="card-title">{{ datos_cliente["PlanContratado"] }}</h5>
@@ -69,16 +69,16 @@
                     </div>
 
                     <div class="col-md-6 text-center">
-                        <h3 class="mt-4">INFORMACIÓN DEL PAGO</h3>
+                        <h3>INFORMACIÓN DE LA DEUDA</h3>
                         <div class="card-group text-center">
-                            <div class="card border-primary" style="overflow: hidden; height: 120px;">
+                            <div class="card border-primary" style="overflow: hidden; height: 130px;">
                                 <div class="card-header"><b>Facturas no pagadas</b></div>
                                 <div class="card-body">
                                     <h5 class="card-title">{{ datos_cliente["facturas_nopagadas"] }}</h5>
                                 </div>
                             </div>
-                            <div class="card border-primary" style="overflow: hidden; height: 120px;">
-                                <div class="card-header"><b>Deuda en dólares ($)</b></div>
+                            <div class="card border-primary" style="overflow: hidden; height: 130px;">
+                                <div class="card-header"><b>Deuda en ($)</b></div>
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         {% if monto_dls > 0 %}
@@ -89,8 +89,8 @@
                                     </h5>
                                 </div>
                             </div>
-                            <div class="card border-primary" style="overflow: hidden; height: 120px;">
-                                <div class="card-header"><b>Deuda en Bolívares (Bs.)</b></div>
+                            <div class="card border-primary" style="overflow: hidden; height: 130px;">
+                                <div class="card-header"><b>Deuda en (Bs.)</b></div>
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         {% if monto_bs > 0 %}
@@ -117,7 +117,7 @@
             </div>
         </div>
 
-        <div class="row mt-5">
+        <div class="row mt-3">
             <div class="col-1">
             </div>
 
