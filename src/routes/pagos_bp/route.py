@@ -67,14 +67,9 @@ def pagos():
 # TODO: Modulo de Lukapay zelle - apagable
 # TODO: Icono de pestaña con temas claros
 # TODO: Validar el trackid diferido
-# TODO: botones en el resultado de pago?
 # TODO: Mostrar monto de la deuda luego del pago exitoso?
-# TODO: En home al no tener factura mostrar en gris en las opciones de pago
-# TODO: Si esta retirado mensaje de comunicarse al callcenter y poner en gris
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
 # TODO: Eliminar spinner al regresar en home
 # TODO: que hacer con el campo plan contratado?
 # TODO: Agregar lista de correos en config
-# TODO revisar donde matar la session
-# TODO: botones de salir de la sesion
