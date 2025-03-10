@@ -41,7 +41,7 @@ def buscar_cliente(client_id, client_email):
                 return api_response
 
             else:
-                logger.error("user: " + str(client_id) + " TYPE: No coinciden los correos " + "\n")
+                logger.error("USER: " + str(client_id) + " TYPE: No coinciden los correos " + "\n")
                 return "error", "No existe el cliente con el filtro indicado."
         elif api_response[1]["estado"] == "error":
             # log se muestra desde respuesta de la api

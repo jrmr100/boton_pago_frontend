@@ -29,7 +29,7 @@ def home():
         client_tipo_id = form.tipo_id.data  # no usado por ahora
         client_id = form.ci.data
 
-        logger.info("user: " + str(client_id) +
+        logger.info("USER: " + str(client_id) +
                     " TYPE: Iniciando transacción con el correo: " + client_email + "\n")
 
         ################ Busco cliente en MW ##############

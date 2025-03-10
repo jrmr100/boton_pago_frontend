@@ -81,7 +81,7 @@ def pagomovil():
             monto_pagado = resultado_val[1]['result']['validatedPayments'][0]['amount']
 
             result_buscarfacturas = buscar_facturas(id_cliente, str(monto_pagado), montobs)
-            logger.debug("user: " + str(client_id) +
+            logger.debug("USER: " + str(client_id) +
                          " TYPE: Respuesta MW buscando facturas: " + str(result_buscarfacturas))
 
             if result_buscarfacturas[0] == "success":
@@ -110,13 +110,10 @@ def pagomovil():
                 medio_pago = "pm_vippo"
                 codigo_auth = form.order.data
 
-                logger.debug("user: " + str(client_id) + " TYPE: pagando facturas: " + str(
+                logger.debug("USER: " + str(client_id) + " TYPE: pagando facturas: " + str(
                     facturas) + "-" + codigo_auth + "-" + medio_pago)
 
                 pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago)
-
-                logger.debug("user: " + str(
-                    client_id) + " TYPE: Resultado del pago de facturas: " + str(pago_facturas))
 
                 if pago_facturas[0] == "success":
                     if pago_facturas[1]["estado"] == "exito":
