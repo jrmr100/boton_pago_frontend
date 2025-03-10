@@ -20,6 +20,7 @@ tasa_bcv = None
 
 
 @blue_ruta.before_request
+@login_required
 def cargar_tasa_bcv():
     global tasa_bcv
     if tasa_bcv is None:

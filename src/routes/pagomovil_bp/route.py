@@ -20,6 +20,7 @@ blue_ruta = Blueprint(
 listabancos = None
 
 @blue_ruta.before_request
+@login_required
 def cargar_listabancos():
     global listabancos
     if listabancos is None:
