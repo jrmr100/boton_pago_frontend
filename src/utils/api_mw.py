@@ -23,7 +23,7 @@ def buscar_cliente(client_id, client_email):
         if api_response[1]["estado"] == "exito":  # Cliente obtenido
             ###### VALIDO EL CORREO DEL CLIENTE ######
             email_mw = api_response[1]['datos'][0]['correo']
-            if client_email == email_mw:
+            if client_email.lower() == email_mw.lower():
                 # Almaceno la session
                 session.permanent = True  # Permite utilizar el tiempo de vida de la session
                 datos_cliente = {"nombre": api_response[1]["datos"][0]["nombre"],
