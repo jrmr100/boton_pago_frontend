@@ -5,7 +5,7 @@ import os
 import src.utils.connect_api as connect_api
 from src.utils.logger import now, logger
 from flask_login import current_user, login_user
-
+import src.config as config
 
 
 
@@ -57,7 +57,8 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
 
         # Valido si el monto pagado es inferior a la deuda
     elif float(monto_pagado_bs) < float(monto_deuda):
-        return "error", "El monto pagado (Bs." + monto_pagado_bs + ") esta por debajo de la deuda (Bs." + str(monto_deuda) + ")"
+        return "error", "Monto pagado (Bs." + monto_pagado_bs + ") esta por debajo de la deuda\
+         (Bs." + str(monto_deuda) + ") debe contactarnos por WhatsApp al numero " + config.contacto_WhatsApp
     else:
         # Obtengo los codigos de las facturas pendientes por el cliente
         headers = {}

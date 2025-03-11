@@ -68,11 +68,11 @@ def pagomovil():
             else:
                 img_result = 'img/error.png'
                 return render_template('pay_result.html', msg=resultado_val[1]["result"]["label"],
-                                       datos_cliente=datos_cliente, img_entity=img_entity,
+                                       img_entity=img_entity,
                                        id_customer=id_customer,
                                        phone_payer=form.tipo_phone.data + form.payerPhone.data,
                                        entity=form.entity.data[6:], order=order, monto_bs=montobs,
-                                       img_result=img_result)
+                                       img_result=img_result, datos_cliente=datos_cliente)
         else:
             return render_template("error_general.html", msg="Error validando el pago, intente mas tarde",
                                    error=resultado_val[1], type="500")
@@ -95,11 +95,11 @@ def pagomovil():
             elif result_buscarfacturas[0] == "error":
                 img_result = 'img/error.png'
                 return render_template('pay_result.html', msg=result_buscarfacturas[1],
-                                       datos_cliente=datos_cliente, img_entity=img_entity,
+                                       img_entity=img_entity,
                                        id_customer=id_customer,
                                        phone_payer=form.tipo_phone.data + form.payerPhone.data,
                                        entity=form.entity.data[6:], order=order, monto_bs=montobs,
-                                       img_result=img_result)
+                                       img_result=img_result, datos_cliente=datos_cliente)
             else:
                 return render_template("error_general.html",
                                        msg="Error buscando facturas del cliente, intente mas tarde",
@@ -120,19 +120,19 @@ def pagomovil():
                     if pago_facturas[1]["estado"] == "exito":
                         img_result = 'img/exito.png'
                         return render_template('pay_result.html', msg="Pago realizado con éxito",
-                                               datos_cliente=datos_cliente, img_entity=img_entity,
+                                               img_entity=img_entity,
                                                id_customer=id_customer,
                                                phone_payer=form.tipo_phone.data + form.payerPhone.data,
                                                entity=form.entity.data[6:], order=order, monto_bs=0,
-                                               img_result=img_result)
+                                               img_result=img_result, datos_cliente=datos_cliente)
                     else:
                         img_result = 'img/error.png'
                         return render_template('pay_result.html', msg="Error pagando factura",
-                                               datos_cliente=datos_cliente, img_entity=img_entity,
+                                               img_entity=img_entity,
                                                id_customer=id_customer,
                                                phone_payer=form.tipo_phone.data + form.payerPhone.data,
                                                entity=form.entity.data[6:], order=order, monto_bs=montobs,
-                                               img_result=img_result)
+                                               img_result=img_result, datos_cliente=datos_cliente)
                 else:
                     return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
                                            error=pago_facturas[1], type="500")
