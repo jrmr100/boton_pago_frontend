@@ -16,6 +16,16 @@ blue_ruta = Blueprint(
     static_url_path='/'
 )
 
+@blue_ruta.after_request
+def add_header(response):
+    """
+    Evito que los navegadores metan en cache
+    esta pagina y no afecte el spinner
+    """
+    response.headers['Cache-Control'] = 'no-store, must-revalidate'
+    response.headers['Expires'] = '0'
+    return response
+
 @blue_ruta.route('/', methods=["GET", "POST"])
 def home():
     form = FormFields()

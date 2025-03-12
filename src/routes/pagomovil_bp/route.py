@@ -30,7 +30,15 @@ def cargar_listabancos():
             return render_template("error_general.html", msg="Error obteniendo la lista de bancos, intente mas tarde",
                                    error="No es posible acceder a la lista de bancos emisores", type="500")
 
-
+@blue_ruta.after_request
+def add_header(response):
+    """
+    Evito que los navegadores metan en cache
+    esta pagina y no afecte el spinner
+    """
+    response.headers['Cache-Control'] = 'no-store, must-revalidate'
+    response.headers['Expires'] = '0'
+    return response
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 @login_required
