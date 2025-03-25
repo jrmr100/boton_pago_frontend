@@ -27,7 +27,7 @@ class FormFields(FlaskForm):
 
     payerPhone = StringField('',
                              validators=[DataRequired(),
-                                         Length(min=2, max=20), only_numbers],
+                                         Length(min=5, max=7), only_numbers],
                              render_kw={'placeholder': '1234567', "title": "Solo números, ejem: 1234567"})
 
     order = StringField('Número de referencia (Últimos 6 dígitos):',

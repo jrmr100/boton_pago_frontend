@@ -1,5 +1,5 @@
 # Lista de opciones CI/RIF para el home
-lista_id = ("V-", "J-", "G-", "E-", "P-")
+lista_id = ("V", "J", "G", "E", "P")
 
 # Lista de operadoras telefonicas
 lista_phone = ("0412", "0414", "0424", "0416", "0426")
