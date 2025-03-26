@@ -1,0 +1,80 @@
+<div class="col-1">
+</div>
+
+<div class="col-10 mt-2 card">
+    <div class="row">
+
+        <h3 class="mt-3">Información del pago realizado banesco:</h3>
+        <div class="col-lg-6">
+            <!-- CI PAGADOR -->
+            <div>
+                <label><b>{{ form.tipo_id.label }}</b></label>
+                <div class="d-flex">
+                    {{ form.tipo_id(class="form-select") }}
+                    {{ form.payerID(class="form-control", autofocus=true) }}
+                </div>
+                {% for error in form.payerID.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- BANCO EMISOR -->
+            <div class="mt-3 mb-3">
+                <b>{{ form.entity.label }}</b>
+                {{ form.entity(class="form-select") }}
+                {% for error in form.entity.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <!-- TELEFONO PAGADOR -->
+            <div>
+                <label><b>{{ form.tipo_phone.label }}</b></label>
+                <div class="d-flex">
+                    {{ form.tipo_phone(class="form-select", style="width: 90px;") }}
+                    {{ form.payerPhone(class="form-control ms-2") }}
+                </div>
+                {% for error in form.payerPhone.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+
+            <!-- REFERENCIA -->
+            <div class="mt-3 mb-3">
+                <label><b>{{ form.order.label }}</b></label>
+                <div>
+                    {{ form.order(class="form-control") }}
+                </div>
+                {% for error in form.order.errors %}
+                    <span class="text-danger">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="row">
+            <!-- REGRESAR -->
+            <div class="col-6 justify-content-center d-flex text-center mt-5">
+                <button type="button"
+                        class="btn btn-outline-danger justify-content-center d-flex align-items-center text-center"
+                        style="width: 170px; height: 50px;"
+                        onclick="window.location.href='{{ url_for('pagos.pagos') }}'">
+                    <span class="fs-2 me-2"><i class="bi bi-arrow-return-left"></i></span>
+                    Regresar
+                </button>
+            </div>
+
+            <!-- ENVIAR PAGO -->
+            <div class="col-6 justify-content-center d-flex text-center mt-5 mb-4">
+                <button type="submit"
+                        class="btn btn-outline-primary justify-content-center d-flex align-items-center text-center"
+                        style="width: 170px; height: 50px;">
+                    <span class="fs-2 me-2"><i class="bi bi-check-circle"></i></span>
+                    Enviar pago
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-1">
+</div>
