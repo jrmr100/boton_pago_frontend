@@ -1,3 +1,4 @@
+from flask import session
 from dotenv import load_dotenv
 from src.utils.logger import logger, now
 import os
@@ -22,6 +23,7 @@ def leer_tasa_bcv():
         lista_tasa_bcv = lineas_tasa_bcv.split(",")
         tasa_bcv = lista_tasa_bcv[0]
         logger.debug("USER: " + current_user.id + " - Tasa BCV leida del archivo TXT: " + str(tasa_bcv) + "\n")
+        session["tasa_bcv"] = tasa_bcv
         return tasa_bcv
     except Exception as e:
         logger.debug("USER: " + current_user.id + " - Except de la lectura de tasa BCV desde el archivo: " + str(e) + "\n")

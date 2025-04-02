@@ -1,11 +1,13 @@
 
-from flask import render_template, Blueprint, session, redirect, url_for, flash
+from flask import session, redirect, url_for, flash
 from src.routes.home_bp.templates.form_fields import User
 import os
 import src.utils.connect_api as connect_api
 from src.utils.logger import now, logger
 from flask_login import current_user, login_user
 import src.config as config
+import math
+
 
 
 
@@ -51,12 +53,12 @@ def buscar_cliente(client_id, client_email):
 
 
 def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
+    monto_deuda_float = float(monto_deuda)
     # Valido la longitud del ID del cliente
     if len(id_cliente) < 1 or len(id_cliente) > 7:
         return "error", "idtraza muy largo"
-
         # Valido si el monto pagado es inferior a la deuda
-    elif float(monto_pagado_bs) < float(monto_deuda):
+    elif float(monto_pagado_bs) < int(monto_deuda_float):  # Omito los decimales de la deuda (solo entero)
         return "error", "Monto pagado (Bs." + monto_pagado_bs + ") esta por debajo de la deuda\
          (Bs." + str(monto_deuda) + ") debe contactarnos por WhatsApp al numero " + config.contacto_WhatsApp
     else:
@@ -67,18 +69,47 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
         api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
         return api_response
 
-def pagar_facturas(facturas, codigo_auth, medio_pago):
+def pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado):
     cod_factura = 1
     headers = {"Content-Type": "application/json"}
     endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_PAGAR")
+    monto_pagado_dls = float(monto_pagado) / float(session["tasa_bcv"])
+    monto_pagado_dls = round(monto_pagado_dls, 2)  # trabajo con solo 2 decimales
+    monto_pagado_dls_rounded = math.ceil(monto_pagado_dls)  # redondeo hacia arriba el monto pagado para evitar decimales
 
-    for factura in facturas:
-        body = {"token": os.getenv("TOKEN_MW"),
-                   "idfactura": factura["id"],
-                   "pasarela": "API-" + medio_pago,
-                   "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
-        api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
-        cod_factura = cod_factura + 1
+    if len(facturas) == 1:  # aplico solo cuando es una solo factura
+        monto_factura = facturas[0]["total"]
+        if monto_pagado_dls_rounded >= float(monto_factura):  # si el monto pagado es mayor o igual al total de la factura
+            body = {"token": os.getenv("TOKEN_MW"),
+                    "idfactura": facturas[0]["id"],
+                    "pasarela": "API-" + medio_pago,
+                    "cantidad": monto_pagado_dls,
+                    "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
+            api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
+        else:
+            return "error", "Monto pagado (Bs." + monto_pagado + ") esta por debajo de la deuda\
+         (Bs." + str(facturas[0]["total"]) + ") debe contactarnos por WhatsApp al numero " + config.contacto_WhatsApp
 
-    return api_response
+    elif len(facturas) > 1:
+        for factura in facturas:
+            monto_factura = factura["total"]
+
+            if monto_pagado_dls_rounded >= float(monto_factura):  # si el monto pagado es mayor o igual al total de la factura
+                body = {"token": os.getenv("TOKEN_MW"),
+                        "idfactura": facturas[0]["id"],
+                        "pasarela": "API-" + medio_pago,
+                        "cantidad": monto_factura,
+                        "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
+                api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
+                cod_factura = cod_factura + 1
+            else:
+                return "error", "Monto pagado (Bs." + monto_pagado + ") esta por debajo de la deuda\
+             (Bs." + str(
+                    facturas[0]["total"]) + ") debe contactarnos por WhatsApp al numero " + config.contacto_WhatsApp
+
+
+
+
+
+        return api_response
 

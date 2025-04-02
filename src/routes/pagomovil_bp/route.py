@@ -118,11 +118,12 @@ def pagomovil():
                 facturas = result_buscarfacturas[1]["facturas"]
                 medio_pago = "pm_vippo"
                 codigo_auth = form.order.data
+                monto_pagado = str(monto_pagado)
 
                 logger.debug("USER: " + str(client_id) + " TYPE: pagando facturas: " + str(
                     facturas) + "-" + codigo_auth + "-" + medio_pago)
 
-                pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago)
+                pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado)
 
                 if pago_facturas[0] == "success":
                     if pago_facturas[1]["estado"] == "exito":
@@ -147,4 +148,5 @@ def pagomovil():
 
     else:
         return render_template('pagomovil.html', form=form, datos_cliente=datos_cliente,
-                               pm_bancoplaza=config.pm_bancoplaza, pm_banesco=config.pm_banesco, montobs=montobs)
+                               pm_bancoplaza=config.pm_bancoplaza,
+                               montobs=montobs)
