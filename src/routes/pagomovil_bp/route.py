@@ -148,4 +148,5 @@ def pagomovil():
     else:
         return render_template('pagomovil.html', form=form, datos_cliente=datos_cliente,
                                pm_bancoplaza=config.pm_bancoplaza,
+                               pm_banesco=config.pm_banesco,
                                montobs=montobs)

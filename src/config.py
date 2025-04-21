@@ -9,5 +9,6 @@ correos_tasa_bcv = ["jmonrroy@ifx.com.ve", "gjaramillo@ifx.com.ve", "zarelda.her
                     "mariaespana2netvzla@gmail.com", "reinaldo.b@ifxnw.com.ve", "gerencia@sisca.co"]
 
 pm_bancoplaza = ("04241686275", "BANCO PLAZA", "J303390684") # RIF IFX
+pm_banesco = ("04241686275", "BANESCO", "J303390684") # RIF IFX
 
 contacto_WhatsApp = "04241686275"
