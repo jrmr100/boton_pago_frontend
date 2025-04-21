@@ -9,7 +9,7 @@
 {% block body %}
     {% include '_nav-bar.html' %}
     {% include '_modal_spinner.html' %}
-
+    {% include '_modal_pagomovil.html' %}
 
     <div class="container-fluid bg-secondary-subtle min-vh-100">
         <!-- FILA 1 -->
@@ -72,12 +72,14 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center">
-                                <button type="button"
-                                        class="btn btn-outline-primary justify-content-center d-flex align-items-center text-center"
-                                        style="width: 170px; height: 50px;">
-                                    Siguiente
-                                    <span class="fs-2 me-2"><i class="ms-2 bi bi-arrow-right-circle-fill"></i></span>
-                                </button>
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <button class="btn btn-primary"
+                                            type="button"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">Siguiente
+                                            <i class="ms-2 bi bi-arrow-right-circle-fill"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
