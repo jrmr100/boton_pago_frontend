@@ -12,7 +12,6 @@
     {% include '_modal_spinner.html' %}
 
     <div class="container-fluid bg-secondary-subtle min-vh-100">
-        <!-- FILA 1 -->
         <div class="row">
             <div class="col-1">
             </div>
@@ -37,9 +36,9 @@
                                                         <b>RIF:</b> {{ pm_bancoplaza[2] }}
                                                     </p>
                                                     <div class="d-grid gap-2">
-                                                        <input type="radio" class="btn-check" name="options-outlined"
-                                                               id="success-outlined" autocomplete="off">
-                                                        <label class="btn btn-outline-primary" for="success-outlined">Seleccionar</label>
+                                                        <input type="radio" class="btn-check tarjeta-seleccionada" name="bancoSeleccionado"
+                                                               id="banco-bancoplaza" autocomplete="off" value="{{ pm_bancoplaza[1] }}">
+                                                        <label class="btn btn-outline-primary" for="banco-bancoplaza">Seleccionar</label>
                                                     </div>
 
                                                 </div>
@@ -61,9 +60,9 @@
                                                         <b>RIF:</b> {{ pm_banesco[2] }}
                                                     </p>
                                                     <div class="d-grid gap-2">
-                                                        <input type="radio" class="btn-check" name="options-outlined"
-                                                               id="success-outlined2" autocomplete="off">
-                                                        <label class="btn btn-outline-primary" for="success-outlined2">Seleccionar</label>
+                                                        <input type="radio" class="btn-check tarjeta-seleccionada" name="bancoSeleccionado"
+                                                               id="banco-banesco" autocomplete="off" value="{{ pm_banesco[1] }}">
+                                                        <label class="btn btn-outline-primary" for="banco-banesco">Seleccionar</label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -75,9 +74,7 @@
                                 <div class="d-grid gap-2 col-6 mx-auto">
                                     <button class="btn btn-primary"
                                             type="button"
-                                            id="siguienteBtn"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#pagoMovilModal">Siguiente
+                                            id="siguienteBtn">Siguiente
                                         <i class="ms-2 bi bi-arrow-right-circle-fill"></i>
                                     </button>
                                 </div>
@@ -106,26 +103,22 @@
             const siguienteBtn = document.getElementById('siguienteBtn');
             const pagoMovilModal = document.getElementById('pagoMovilModal');
 
-            siguienteBtn.addEventListener('click', function () {
-                const radios = document.querySelectorAll('input[name="options-outlined"]:checked');
+            siguienteBtn.addEventListener('click', function (event) {
+                const tarjetaSeleccionada = document.querySelector('input[name="bancoSeleccionado"]:checked');
 
-                if (radios.length > 0) {
-                    const seleccionado = radios[0];
-                    const tarjetaSeleccionadaLabel = seleccionado.closest('.card').querySelector('.card-title b').textContent.trim();
-
-                    // Aquí tienes el nombre de la tarjeta seleccionada: tarjetaSeleccionadaLabel
-                    console.log('Tarjeta seleccionada:', tarjetaSeleccionadaLabel);
-
-                    // Ahora puedes pasar esta información al modal.
-                    // Por ejemplo, modificando el contenido de un elemento dentro del modal.
+                if (tarjetaSeleccionada) {
+                    // Se ha seleccionado una tarjeta, ahora puedes mostrar el modal
                     const nombreTarjetaModal = pagoMovilModal.querySelector('#nombreTarjetaModal'); // Asegúrate de que este ID exista en tu modal
                     if (nombreTarjetaModal) {
-                        nombreTarjetaModal.textContent = tarjetaSeleccionadaLabel;
+                        nombreTarjetaModal.textContent = 'Banco destino: ' + tarjetaSeleccionada.value;
                     }
-
-                    // El modal se mostrará automáticamente debido al atributo data-bs-toggle y data-bs-target en el botón.
+                    const modal = new bootstrap.Modal(pagoMovilModal);
+                    modal.show();
                 } else {
-                    alert('Por favor, selecciona un banco.'); // O muestra algún otro feedback al usuario
+                    // No se ha seleccionado ninguna tarjeta, evita que el modal se muestre
+                    event.preventDefault(); // Evita el comportamiento predeterminado del botón (mostrar el modal por data-bs-toggle)
+                    alert('Por favor, selecciona un banco para continuar.'); // Muestra un mensaje al usuario
+                    // También podrías agregar alguna indicación visual a las tarjetas para resaltar que se debe seleccionar una.
                 }
             });
         });
