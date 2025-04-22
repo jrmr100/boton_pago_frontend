@@ -1,0 +1,129 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <title>2NET - Pagomovil</title>
+
+{% endblock %}
+
+
+<body>
+{% block body %}
+    {% include '_nav-bar.html' %}
+    {% include '_modal_pagomovil.html' %}
+    {% include '_modal_spinner.html' %}
+
+    <div class="container-fluid bg-secondary-subtle min-vh-100">
+        <div class="row">
+            <div class="col-1">
+            </div>
+
+            <div class="col-10">
+                <div class="row mt-3">
+                    <div class="col-lg-10 card">
+                        <div class="card-body">
+                            <div class="row d-flex justify-content-center">
+                                <h3 class="mt-3 text-center">Selecciona el banco de tu preferencia</h3>
+                                <div class="col-lg-6 d-flex justify-content-center">
+                                    <div class="card mb-3" style="max-width: 540px;">
+                                        <div class="row g-0">
+                                            <div class="col-4 d-flex justify-content-center align-items-center">
+                                                <img class="img-fluid rounded-start" alt="Logo_bancoplaza"
+                                                     src="{{ url_for('pagomovil.static', filename='img/logo_bancoplaza.png' ) }}">
+                                            </div>
+                                            <div class="col-8">
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><b>{{ pm_bancoplaza[1] }}</b></h5>
+                                                    <p class="card-text"><b>TELEFONO:</b> {{ pm_bancoplaza[0] }}<br>
+                                                        <b>RIF:</b> {{ pm_bancoplaza[2] }}
+                                                    </p>
+                                                    <div class="d-grid gap-2">
+                                                        <input type="radio" class="btn-check tarjeta-seleccionada" name="bancoSeleccionado"
+                                                               id="banco-bancoplaza" autocomplete="off" value="{{ pm_bancoplaza[1] }}">
+                                                        <label class="btn btn-outline-primary" for="banco-bancoplaza">Seleccionar</label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 d-flex justify-content-center">
+                                    <div class="card mb-3" style="max-width: 540px;">
+                                        <div class="row g-0">
+                                            <div class="col-4 d-flex justify-content-center align-items-center">
+                                                <img class="img-fluid rounded-start" alt="Logo_banesco"
+                                                     src="{{ url_for('pagomovil.static', filename='img/logo_banesco.png' ) }}">
+                                            </div>
+                                            <div class="col-8">
+                                                <div class="card-body">
+                                                    <h5 class="card-title"><b>{{ pm_banesco[1] }}</b></h5>
+                                                    <p class="card-text"><b>TELEFONO:</b> {{ pm_banesco[0] }}<br>
+                                                        <b>RIF:</b> {{ pm_banesco[2] }}
+                                                    </p>
+                                                    <div class="d-grid gap-2">
+                                                        <input type="radio" class="btn-check tarjeta-seleccionada" name="bancoSeleccionado"
+                                                               id="banco-banesco" autocomplete="off" value="{{ pm_banesco[1] }}">
+                                                        <label class="btn btn-outline-primary" for="banco-banesco">Seleccionar</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row d-flex justify-content-center">
+                                <div class="d-grid gap-2 col-6 mx-auto">
+                                    <button class="btn btn-primary"
+                                            type="button"
+                                            id="siguienteBtn">Siguiente
+                                        <i class="ms-2 bi bi-arrow-right-circle-fill"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 card bg-secondary bg-opacity-10">
+                        <div class="card-body text-center">
+                            <h4 class="text-decoration-underline">Monto a cancelar</h4>
+                            <i class="bi bi-exclamation-octagon text-danger"></i>
+                            <h6 class="text-wrap">El monto debe ser exacto</h6>
+                            <h3><b> Bs. </b></h3>
+                            <h3><b> {{ montobs }} </b></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1">
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/spinner_modal.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const siguienteBtn = document.getElementById('siguienteBtn');
+            const pagoMovilModal = document.getElementById('pagoMovilModal');
+
+            siguienteBtn.addEventListener('click', function (event) {
+                const tarjetaSeleccionada = document.querySelector('input[name="bancoSeleccionado"]:checked');
+
+                if (tarjetaSeleccionada) {
+                    // Se ha seleccionado una tarjeta, ahora puedes mostrar el modal
+                    const nombreTarjetaModal = pagoMovilModal.querySelector('#nombreTarjetaModal'); // Asegúrate de que este ID exista en tu modal
+                    if (nombreTarjetaModal) {
+                        nombreTarjetaModal.textContent = 'Banco destino: ' + tarjetaSeleccionada.value;
+                    }
+                    const modal = new bootstrap.Modal(pagoMovilModal);
+                    modal.show();
+                } else {
+                    // No se ha seleccionado ninguna tarjeta, evita que el modal se muestre
+                    event.preventDefault(); // Evita el comportamiento predeterminado del botón (mostrar el modal por data-bs-toggle)
+                    alert('Por favor, selecciona un banco para continuar.'); // Muestra un mensaje al usuario
+                    // También podrías agregar alguna indicación visual a las tarjetas para resaltar que se debe seleccionar una.
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+
+</body>
