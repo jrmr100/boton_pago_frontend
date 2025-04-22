@@ -8,8 +8,8 @@
 <body>
 {% block body %}
     {% include '_nav-bar.html' %}
-    {% include '_modal_spinner.html' %}
     {% include '_modal_pagomovil.html' %}
+    {% include '_modal_spinner.html' %}
 
     <div class="container-fluid bg-secondary-subtle min-vh-100">
         <!-- FILA 1 -->
@@ -75,9 +75,10 @@
                                 <div class="d-grid gap-2 col-6 mx-auto">
                                     <button class="btn btn-primary"
                                             type="button"
+                                            id="siguienteBtn"
                                             data-bs-toggle="modal"
                                             data-bs-target="#pagoMovilModal">Siguiente
-                                            <i class="ms-2 bi bi-arrow-right-circle-fill"></i>
+                                        <i class="ms-2 bi bi-arrow-right-circle-fill"></i>
                                     </button>
                                 </div>
                             </div>
@@ -100,6 +101,35 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/spinner_modal.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const siguienteBtn = document.getElementById('siguienteBtn');
+            const pagoMovilModal = document.getElementById('pagoMovilModal');
+
+            siguienteBtn.addEventListener('click', function () {
+                const radios = document.querySelectorAll('input[name="options-outlined"]:checked');
+
+                if (radios.length > 0) {
+                    const seleccionado = radios[0];
+                    const tarjetaSeleccionadaLabel = seleccionado.closest('.card').querySelector('.card-title b').textContent.trim();
+
+                    // Aquí tienes el nombre de la tarjeta seleccionada: tarjetaSeleccionadaLabel
+                    console.log('Tarjeta seleccionada:', tarjetaSeleccionadaLabel);
+
+                    // Ahora puedes pasar esta información al modal.
+                    // Por ejemplo, modificando el contenido de un elemento dentro del modal.
+                    const nombreTarjetaModal = pagoMovilModal.querySelector('#nombreTarjetaModal'); // Asegúrate de que este ID exista en tu modal
+                    if (nombreTarjetaModal) {
+                        nombreTarjetaModal.textContent = tarjetaSeleccionadaLabel;
+                    }
+
+                    // El modal se mostrará automáticamente debido al atributo data-bs-toggle y data-bs-target en el botón.
+                } else {
+                    alert('Por favor, selecciona un banco.'); // O muestra algún otro feedback al usuario
+                }
+            });
+        });
+    </script>
 {% endblock %}
 
 

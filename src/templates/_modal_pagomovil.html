@@ -1,18 +1,71 @@
+
+
 <!-- Modal -->
 <div class="modal fade" id="pagoMovilModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
-            <div class="modal-header text-center">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Indique la información del pago realizado al banco</h1>
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="ModalLabel">INTRODUCE LA INFORMACIÓN DEL PAGO:</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Validar el pago</button>
+                <div class="container-fluid">
+                    <form method="POST">
+                        <div class="row">
+                            <div>
+                                <h1 class="modal-title fs-5 text-center" id="nombreTarjetaModal"></h1>
+
+                                {{ form.hidden_tag() }}
+                                <div>
+                                    <label><b>{{ form.tipo_id.label }}</b></label>
+                                    <div class="d-flex">
+                                        {{ form.tipo_id(class="form-select") }}
+                                        {{ form.payerID(class="form-control", autofocus=true) }}
+                                    </div>
+                                    {% for error in form.payerID.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="mt-3 mb-3">
+                                    <b>{{ form.entity.label }}</b>
+                                    {{ form.entity(class="form-select") }}
+                                    {% for error in form.entity.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                <div>
+                                    <label><b>{{ form.tipo_phone.label }}</b></label>
+                                    <div class="d-flex">
+                                        {{ form.tipo_phone(class="form-select", style="width: 90px;") }}
+                                        {{ form.payerPhone(class="form-control ms-2") }}
+                                    </div>
+                                    {% for error in form.payerPhone.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                                <div class="mt-3 mb-3">
+                                    <label><b>{{ form.order.label }}</b></label>
+                                    <div>
+                                        {{ form.order(class="form-control") }}
+                                    </div>
+                                    {% for error in form.order.errors %}
+                                        <span class="text-danger">{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-primary">Enviar pago</button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>
 </div>
+
+
