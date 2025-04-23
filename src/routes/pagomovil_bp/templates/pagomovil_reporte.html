@@ -1,0 +1,104 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <title>2NET - Pagomovil</title>
+
+{% endblock %}
+
+
+<body>
+{% block body %}
+    {% include '_nav-bar.html' %}
+
+    <div class="container-fluid bg-secondary-subtle min-vh-100">
+        <div class="row" id="fila-formulario">
+            <div class="col-3">
+            </div>
+
+            <div class="col-6 mt-2 card">
+                <form method="POST">
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img class="img-fluid rounded-start" alt="Logo_banesco"
+                             src="{{ url_for('pagomovil_reportes.static', filename=pm_pagomovil[3] ) }}">
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div>
+                                <label><b>{{ form.tipo_id.label }}</b></label>
+                                <div class="d-flex">
+                                    {{ form.tipo_id(class="form-select") }}
+                                    {{ form.payerID(class="form-control", autofocus=true) }}
+                                </div>
+                                {% for error in form.payerID.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <b>{{ form.entity.label }}</b>
+                                {{ form.entity(class="form-select") }}
+                                {% for error in form.entity.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div>
+                                <label><b>{{ form.tipo_phone.label }}</b></label>
+                                <div class="d-flex">
+                                    {{ form.tipo_phone(class="form-select", style="width: 90px;") }}
+                                    {{ form.payerPhone(class="form-control ms-2") }}
+                                </div>
+                                {% for error in form.payerPhone.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label><b>{{ form.order.label }}</b></label>
+                                <div>
+                                    {{ form.order(class="form-control") }}
+                                </div>
+                                {% for error in form.order.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label><b>{{ form.monto.label }}</b></label>
+                                <div>
+                                    {{ form.monto(class="form-control", value=montobs) }}
+                                </div>
+                                {% for error in form.monto.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6 justify-content-center d-flex text-center mt-5">
+                                <button type="button"
+                                        class="btn btn-outline-danger justify-content-center d-flex align-items-center text-center"
+                                        style="width: 170px; height: 50px;"
+                                        onclick="window.location.href='{{ url_for('pagomovil_bancos.pagomovil_bancos') }}'">
+                                    <span class="fs-2 me-2"><i class="bi bi-arrow-return-left"></i></span>
+                                    Regresar
+                                </button>
+                            </div>
+
+                            <div class="col-6 justify-content-center d-flex text-center mt-5 mb-4">
+                                <div class="d-grid gap-2">
+                                    {{ form.submit_reportes(class="btn btn-outline-primary", style="width: 170px; height: 50px;") }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-3">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+</body>

@@ -57,7 +57,7 @@ def pagos():
     if form.validate_on_submit():
         if form.submit1.data:  # Si se presiona el boton de submit1
             session["monto_bs"] = monto_bs
-            return redirect(url_for('pagomovil.pagomovil'))
+            return redirect(url_for('pagomovil_bancos.pagomovil_bancos'))
 
 
     return render_template("pagos.html", datos_cliente=datos_cliente,

@@ -8,7 +8,7 @@ lista_phone = ("0412", "0414", "0424", "0416", "0426")
 correos_tasa_bcv = ["jmonrroy@ifx.com.ve", "gjaramillo@ifx.com.ve", "zarelda.herbert@gmail.com",
                     "mariaespana2netvzla@gmail.com", "reinaldo.b@ifxnw.com.ve", "gerencia@sisca.co"]
 
-pm_bancoplaza = ("04241686275", "BANCO PLAZA", "J303390684") # RIF IFX
-pm_banesco = ("04143025855", "BANESCO", "J303390684") # RIF IFX
+pm_bancoplaza = ("04241686275", "BANCO PLAZA", "J303390684", "img/logo_bancoplaza.png")
+pm_banesco = ("04143025855", "BANESCO", "J303390684", "img/logo_banesco.png")
 
 contacto_WhatsApp = "04241686275"

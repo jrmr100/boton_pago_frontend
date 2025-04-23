@@ -4,7 +4,9 @@ from wtforms.validators import InputRequired, Length, DataRequired
 from src.utils.validaciones_form import only_numbers, banco_emisor, passport
 
 
-class FormFields(FlaskForm):
+
+class FormFieldsReportes(FlaskForm):
+
     entity = SelectField('Banco Emisor: ',
                          choices=[],
                          validators=[InputRequired(),
@@ -34,3 +36,8 @@ class FormFields(FlaskForm):
                         validators=[DataRequired(),
                                     Length(min=6, max=6)],
                         render_kw={"title": "Ultimos 6 digitos"})
+    monto = StringField('Monto del pago:',
+                        validators=[DataRequired(), only_numbers],
+                        render_kw={'disabled': True})
+
+    submit_reportes = SubmitField('Validar pago')
