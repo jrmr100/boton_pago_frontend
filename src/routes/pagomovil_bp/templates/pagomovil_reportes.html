@@ -8,6 +8,7 @@
 <body>
 {% block body %}
     {% include '_nav-bar.html' %}
+    {% include '_modal_spinner.html' %}
 
     <div class="container-fluid bg-secondary-subtle min-vh-100">
         <div class="row" id="fila-formulario">
@@ -16,6 +17,7 @@
 
             <div class="col-6 mt-2 card">
                 <form method="POST">
+                {{ form.hidden_tag() }}
                     <div class="d-flex justify-content-center align-items-center">
                         <img class="img-fluid rounded-start" alt="Logo_banco"
                              src="{{ url_for('pagomovil_bancos.static', filename=pm_pagomovil[3] ) }}">
@@ -98,6 +100,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ url_for('static', filename='js/spinner_modal.js') }}"></script>
 {% endblock %}
 
 

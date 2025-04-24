@@ -1,9 +1,6 @@
 from flask import render_template, Blueprint, session, redirect, url_for
 from src.routes.pagomovil_bp.templates.form_fields_bancos import FormFieldsBancos
-from src.routes.pagomovil_bp.templates.form_fields_reportes import FormFieldsReportes
 
-from src.utils.api_vippo import leer_listabancos
-from src.utils.logger import logger
 from flask_login import login_required, current_user
 import src.config as config
 
@@ -32,6 +29,7 @@ def pagomovil_bancos():
 
         elif form_bancos.submit_banesco.data:
             return redirect(url_for('pagomovil_banesco.pagomovil_banesco'))
+
         else:
             return None
     else:

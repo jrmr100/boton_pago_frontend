@@ -97,12 +97,12 @@ def pagomovil_reportes():
         client_id = str(datos_cliente["cedula"])
 
         if form_reportes.submit_reportes.data:  # Si se presiona el boton de submit1
-            return render_template('pay_result.html', msg="Pago realizado con éxito",
-                               img_entity=img_entity,
-                               id_customer=id_customer,
-                               phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
-                               entity=form_reportes.entity.data[6:], order=order, monto_bs=0,
-                               img_result=form_reportes, datos_cliente=datos_cliente)
+            return render_template('pagomovil_result.html', msg="Pago realizado con éxito",
+                                   img_entity=img_entity,
+                                   id_customer=id_customer,
+                                   phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
+                                   entity=form_reportes.entity.data[6:], order=order, monto_bs=0,
+                                   img_result=form_reportes, datos_cliente=datos_cliente)
         return None
 
     else:
