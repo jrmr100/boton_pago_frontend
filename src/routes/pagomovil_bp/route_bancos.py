@@ -2,7 +2,6 @@ from flask import render_template, Blueprint, session, redirect, url_for
 from src.routes.pagomovil_bp.templates.form_fields_bancos import FormFieldsBancos
 from src.routes.pagomovil_bp.templates.form_fields_reportes import FormFieldsReportes
 
-
 from src.utils.api_vippo import leer_listabancos
 from src.utils.logger import logger
 from flask_login import login_required, current_user
@@ -18,6 +17,7 @@ blue_ruta = Blueprint(
     static_url_path='/' + nombre_ruta
 )
 
+
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 @login_required
 def pagomovil_bancos():
@@ -25,12 +25,13 @@ def pagomovil_bancos():
     datos_cliente = current_user.datos_cliente
     montobs = session["monto_bs"]
 
-    if form_bancos.validate_on_submit():
-        if form_bancos.submit_bancoplaza.data:  # Si se presiona el boton de submit1
-            return redirect(url_for('pagomovil_reportes.pagomovil_reportes'))
 
-        elif form_bancos.submit_banesco.data:  # Si se presiona el boton de submit1
-            return redirect(url_for('pagomovil_reportes.pagomovil_reportes'))
+    if form_bancos.validate_on_submit():
+        if form_bancos.submit_bancoplaza.data:
+            return redirect(url_for('pagomovil_bancoplaza.pagomovil_bancoplaza'))
+
+        elif form_bancos.submit_banesco.data:
+            return redirect(url_for('pagomovil_banesco.pagomovil_banesco'))
         else:
             return None
     else:
