@@ -45,6 +45,7 @@ def leer_listabancos():
 def validar_pago(id_customer, phone_payer, entity, order, montobs):
     endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_VALIDATE")
 
+    params = {}
     # Creo el header y el body para validar el pago movil
     headers = {"apikey": os.getenv("APIKEY_VIPPO"),
                "account": os.getenv("ACCOUNT_VIPPO")}
@@ -67,7 +68,7 @@ def validar_pago(id_customer, phone_payer, entity, order, montobs):
                 "amount": montobs,
             }
             }
-    api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
+    api_response = connect_api.conectar(headers, body, endpoint, params, "POST", current_user.id)
     if api_response[0] == "success":
             return "success", api_response[1]
     elif api_response[0] == "except":

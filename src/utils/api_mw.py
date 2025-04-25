@@ -16,8 +16,9 @@ def buscar_cliente(client_id, client_email):
     headers = {"content-type": "application/json"}
     body = {"token": os.getenv("TOKEN_MW"), "cedula": client_id}
     endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_BUSCAR_CLIENTE")
+    params = {}
 
-    api_response = connect_api.conectar(headers, body, endpoint,"POST", client_id)
+    api_response = connect_api.conectar(headers, body, params, endpoint,"POST", client_id)
 
     if api_response[0] == "success":
         if api_response[1]["estado"] == "exito":  # Cliente obtenido

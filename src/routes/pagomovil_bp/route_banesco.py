@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, session, redirect, url_for
 from src.routes.pagomovil_bp.templates.form_fields_reportes import FormFieldsReportes
-
+from src.utils.api_instapago import validar_pago
 from src.utils.api_vippo import leer_listabancos
 from src.utils.logger import logger
 from flask_login import login_required, current_user
@@ -58,8 +58,26 @@ def pagomovil_banesco():
     form_reportes.tipo_phone.choices = config.lista_phone
 
     if form_reportes.validate_on_submit():
-        return render_template('pagomovil_reportes.html', form=form_reportes, datos_cliente=datos_cliente,
-                               pm_pagomovil=config.pm_banesco, montobs=montobs)
+        id_customer = form_reportes.tipo_id.data + form_reportes.payerID.data
+        phonenumberclient = "0058" + form_reportes.tipo_phone.data[1:] + form_reportes.payerPhone.data
+        bank = form_reportes.entity.data[:4]
+        reference = form_reportes.order.data
+        amount = session["monto_bs"]
+        datos_cliente = current_user.datos_cliente
+        img_entity = config.pm_bancoplaza[3]
+        id_cliente = str(datos_cliente["id"])
+        clientId = str(datos_cliente["cedula"])
+
+        # VALIDO EL PAGO EN INSTAPAGO
+        resultado_val = validar_pago(phonenumberclient, clientId, bank, reference, amount)
+
+        img_result = 'img/exito.png'
+        return render_template('pagomovil_result.html', msg="Pago realizado con éxito",
+                               img_entity=img_entity,
+                               id_customer=id_customer,
+                               phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
+                               entity=form_reportes.entity.data[6:], order=order, monto_bs=0,
+                               img_result=img_result, datos_cliente=datos_cliente)
 
 
     else:

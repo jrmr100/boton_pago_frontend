@@ -17,6 +17,6 @@ blue_ruta = Blueprint(
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 @login_required
-def generarqr(url_param):
+def generarqr():
     qr_image = generar_qr()
-    return jsonify({"qr_image": qr_image})
+    return qr_image

@@ -3,28 +3,31 @@ import json
 from src.utils.logger import logger
 
 
-def conectar(headers, body, endpoint, metodo, cedula):
+def conectar(headers, body, params, endpoint, metodo, cedula):
     try:
         if metodo == "GET":
             logger.debug(
                 "USER: " + cedula + " - Solicitud de API: " +
                 "Header: " + str(headers) + " / " +
                 "Body: " + str(body) + " / " +
+                "params" + str(params) +  " / " +
                 "Endpoint: " + endpoint + " / " +
                 "Metodo: " + metodo + "\n")
 
             response = requests.get(endpoint,
                                     headers=headers,
+                                    params=params,
                                     timeout=15)
         elif metodo == "POST":
             logger.debug(
                 "USER: " + cedula + " - Solicitud de API: " +
                 "Header: " + str(headers) + " / " +
                 "Body: " + str(body) + " / " +
+                "params" + str(params) + " / " +
                 "Endpoint: " + endpoint + " / " +
                 "Metodo: " + metodo + "\n")
             response = requests.post(endpoint,
-                                     headers=headers, json=body,
+                                     headers=headers, json=body, params=params,
                                      timeout=15)
 
         response_decode = response.content.decode("utf-8")

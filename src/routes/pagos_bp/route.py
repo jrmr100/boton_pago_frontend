@@ -69,4 +69,5 @@ def pagos():
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
 # TODO: Agregar lista de correos en config
+# TODO: Solventar pagomovil banesco
 
