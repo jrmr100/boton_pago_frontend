@@ -21,6 +21,7 @@ def pagomovil_bancos():
     form_bancos = FormFieldsBancos()
     datos_cliente = current_user.datos_cliente
     montobs = session["monto_bs"]
+    qr_image = None
 
 
     if form_bancos.validate_on_submit():
@@ -36,4 +37,4 @@ def pagomovil_bancos():
             return render_template('pagomovil_bancos.html', form=form_bancos, datos_cliente=datos_cliente,
                                pm_bancoplaza=config.pm_bancoplaza,
                                pm_banesco=config.pm_banesco,
-                               montobs=montobs)
+                               montobs=montobs, qr_image=qr_image)

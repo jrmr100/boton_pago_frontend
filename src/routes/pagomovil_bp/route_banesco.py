@@ -50,8 +50,6 @@ def pagomovil_banesco():
     datos_cliente = current_user.datos_cliente
     montobs = session["monto_bs"]
     form_reportes.entity.choices = listabancos
-    qr_botton = True
-    qr_image = None
 
     # Carga de los tipos de ID al selectfield ID
     form_reportes.tipo_id.choices = config.lista_id
@@ -61,9 +59,9 @@ def pagomovil_banesco():
 
     if form_reportes.validate_on_submit():
         return render_template('pagomovil_reportes.html', form=form_reportes, datos_cliente=datos_cliente,
-                               pm_pagomovil=config.pm_banesco, montobs=montobs, qr_botton=qr_botton, qr_image=qr_image)
+                               pm_pagomovil=config.pm_banesco, montobs=montobs)
 
 
     else:
         return render_template('pagomovil_reportes.html', form=form_reportes, datos_cliente=datos_cliente,
-                           pm_pagomovil=config.pm_banesco, montobs=montobs, qr_botton=qr_botton)
+                           pm_pagomovil=config.pm_banesco, montobs=montobs)
