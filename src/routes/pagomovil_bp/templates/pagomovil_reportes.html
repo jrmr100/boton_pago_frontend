@@ -9,6 +9,7 @@
 {% block body %}
     {% include '_nav-bar.html' %}
     {% include '_modal_spinner.html' %}
+    {% include '_modal_generarqr.html' %}
 
     <div class="container-fluid bg-secondary-subtle min-vh-100">
         <div class="row" id="fila-formulario">
@@ -17,7 +18,7 @@
 
             <div class="col-6 mt-2 card">
                 <form method="POST">
-                {{ form.hidden_tag() }}
+                    {{ form.hidden_tag() }}
                     <div class="d-flex justify-content-center align-items-center">
                         <img class="img-fluid rounded-start" alt="Logo_banco"
                              src="{{ url_for('pagomovil_bancos.static', filename=pm_pagomovil[3] ) }}">
@@ -29,10 +30,24 @@
                                 <div class="d-flex">
                                     {{ form.tipo_id(class="form-select") }}
                                     {{ form.payerID(class="form-control", autofocus=true) }}
+                                    {% if qr_botton %}
+                                        <div class="ms-2 d-flex justify-content-center">
+                                            <button type="button" id="generateQR" class="btn btn-outline-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#qrModal">
+                                                <i class="bi bi-qr-code fs-5"></i>
+                                            </button>
+                                            <button id="generateQR" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#qrModal">
+                                                <i class="bi bi-qr-code fs-5"></i>
+                                            </button>
+                                        </div>
+                                    {% endif %}
                                 </div>
                                 {% for error in form.payerID.errors %}
                                     <span class="text-danger">{{ error }}</span>
                                 {% endfor %}
+
                             </div>
 
                             <div class="mt-3 mb-3">
@@ -100,7 +115,22 @@
             </div>
         </div>
     </div>
+
     <script src="{{ url_for('static', filename='js/spinner_modal.js') }}"></script>
+    <script>
+        document.getElementById("generateQR").addEventListener("click", function () {
+            fetch("/generarqr")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.qr_image) {
+                        document.getElementById("qrImage").src = data.qr_image;
+                    } else {
+                        alert("No se pudo obtener el código QR. Inténtalo nuevamente.");
+                    }
+                });
+        });
+    </script>
+
 {% endblock %}
 
 
