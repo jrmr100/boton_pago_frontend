@@ -70,4 +70,5 @@ def pagos():
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
 # TODO: Agregar lista de correos en config
 # TODO: Solventar pagomovil banesco
+# TODO: Revisar responsive en todo el proyecto
 
