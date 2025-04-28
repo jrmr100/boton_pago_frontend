@@ -73,7 +73,7 @@ def pagomovil_banesco():
         resultado_val = validar_pago(phonenumberclient, clientId, bank, reference, amount)
 
         if resultado_val[0] == "success":
-            if resultado_val[1]["sucess"] is True:
+            if resultado_val[1]["message"] is True and resultado_val[1]["code"] == "200":
                 pago_validado = True
             else:
                 img_result = 'img/error.png'
