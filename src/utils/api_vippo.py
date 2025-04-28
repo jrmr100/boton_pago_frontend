@@ -68,7 +68,7 @@ def validar_pago(id_customer, phone_payer, entity, order, montobs):
                 "amount": montobs,
             }
             }
-    api_response = connect_api.conectar(headers, body, endpoint, params, "POST", current_user.id)
+    api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
     if api_response[0] == "success":
             return "success", api_response[1]
     elif api_response[0] == "except":

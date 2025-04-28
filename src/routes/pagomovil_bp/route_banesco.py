@@ -64,22 +64,56 @@ def pagomovil_banesco():
         reference = form_reportes.order.data
         amount = session["monto_bs"]
         datos_cliente = current_user.datos_cliente
-        img_entity = config.pm_bancoplaza[3]
+        img_entity = config.pm_banesco[3]
         id_cliente = str(datos_cliente["id"])
-        clientId = str(datos_cliente["cedula"])
+        clientId = str(form_reportes.tipo_id.data) + str(form_reportes.payerID.data)
+        pago_validado = False
 
         # VALIDO EL PAGO EN INSTAPAGO
         resultado_val = validar_pago(phonenumberclient, clientId, bank, reference, amount)
 
-        img_result = 'img/exito.png'
-        return render_template('pagomovil_result.html', msg="Pago realizado con éxito",
-                               img_entity=img_entity,
-                               id_customer=id_customer,
-                               phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
-                               entity=form_reportes.entity.data[6:], order=order, monto_bs=0,
-                               img_result=img_result, datos_cliente=datos_cliente)
+        if resultado_val[0] == "success":
+            if resultado_val[1]["sucess"] is True:
+                pago_validado = True
+            else:
+                img_result = 'img/error.png'
+                return render_template('pagomovil_result.html', msg=resultado_val[1]["message"],
+                                       img_entity=img_entity,
+                                       id_customer=id_customer,
+                                       phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
+                                       entity=form_reportes.entity.data[6:], order=reference, monto_bs=montobs,
+                                       img_result=img_result, datos_cliente=datos_cliente)
 
+        else:
+            return render_template("error_general.html", msg="Error validando el pago, intente mas tarde",
+                                   error=resultado_val[1], type="500")
+        # BUSCO LAS FACTURAS EN MW SI SE VALIDA EL PAGO
+        if pago_validado is True:
+            monto_pagado = resultado_val[1]['result']['validatedPayments'][0]['amount']
 
+            result_buscarfacturas = buscar_facturas(id_cliente, str(monto_pagado), montobs)
+            logger.debug("USER: " + str(client_id) +
+                         " TYPE: Respuesta MW buscando facturas: " + str(result_buscarfacturas))
+
+            if result_buscarfacturas[0] == "success":
+                if result_buscarfacturas[1]["estado"] == "exito":
+                    facturas_ubicadas = "True"
+                else:
+                    return render_template("error_general.html",
+                                           msg="Error buscando facturas del cliente, intente mas tarde",
+                                           error=str(resultado_val[1]), type="500")
+            elif result_buscarfacturas[0] == "error":
+                img_result = 'img/error.png'
+                return render_template('pagomovil_result.html', msg=result_buscarfacturas[1],
+                                       img_entity=img_entity,
+                                       id_customer=id_customer,
+                                       phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
+                                       entity=form_reportes.entity.data[6:], order=order, monto_bs=montobs,
+                                       img_result=img_result, datos_cliente=datos_cliente)
+            else:
+                return render_template("error_general.html",
+                                       msg="Error buscando facturas del cliente, intente mas tarde",
+                                       error=resultado_val[1], type="500")
     else:
         return render_template('pagomovil_reportes.html', form=form_reportes, datos_cliente=datos_cliente,
                            pm_pagomovil=config.pm_banesco, montobs=montobs)

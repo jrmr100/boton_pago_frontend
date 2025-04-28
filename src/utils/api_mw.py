@@ -52,6 +52,7 @@ def buscar_cliente(client_id, client_email):
 
 
 def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
+
     # Valido la longitud del ID del cliente
     if len(id_cliente) < 1 or len(id_cliente) > 7:
         return "error", "idtraza muy largo"
@@ -63,13 +64,15 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
     else:
         # Obtengo los codigos de las facturas pendientes por el cliente
         headers = {}
+        params = {}
         body = {"token": os.getenv("TOKEN_MW"), "idcliente": id_cliente, "estado": "1"}
         endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_BUSCAR_FACTURAS")
-        api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
+        api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
         return api_response
 
 def pagar_facturas(facturas, codigo_auth, medio_pago):
     cod_factura = 1
+    params = {}
     headers = {"Content-Type": "application/json"}
     endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_PAGAR")
 
@@ -78,7 +81,7 @@ def pagar_facturas(facturas, codigo_auth, medio_pago):
                    "idfactura": factura["id"],
                    "pasarela": "API-" + medio_pago,
                    "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
-        api_response = connect_api.conectar(headers, body, endpoint, "POST", current_user.id)
+        api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
         cod_factura = cod_factura + 1
 
     return api_response
