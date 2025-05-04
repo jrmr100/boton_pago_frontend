@@ -30,6 +30,8 @@ def cargar_listabancos():
         if "error listabancos" in listabancos:
             return render_template("error_general.html", msg="Error obteniendo la lista de bancos, intente mas tarde",
                                    error="No es posible acceder a la lista de bancos emisores", type="500")
+        return None
+    return None
 
 
 @blue_ruta.after_request
@@ -147,6 +149,8 @@ def pagomovil_bancoplaza():
                 else:
                     return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
                                            error=pago_facturas[1], type="500")
+            return None
+        return None
 
     else:
         return render_template('pagomovil_reportes.html', form=form_reportes, datos_cliente=datos_cliente,
