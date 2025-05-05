@@ -37,6 +37,6 @@ class FormFieldsReportes(FlaskForm):
                                     Length(min=6, max=6)],
                         render_kw={"title": "Ultimos 6 digitos"})
     monto = StringField('Monto del pago:',
-                        render_kw={'disabled': True})
+                        render_kw={'disabled': False})
 
     submit_reportes = SubmitField('Validar pago')

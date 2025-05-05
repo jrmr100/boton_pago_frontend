@@ -58,9 +58,9 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
         return "error", "idtraza muy largo"
 
         # Valido si el monto pagado es inferior a la deuda
-    elif float(monto_pagado_bs) < float(monto_deuda):
-        return "error", "Monto pagado (Bs." + monto_pagado_bs + ") esta por debajo de la deuda\
-         (Bs." + str(monto_deuda) + ") debe contactarnos por WhatsApp al numero " + config.contacto_WhatsApp
+    #elif float(monto_pagado_bs) < float(monto_deuda):
+    #    return "error", "Monto pagado (Bs." + monto_pagado_bs + ") esta por debajo de la deuda\
+    #     (Bs." + str(monto_deuda) + ") debe contactarnos por WhatsApp al numero " + config.contacto_WhatsApp
     else:
         # Obtengo los codigos de las facturas pendientes por el cliente
         headers = {}

@@ -71,4 +71,7 @@ def pagos():
 # TODO: Agregar lista de correos en config
 # TODO: Solventar pagomovil banesco
 # TODO: Revisar responsive en todo el proyecto
+# TODO: En route banesco, proteger el campo monto
+# TODO: En api instapago validar_pago, retornar fecha a today
+
 

@@ -6,6 +6,8 @@ from src.utils.logger import now, logger
 
 def validar_pago(phonenumberclient, clientId, bank, reference, amount):
     today = now.strftime('%Y-%m-%d')
+    #date = today
+    date = "2023-10-17"
     endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_VALIDATEPM_IP")
     keyId = os.getenv("KEYID_IP")
     publickeyid = os.getenv("PUBLICKEYID_IP")
@@ -22,7 +24,7 @@ def validar_pago(phonenumberclient, clientId, bank, reference, amount):
         "phonenumberclient": phonenumberclient,
         "clientId": clientId,
         "bank": bank,
-        "date": today,
+        "date": date,
         "reference": reference,
         "receiptbank": receiptbank,
         "amount": amount
