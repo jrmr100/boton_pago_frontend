@@ -73,5 +73,6 @@ def pagos():
 # TODO: Revisar responsive en todo el proyecto
 # TODO: En route banesco, proteger el campo monto
 # TODO: En api instapago validar_pago, retornar fecha a today
+# TODO: En apiMW buscar facturas - reactivar validador del monto inferior
 
 
