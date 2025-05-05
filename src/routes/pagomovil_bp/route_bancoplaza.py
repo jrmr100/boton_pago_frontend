@@ -147,12 +147,6 @@ def pagomovil_bancoplaza():
                 else:
                     return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
                                            error=pago_facturas[1], type="500")
-            else:
-                return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
-                                       error="Facturas ubicadas is not true", type="500")
-        else:
-            return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
-                                   error= "Pago validado is not true", type="500")
 
     else:
         return render_template('pagomovil_reportes.html', form=form_reportes, datos_cliente=datos_cliente,
