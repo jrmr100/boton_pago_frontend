@@ -4,7 +4,7 @@ document.getElementById("generateQRbanesco").addEventListener("click", function 
     let loadingModal = new bootstrap.Modal(loadingModalElement);
     loadingModal.show();
 
-    fetch("/qr_ip")
+    fetch("/generarqr")
         .then(response => response.json())
         .then(data => {
             // Ocultar el modal de carga después de recibir la respuesta (éxito o error)

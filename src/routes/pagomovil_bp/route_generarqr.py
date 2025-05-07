@@ -4,8 +4,8 @@ from flask_login import login_required
 import os
 
 
-nombre_ruta = "qr_ip"
-nombre_ruta_con_parametro = f"{nombre_ruta}/<float:amount>"
+nombre_ruta = "generarqr"
+# nombre_ruta_con_parametro = f"{nombre_ruta}/<float:amount>"
 
 # Defino el Blueprint
 blue_ruta = Blueprint(
@@ -16,13 +16,15 @@ blue_ruta = Blueprint(
 )
 
 
-@blue_ruta.route('/' + nombre_ruta_con_parametro, methods=["GET", "POST"])
+#@blue_ruta.route('/' + nombre_ruta_con_parametro, methods=["GET", "POST"])
+@blue_ruta.route('/' + nombre_ruta + '/<string:amount>', methods=["GET", "POST"])
 @login_required
 def generarqr(amount):
     publickeyid = os.getenv("PUBLICKEYID_IP")
     keyid = os.getenv("KEYID_IP")
     bank = os.getenv("RECEIPTBANK_IP")
     amount = amount
+    amount = 90
 
     url = f"https://merchant.instapago.com/services/api/v2/Payments/GetPaymentAffiliateQR?PublicKeyId={publickeyid}&KeyId={keyid}&Bank={bank}&Amount={amount}"
 

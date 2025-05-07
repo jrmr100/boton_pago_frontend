@@ -128,7 +128,7 @@
     <script>
         document.getElementById("generateQRbanesco").addEventListener("click", function () {
             const montoBs = "{{ montobs }}";
-            const qrUrl = '/qr_ip/' + montoBs;
+            const qrUrl = '/generarqr/' + montoBs;
             // Mostrar el modal de carga inmediatamente al hacer clic
             let loadingModalElement = document.getElementById("loadingModal");
             let loadingModal = new bootstrap.Modal(loadingModalElement);
