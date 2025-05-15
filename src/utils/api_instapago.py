@@ -22,11 +22,11 @@ def validar_pago(phonenumberclient, clientId, bank, reference, amount):
         "keyId": keyId,
         "publickeyid": publickeyid,
         "phonenumberclient": phonenumberclient,
-        "clientId": clientId,
+        "clientid": clientId,
         "bank": bank,
+        "receiptbank": receiptbank,
         "date": date,
         "reference": reference,
-        "receiptbank": receiptbank,
         "amount": amount
     }
 

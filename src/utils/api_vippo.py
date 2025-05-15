@@ -32,7 +32,7 @@ def leer_listabancos():
     # Funcion llamada desde el programa y busca la tasa en el archivo lista_bancos.txt
     try:
         # Leer la lista de bancos
-        with open(os.getenv("PATH_BASE") + os.getenv("FILE_LISTABANCOS"), 'r') as archivo:
+        with open(os.getenv("PATH_BASE") + os.getenv("FILE_LISTABANCOS_VIPPO"), 'r') as archivo:
             linea_lista_bancos = archivo.read()
             lista_bancos = linea_lista_bancos.split("\n")
             logger.debug("USER: " + current_user.id + " - Lista de bancos leida del archivo TXT: " + str(lista_bancos) + "\n")
