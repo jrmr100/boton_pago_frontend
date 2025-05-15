@@ -75,7 +75,7 @@ def pagos():
 # TODO: En api instapago validar_pago, retornar fecha a today
 # TODO: En apiMW buscar facturas - reactivar validador del monto inferior
 # TODO: Cambiar monto en route generarqr
-# TODO: En api instapago revisar respuesta "consulta sin resultado" al tener telefono distinto
 # TODO: Terminar la busqueda de lalista de bancos de Instapago
+# TODO: validar si es consulta o validate de pagos en instapago
 
 
