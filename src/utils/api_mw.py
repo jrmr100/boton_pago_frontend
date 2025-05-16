@@ -58,9 +58,9 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
         return "error", "idtraza muy largo"
 
         # Valido si el monto pagado es inferior a la deuda
-    #elif float(monto_pagado_bs) < float(monto_deuda):
-    #    return "error", "Monto pagado (Bs." + monto_pagado_bs + ") esta por debajo de la deuda\
-    #     (Bs." + str(monto_deuda) + ") debe contactarnos por WhatsApp al numero " + config.contacto_WhatsApp
+    elif float(monto_pagado_bs) < float(monto_deuda):
+        return "error", f"Monto pagado (Bs.{monto_pagado_bs}) esta por debajo de la deuda (Bs.{monto_deuda})<br> \
+                        Le agradecemos contactarnos por WhatsApp al numero {config.contacto_WhatsApp}"
     else:
         # Obtengo los codigos de las facturas pendientes por el cliente
         headers = {}
@@ -70,19 +70,44 @@ def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
         api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
         return api_response
 
-def pagar_facturas(facturas, codigo_auth, medio_pago):
+def pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado):
     cod_factura = 1
     params = {}
     headers = {"Content-Type": "application/json"}
     endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_PAGAR")
+    monto_deuda = session["monto_bs"]
+    diff_pago = float(monto_pagado) - float(monto_deuda)
 
-    for factura in facturas:
-        body = {"token": os.getenv("TOKEN_MW"),
-                   "idfactura": factura["id"],
-                   "pasarela": "API-" + medio_pago,
-                   "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
-        api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
-        cod_factura = cod_factura + 1
+    if diff_pago == 0:  # indica que el pago es exacto
+        for factura in facturas:
+            body = {"token": os.getenv("TOKEN_MW"),
+                       "idfactura": factura["id"],
+                       "pasarela": "API-" + medio_pago,
+                       "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
+            api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
+            cod_factura = cod_factura + 1
+    else:  # Indica que el pago esta por encima de la deuda
+        diff_pago_dls = diff_pago / float(session["tasa_bcv"])
+        ultima_factura = len(facturas) - 1
 
+        for i in range(len(facturas)):   # Reviso todas las facturas
+            if i == ultima_factura:   # Solo a la ultima factura le sumo la diferencia
+                cantidad = float(facturas[i]["total"]) + diff_pago_dls
+                cantidad = f"{cantidad:.2f}"
+
+                body = {"token": os.getenv("TOKEN_MW"),
+                           "idfactura": facturas[i]["id"],
+                           "pasarela": "API-" + medio_pago,
+                           "cantidad": float(cantidad),
+                           "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
+                api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
+                cod_factura = cod_factura + 1
+            else:  # No agrego cantidad para que se pague completa la factura
+                body = {"token": os.getenv("TOKEN_MW"),
+                           "idfactura": facturas[i]["id"],
+                           "pasarela": "API-" + medio_pago,
+                           "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
+                api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
+                cod_factura = cod_factura + 1
     return api_response
 

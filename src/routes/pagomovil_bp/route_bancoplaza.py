@@ -69,9 +69,10 @@ def pagomovil_bancoplaza():
         img_entity = config.pm_bancoplaza[3]
         id_cliente = str(datos_cliente["id"])
         client_id = str(datos_cliente["cedula"])
+        fecha_pago = form_reportes.fecha_pago.data
 
         # VALIDO EL PAGO EN VIPPO
-        resultado_val = validar_pago(id_customer, phone_payer, entity, order, montobs)
+        resultado_val = validar_pago(id_customer, phone_payer, entity, order, montobs, fecha_pago)
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Operación realizada con éxito.":
@@ -125,7 +126,7 @@ def pagomovil_bancoplaza():
                 logger.debug("USER: " + str(client_id) + " TYPE: pagando facturas: " + str(
                     facturas) + "-" + codigo_auth + "-" + medio_pago)
 
-                pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago)
+                pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado)
 
                 if pago_facturas[0] == "success":
                     if pago_facturas[1]["estado"] == "exito":

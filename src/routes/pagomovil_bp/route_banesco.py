@@ -1,4 +1,4 @@
-from flask import render_template, Blueprint, session, redirect, url_for
+from flask import render_template, Blueprint, session
 from src.routes.pagomovil_bp.templates.form_fields_reportes import FormFieldsReportes
 from src.utils.api_instapago import validar_pago
 from src.utils.api_vippo import leer_listabancos
@@ -70,17 +70,18 @@ def pagomovil_banesco():
         img_entity = config.pm_banesco[3]
         id_cliente = str(datos_cliente["id"])
         clientId = str(form_reportes.tipo_id.data) + str(form_reportes.payerID.data)
+        fecha_pago = form_reportes.fecha_pago.data
         pago_validado = False
 
         # VALIDO EL PAGO EN INSTAPAGO
-        resultado_val = validar_pago(phonenumberclient, clientId, bank, reference, amount)
+        resultado_val = validar_pago(phonenumberclient, clientId, bank, reference, amount, fecha_pago)
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Se ha encontrado un pago, exitosamente":
                 pago_validado = True
             else:
                 img_result = 'img/error.png'
-                return render_template('pagomovil_result.html', msg=resultado_val[1]["message"],
+                return render_template('pagomovil_result.html', msg="Pago no localizado, revise la información",
                                        img_entity=img_entity,
                                        id_customer=id_customer,
                                        phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
@@ -127,7 +128,7 @@ def pagomovil_banesco():
                 logger.debug("USER: " + str(clientId) + " TYPE: pagando facturas: " + str(
                     facturas) + "-" + codigo_auth + "-" + medio_pago)
 
-                pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago)
+                pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado)
 
                 if pago_facturas[0] == "success":
                     if pago_facturas[1]["estado"] == "exito":

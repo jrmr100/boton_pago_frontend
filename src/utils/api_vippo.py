@@ -7,9 +7,6 @@ from flask_login import current_user
 
 load_dotenv()
 fecha_actual: str = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-today = now.strftime('%Y%m%d')  # Requerido en este formato para validar el pago
-
-
 
 
 
@@ -42,7 +39,8 @@ def leer_listabancos():
         return "error listabancos - " + str(e)
 
 
-def validar_pago(id_customer, phone_payer, entity, order, montobs):
+def validar_pago(id_customer, phone_payer, entity, order, montobs, fecha_pago):
+    date = fecha_pago.strftime('%Y-%m-%d')
     endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_VALIDATE")
 
     params = {}
@@ -57,8 +55,8 @@ def validar_pago(id_customer, phone_payer, entity, order, montobs):
             "ipAddress": os.getenv("IP_ADDRESS"),
             "data": {
                 "dates": {
-                    "startDate": today,
-                    "endDate": today,
+                    "startDate": date,
+                    "endDate": date,
                 },
                 "customerID": id_customer,
                 "customerPhone": phone_payer,

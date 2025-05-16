@@ -4,10 +4,8 @@ import src.utils.connect_api as connect_api
 from src.utils.logger import now, logger
 
 
-def validar_pago(phonenumberclient, clientId, bank, reference, amount):
-    today = now.strftime('%Y-%m-%d')
-    #date = today
-    date = "2025-05-15"
+def validar_pago(phonenumberclient, clientId, bank, reference, amount, fecha_pago):
+    date = fecha_pago.strftime('%Y-%m-%d')
     #endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_VALIDATEPM_IP")
     endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_CONSULTAPM_IP")
     keyId = os.getenv("KEYID_IP")

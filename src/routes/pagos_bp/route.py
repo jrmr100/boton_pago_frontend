@@ -36,6 +36,7 @@ def cargar_tasa_bcv():
 def pagos():
     form = FormFields()
     datos_cliente = current_user.datos_cliente
+    session["tasa_bcv"] = tasa_bcv
 
     # VALIDO CONDICIONES DEL CLIENTE
     if datos_cliente["estado"] == "RETIRADO":
@@ -74,7 +75,6 @@ def pagos():
 # TODO: En route banesco, proteger el campo monto
 # TODO: En api instapago validar_pago, retornar fecha a today
 # TODO: En apiMW buscar facturas - reactivar validador del monto inferior
-# TODO: Cambiar monto en route generarqr
 # TODO: Terminar la busqueda de lalista de bancos de Instapago
 # TODO: validar si es consulta o validate de pagos en instapago
 

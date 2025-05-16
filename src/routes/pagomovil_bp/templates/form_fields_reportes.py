@@ -1,7 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField
+from wtforms import StringField, SubmitField, SelectField, DateField
 from wtforms.validators import InputRequired, Length, DataRequired
 from src.utils.validaciones_form import only_numbers, banco_emisor, passport
+from datetime import datetime
 
 
 
@@ -31,6 +32,10 @@ class FormFieldsReportes(FlaskForm):
                              validators=[DataRequired(),
                                          Length(min=5, max=7), only_numbers],
                              render_kw={'placeholder': '1234567', "title": "Solo números, ejem: 1234567"})
+    fecha_pago = DateField('Fecha del pago:',
+
+                           default=datetime.now(),
+                           validators=[DataRequired()])
 
     order = StringField('Número de referencia (Últimos 6 dígitos):',
                         validators=[DataRequired(),
