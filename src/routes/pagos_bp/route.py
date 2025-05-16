@@ -70,12 +70,7 @@ def pagos():
 # TODO: Se podra iniciar desde MW exclusivamente -sacar CI del MW
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
 # TODO: Agregar lista de correos en config
-# TODO: Solventar pagomovil banesco
 # TODO: Revisar responsive en todo el proyecto
-# TODO: En route banesco, proteger el campo monto
-# TODO: En api instapago validar_pago, retornar fecha a today
-# TODO: En apiMW buscar facturas - reactivar validador del monto inferior
-# TODO: Terminar la busqueda de lalista de bancos de Instapago
 # TODO: validar si es consulta o validate de pagos en instapago
 
 
