@@ -1,4 +1,5 @@
 from wtforms import ValidationError
+from flask import session
 
 
 
@@ -14,3 +15,7 @@ def banco_emisor(form, field):
 def passport(form, field):
     if form["tipo_id"].data != "P":
         only_numbers(form, field)
+
+def monto_pm(form, field):
+    if field.data <= session["monto_bs"]:
+        raise ValidationError(f'El monto debe ser igual o mayor a la deuda: Bs.{session["monto_bs"]}')
