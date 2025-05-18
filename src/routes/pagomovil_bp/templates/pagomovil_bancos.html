@@ -46,10 +46,17 @@
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="ms-2 d-flex justify-content-center">
-                                                                <button type="button" id="generateQRbancoplaza"
-                                                                        class="btn btn-outline-secondary" disabled>
-                                                                    <i class="bi bi-qr-code fs-5"></i>
-                                                                </button>
+                                                                 <!--{% if pm_bancoplaza[4] == True %}
+                                                                    <button type="button" id="generateQRbancoplaza"
+                                                                            class="btn btn-outline-secondary" disabled>
+                                                                        <i class="bi bi-qr-code fs-5"></i>
+                                                                    </button>
+                                                                {% else %}
+                                                                    <button type="button" id="generateQRbancoplaza"
+                                                                            class="btn btn-outline-primary">
+                                                                        <i class="bi bi-qr-code fs-5"></i>
+                                                                    </button>
+                                                                {% endif %}-->
                                                             </div>
                                                         </div>
                                                     </div>
@@ -81,13 +88,19 @@
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="ms-2 d-flex justify-content-center">
-                                                                <button type="button" id="generateQRbanesco"
-                                                                        class="btn btn-outline-primary">
-                                                                    <i class="bi bi-qr-code fs-5"></i>
-                                                                </button>
+                                                                {% if pm_banesco[4] == True %}
+                                                                    <button type="button" id="generateQRbanescoa"
+                                                                            class="btn btn-outline-secondary" disabled>
+                                                                        <i class="bi bi-qr-code fs-5"></i>
+                                                                    </button>
+                                                                {% else %}
+                                                                    <button type="button" id="generateQRbanesco"
+                                                                            class="btn btn-outline-primary">
+                                                                        <i class="bi bi-qr-code fs-5"></i>
+                                                                    </button>
+                                                                {% endif %}
                                                             </div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
