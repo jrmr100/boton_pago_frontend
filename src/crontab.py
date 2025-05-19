@@ -71,7 +71,7 @@ def buscar_tasabcv():
             logger.info("Respuesta obtenida de tasa BCV " + str(api_response[1]))
             tasa_bcv = str(api_response[1]["result"]["bcvRates"]["rates"]['us_dollar'])
             if float(tasa_bcv) > 0:
-                with open(archivo_tasa, "w") as archivo:
+                with open(archivo_tasa, "w", encoding="utf-8") as archivo:
                     archivo.write(tasa_bcv + ", " + fecha_actual)
 
                 print("Tasa BCV obtenida con exito: " + tasa_bcv)
@@ -131,7 +131,7 @@ def buscar_listabancos_vippo():
             for banks in api_response[1]["result"]["banks"]:
                 lista_bancos.append(banks["codigo"] + " - " + banks["nombre"])
             lista_bancos_sorted = sorted(lista_bancos)
-            with open(archivo_lista_bancos, "w") as archivo:
+            with open(archivo_lista_bancos, "w", encoding="utf-8") as archivo:
                 for banco in lista_bancos_sorted:
                     archivo.write(banco + "\n")
             print("Lista de bancos vippo obtenida con exito: " + str(api_response[1]))

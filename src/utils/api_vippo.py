@@ -14,7 +14,7 @@ def leer_tasa_bcv():
     # Funcion llamada desde el programa y busca la tasa en el archivo tasa_bcv.txt
     try:
         # Leer la tasa desde el archivo tasa_bcv.txt
-        with open(os.getenv("PATH_BASE") + os.getenv("FILE_TASABCV"), 'r') as archivo:
+        with open(os.getenv("PATH_BASE") + os.getenv("FILE_TASABCV"), 'r', encoding="utf-8") as archivo:
             lineas_tasa_bcv = archivo.read()
         lista_tasa_bcv = lineas_tasa_bcv.split(",")
         tasa_bcv = lista_tasa_bcv[0]
@@ -29,7 +29,7 @@ def leer_listabancos():
     # Funcion llamada desde el programa y busca la tasa en el archivo lista_bancos.txt
     try:
         # Leer la lista de bancos
-        with open(os.getenv("PATH_BASE") + os.getenv("FILE_LISTABANCOS_VIPPO"), 'r') as archivo:
+        with open(os.getenv("PATH_BASE") + os.getenv("FILE_LISTABANCOS_VIPPO"), 'r', encoding="utf-8") as archivo:
             linea_lista_bancos = archivo.read()
             lista_bancos = linea_lista_bancos.split("\n")
             logger.debug("USER: " + current_user.id + " - Lista de bancos leida del archivo TXT: " + str(lista_bancos) + "\n")
