@@ -15,10 +15,10 @@ class FormFieldsReportes(FlaskForm):
 
     tipo_id = SelectField('CI/RIF del pagador: ',
                           choices=[],
-                          validators=[InputRequired()],
+                          validators=[InputRequired(), only_numbers],
                           render_kw={'style': 'width: 80px; margin-right: 10px;'})
 
-    payerID = StringField("", validators=[DataRequired(),
+    payerID = StringField("", validators=[DataRequired(), only_numbers,
                                           Length(min=2, max=20), passport],
                           render_kw={'placeholder': '123456789',
                                      "title": "Ingrese la información del ID"})
@@ -38,7 +38,7 @@ class FormFieldsReportes(FlaskForm):
                            validators=[DataRequired()])
 
     order = StringField('Número de referencia (Últimos 6 dígitos):',
-                        validators=[DataRequired(),
+                        validators=[DataRequired(), only_numbers,
                                     Length(min=6, max=6)],
                         render_kw={"title": "Ultimos 6 digitos"})
     monto = FloatField('Monto del pago:',
