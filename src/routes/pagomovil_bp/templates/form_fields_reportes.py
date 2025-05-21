@@ -15,10 +15,10 @@ class FormFieldsReportes(FlaskForm):
 
     tipo_id = SelectField('CI/RIF del pagador: ',
                           choices=[],
-                          validators=[InputRequired(), only_numbers],
+                          validators=[InputRequired()],
                           render_kw={'style': 'width: 80px; margin-right: 10px;'})
 
-    payerID = StringField("", validators=[DataRequired(), only_numbers,
+    payerID = StringField("", validators=[DataRequired(),
                                           Length(min=2, max=20), passport],
                           render_kw={'placeholder': '123456789',
                                      "title": "Ingrese la información del ID"})
