@@ -145,7 +145,6 @@
             let loadingModalElement = document.getElementById("loadingModal");
             let loadingModal = new bootstrap.Modal(loadingModalElement);
             loadingModal.show();
-
             fetch(qrUrl)
                 .then(response => response.json())
                 .then(data => {

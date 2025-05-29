@@ -23,10 +23,11 @@ def generarqr(amount):
     publickeyid = os.getenv("PUBLICKEYID_IP")
     keyid = os.getenv("KEYID_IP")
     bank = os.getenv("RECEIPTBANK_IP")
-    amount = amount
+    amount = float(amount)
     # amount = 90   # monto de prueba
 
     url = f"https://merchant.instapago.com/services/api/v2/Payments/GetPaymentAffiliateQR?PublicKeyId={publickeyid}&KeyId={keyid}&Bank={bank}&Amount={amount}"
+    print(url)
 
     try:
         response = requests.get(url)
