@@ -51,11 +51,17 @@ def buscar_cliente(client_id, client_email):
         return "except", api_response[1]
 
 
-def buscar_facturas(id_cliente, monto_pagado_bs, monto_deuda):
+def buscar_facturas(id_cliente, monto_pagado):
+    monto_deuda = session["monto_bs"]
 
     # Valido la longitud del ID del cliente
     if len(id_cliente) < 1 or len(id_cliente) > 7:
         return "error", "idtraza muy largo"
+        # Valido si el monto pagado es inferior a la deuda
+    elif float(monto_pagado) < float(monto_deuda):
+            return "error", f"Monto pagado (Bs.{monto_pagado}) esta por debajo de la deuda (Bs.{monto_deuda})\
+             debe contactarnos por WhatsApp al numero " + config.contacto_WhatsApp
+
     else:
         # Obtengo los codigos de las facturas pendientes por el cliente
         headers = {}

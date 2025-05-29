@@ -6,8 +6,8 @@ from src.utils.logger import now, logger
 
 def validar_pago(phonenumberclient, clientId, bank, reference, amount, fecha_pago):
     date = fecha_pago.strftime('%Y-%m-%d')
-    #endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_VALIDATEPM_IP")
-    endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_CONSULTAPM_IP")
+    endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_VALIDATEPM_IP")
+    #endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_CONSULTAPM_IP")
     keyId = os.getenv("KEYID_IP")
     publickeyid = os.getenv("PUBLICKEYID_IP")
     receiptbank = os.getenv("RECEIPTBANK_IP")

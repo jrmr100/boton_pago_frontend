@@ -96,7 +96,7 @@ def pagomovil_banesco():
         if pago_validado is True:
             monto_pagado = resultado_val[1]['amount']
 
-            result_buscarfacturas = buscar_facturas(id_cliente, str(monto_pagado), montobs)
+            result_buscarfacturas = buscar_facturas(id_cliente, monto_pagado)
             logger.debug("USER: " + str(id_customer) +
                          " TYPE: Respuesta MW buscando facturas: " + str(result_buscarfacturas))
 

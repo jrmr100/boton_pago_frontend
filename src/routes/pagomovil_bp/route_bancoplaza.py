@@ -93,7 +93,7 @@ def pagomovil_bancoplaza():
         if pago_validado is True:
             monto_pagado = resultado_val[1]['result']['validatedPayments'][0]['amount']
 
-            result_buscarfacturas = buscar_facturas(id_cliente, str(monto_pagado), montobs)
+            result_buscarfacturas = buscar_facturas(id_cliente, monto_pagado)
             logger.debug("USER: " + str(client_id) +
                          " TYPE: Respuesta MW buscando facturas: " + str(result_buscarfacturas))
 
@@ -123,6 +123,7 @@ def pagomovil_bancoplaza():
                 medio_pago = "pm_vippo"
                 codigo_auth = form_reportes.order.data
 
+
                 logger.debug("USER: " + str(client_id) + " TYPE: pagando facturas: " + str(
                     facturas) + "-" + codigo_auth + "-" + medio_pago)
 
@@ -148,6 +149,12 @@ def pagomovil_bancoplaza():
                 else:
                     return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
                                            error=pago_facturas[1], type="500")
+            else:
+                return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
+                                       error="Facturas ubicadas is not true", type="500")
+        else:
+            return render_template("error_general.html", msg="Error validando pago, intente mas tarde",
+                                   error="Facturas ubicadas is not true", type="500")
 
     else:
         return render_template('pagomovil_reportes.html', form=form_reportes, datos_cliente=datos_cliente,
