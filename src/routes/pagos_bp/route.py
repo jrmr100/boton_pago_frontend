@@ -61,8 +61,13 @@ def pagos():
             return redirect(url_for('pagomovil_bancos.pagomovil_bancos'))
 
 
+    if float(monto_bs) > 0:
+        deuda = True
+    else:
+        deuda = False
+
     return render_template("pagos.html", datos_cliente=datos_cliente,
-                           monto_bs=float(monto_bs), form=form, monto_dls=monto_dls, card_disable=card_disable)
+                           monto_bs=monto_bs, form=form, monto_dls=monto_dls, card_disable=card_disable, deuda=deuda)
 
 # TODO: Modulo de Lukapay pago movil - apagable
 # TODO: Modulo de Lukapay zelle - apagable
