@@ -53,7 +53,7 @@ def pagos():
     # Calculo el monto en Bs
     monto_dls = float(datos_cliente["total_facturas"])
     montobs_long = float(monto_dls) * float(tasa_bcv)
-    monto_bs = float("{:.2f}".format(montobs_long))
+    monto_bs = f"{montobs_long:.2f}"
 
     if form.validate_on_submit():
         if form.submit1.data:  # Si se presiona el boton de submit1
@@ -62,7 +62,7 @@ def pagos():
 
 
     return render_template("pagos.html", datos_cliente=datos_cliente,
-                           monto_bs=monto_bs, form=form, monto_dls=monto_dls, card_disable=card_disable)
+                           monto_bs=float(monto_bs), form=form, monto_dls=monto_dls, card_disable=card_disable)
 
 # TODO: Modulo de Lukapay pago movil - apagable
 # TODO: Modulo de Lukapay zelle - apagable
