@@ -64,7 +64,7 @@ def pagomovil_bancoplaza():
         phone_payer = form_reportes.tipo_phone.data[1:] + form_reportes.payerPhone.data
         entity = form_reportes.entity.data[:4]
         order = form_reportes.order.data
-        montobs = session["monto_bs"]
+        montobs = f"{form_reportes.monto.data:.2f}"
         datos_cliente = current_user.datos_cliente
         img_entity = config.pm_bancoplaza[3]
         id_cliente = str(datos_cliente["id"])

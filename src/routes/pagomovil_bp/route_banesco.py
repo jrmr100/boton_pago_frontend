@@ -65,7 +65,7 @@ def pagomovil_banesco():
         bank = form_reportes.entity.data[:4]
         reference = form_reportes.order.data
         # amount = session["monto_bs"]
-        amount = form_reportes.monto.data
+        amount = f"{form_reportes.monto.data:.2f}"
         datos_cliente = current_user.datos_cliente
         img_entity = config.pm_banesco[3]
         id_cliente = str(datos_cliente["id"])
