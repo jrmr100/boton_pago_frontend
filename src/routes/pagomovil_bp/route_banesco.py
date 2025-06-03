@@ -81,7 +81,12 @@ def pagomovil_banesco():
                 pago_validado = True
             else:
                 img_result = 'img/error.png'
-                return render_template('pagomovil_result.html', msg="Pago no localizado, revise la información",
+                if resultado_val[1]["message"] == "El pago ya ha sido validado":
+                    mensaje = "El pago ya ha sido validado anteriormente"
+                else:
+                    mensaje = "Pago no localizado, revise la información suministrada"
+
+                return render_template('pagomovil_result.html', msg=mensaje,
                                        img_entity=img_entity,
                                        id_customer=id_customer,
                                        phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
