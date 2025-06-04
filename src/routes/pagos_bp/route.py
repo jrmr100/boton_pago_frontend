@@ -77,5 +77,7 @@ def pagos():
 # TODO: Agregar lista de correos en config
 # TODO: Revisar responsive en todo el proyecto
 # TODO: validar si es consulta o validate de pagos en instapago
+# TODO: acomodar todo el log y la secuencia
+# TODO: Resolver caso de abonar si el pago es por debajo del monto de la deuda
 
 
