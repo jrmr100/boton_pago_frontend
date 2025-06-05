@@ -57,7 +57,7 @@ def buscar_facturas(id_cliente, monto_pagado):
     # Valido la longitud del ID del cliente
     if len(id_cliente) < 1 or len(id_cliente) > 7:
         logger.error("USER: " + str(id_cliente) + " TYPE: idcliente no valido" + "\n")
-        return "error", "idcliente no valido"
+        return "error", "id-cliente no valido"
 
         # Valido si el monto pagado es inferior a la deuda
     elif float(monto_pagado) < float(monto_deuda):
