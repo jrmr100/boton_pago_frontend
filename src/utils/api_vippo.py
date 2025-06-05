@@ -39,7 +39,7 @@ def leer_listabancos():
         return "error listabancos - " + str(e)
 
 
-def validar_pago(id_customer, phone_payer, entity, order, montobs, fecha_pago):
+def validar_pago(id_pagador, phone_payer, entity, order, montobs, fecha_pago):
     date = fecha_pago.strftime('%Y-%m-%d')
     endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_VALIDATE")
 
@@ -58,7 +58,7 @@ def validar_pago(id_customer, phone_payer, entity, order, montobs, fecha_pago):
                     "startDate": date,
                     "endDate": date,
                 },
-                "customerID": id_customer,
+                "customerID": id_pagador,
                 "customerPhone": phone_payer,
                 "entity": entity,
                 "reference": order,
@@ -67,7 +67,6 @@ def validar_pago(id_customer, phone_payer, entity, order, montobs, fecha_pago):
             }
             }
     api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
-    logger.info(f"USER: {current_user.id} - respuesta validar pago: {api_response}")
 
     if api_response[0] == "success":
             return "success", api_response[1]

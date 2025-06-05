@@ -9,4 +9,7 @@ logging.basicConfig(handlers=[logging.FileHandler(filename=os.getenv("PATH_BASE"
                     encoding='utf-8', mode='a+')],
                     level=int(os.getenv("LOG_LEVEL")),
                     format='%(asctime)s %(levelname)s %(name)s %(message)s')
+logging.getLogger('werkzeug').setLevel(logging.CRITICAL)
+logging.getLogger('urllib3').setLevel(logging.CRITICAL)
+
 logger = logging.getLogger(__name__)

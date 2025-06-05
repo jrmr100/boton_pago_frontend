@@ -1,4 +1,6 @@
 from flask import  Blueprint, jsonify
+from flask_login import current_user
+import src.utils.connect_api as connect_api
 import requests
 from flask_login import login_required
 import os
@@ -25,17 +27,25 @@ def generarqr(amount):
     bank = os.getenv("RECEIPTBANK_IP")
     amount = str(amount)
     # amount = 90   # monto de prueba
+    headers = {}
+    body = {}
+    params = {
+        "keyId": keyid,
+        "publickeyid": publickeyid,
+        "bank": bank,
+        "amount": amount
+    }
+    endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_QR_IP")
+    client_id = current_user.id
 
-    url = f"https://merchant.instapago.com/services/api/v2/Payments/GetPaymentAffiliateQR?PublicKeyId={publickeyid}&KeyId={keyid}&Bank={bank}&Amount={amount}"
+    api_response = connect_api.conectar(headers, body, params, endpoint, "GET", client_id)
 
-    try:
-        response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            qr_image = data.get("qrCode", None)
+    if api_response[0] == "success":
+        if api_response[1]["code"] == "200":
+            qr_image = api_response[1]["qrCode"]
             return jsonify({"qr_image": qr_image})
         else:
             return jsonify({"qr_image": None})
-    except Exception as e:
+    else:
         return jsonify({"qr_image": None})
 

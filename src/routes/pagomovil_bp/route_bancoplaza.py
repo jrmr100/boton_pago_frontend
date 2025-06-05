@@ -2,7 +2,6 @@ from flask import render_template, Blueprint, session
 from src.routes.pagomovil_bp.templates.form_fields_reportes import FormFieldsReportes
 from src.utils.api_mw import buscar_facturas, pagar_facturas
 from src.utils.api_vippo import leer_listabancos, validar_pago
-from src.utils.logger import logger
 from flask_login import login_required, current_user
 import src.config as config
 
@@ -60,7 +59,7 @@ def pagomovil_bancoplaza():
 
     ################## SUBMIT ##################
     if form_reportes.validate_on_submit():
-        id_customer = form_reportes.tipo_id.data + form_reportes.payerID.data
+        id_pagador = form_reportes.tipo_id.data + form_reportes.payerID.data
         phone_payer = form_reportes.tipo_phone.data[1:] + form_reportes.payerPhone.data
         entity = form_reportes.entity.data[:4]
         order = form_reportes.order.data
@@ -72,7 +71,7 @@ def pagomovil_bancoplaza():
         fecha_pago = form_reportes.fecha_pago.data
 
         # VALIDO EL PAGO EN VIPPO
-        resultado_val = validar_pago(id_customer, phone_payer, entity, order, montobs, fecha_pago)
+        resultado_val = validar_pago(id_pagador, phone_payer, entity, order, montobs, fecha_pago)
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Operación realizada con éxito.":
@@ -81,7 +80,7 @@ def pagomovil_bancoplaza():
                 img_result = 'img/error.png'
                 return render_template('pagomovil_result.html', msg=resultado_val[1]["result"]["label"],
                                        img_entity=img_entity,
-                                       id_customer=id_customer,
+                                       id_customer=id_pagador,
                                        phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
                                        entity=form_reportes.entity.data[6:], order=order, monto_bs=montobs,
                                        img_result=img_result, datos_cliente=datos_cliente)
@@ -94,8 +93,6 @@ def pagomovil_bancoplaza():
             monto_pagado = resultado_val[1]['result']['validatedPayments'][0]['amount']
 
             result_buscarfacturas = buscar_facturas(id_cliente, monto_pagado)
-            logger.debug("USER: " + str(client_id) +
-                         " TYPE: Respuesta MW buscando facturas: " + str(result_buscarfacturas))
 
             if result_buscarfacturas[0] == "success":
                 if result_buscarfacturas[1]["estado"] == "exito":
@@ -108,7 +105,7 @@ def pagomovil_bancoplaza():
                 img_result = 'img/error.png'
                 return render_template('pagomovil_result.html', msg=result_buscarfacturas[1],
                                        img_entity=img_entity,
-                                       id_customer=id_customer,
+                                       id_customer=id_pagador,
                                        phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
                                        entity=form_reportes.entity.data[6:], order=order, monto_bs=montobs,
                                        img_result=img_result, datos_cliente=datos_cliente)
@@ -123,10 +120,6 @@ def pagomovil_bancoplaza():
                 medio_pago = "pm_vippo"
                 codigo_auth = form_reportes.order.data
 
-
-                logger.debug("USER: " + str(client_id) + " TYPE: pagando facturas: " + str(
-                    facturas) + "-" + codigo_auth + "-" + medio_pago)
-
                 pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado)
 
                 if pago_facturas[0] == "success":
@@ -134,7 +127,7 @@ def pagomovil_bancoplaza():
                         img_result = 'img/exito.png'
                         return render_template('pagomovil_result.html', msg="Pago realizado con éxito",
                                                img_entity=img_entity,
-                                               id_customer=id_customer,
+                                               id_customer=id_pagador,
                                                phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
                                                entity=form_reportes.entity.data[6:], order=order, monto_bs=0,
                                                img_result=img_result, datos_cliente=datos_cliente)
@@ -142,7 +135,7 @@ def pagomovil_bancoplaza():
                         img_result = 'img/error.png'
                         return render_template('pagomovil_result.html', msg="Error pagando factura",
                                                img_entity=img_entity,
-                                               id_customer=id_customer,
+                                               id_customer=id_pagador,
                                                phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
                                                entity=form_reportes.entity.data[6:], order=order, monto_bs=montobs,
                                                img_result=img_result, datos_cliente=datos_cliente)

@@ -2,7 +2,6 @@ from flask import render_template, Blueprint, session
 from src.routes.pagomovil_bp.templates.form_fields_reportes import FormFieldsReportes
 from src.utils.api_instapago import validar_pago
 from src.utils.api_vippo import leer_listabancos
-from src.utils.logger import logger
 from flask_login import login_required, current_user
 import src.config as config
 from src.utils.api_mw import buscar_facturas, pagar_facturas
@@ -69,12 +68,12 @@ def pagomovil_banesco():
         datos_cliente = current_user.datos_cliente
         img_entity = config.pm_banesco[3]
         id_cliente = str(datos_cliente["id"])
-        clientId = str(form_reportes.tipo_id.data) + str(form_reportes.payerID.data)
+        id_pagador = str(form_reportes.tipo_id.data) + str(form_reportes.payerID.data)
         fecha_pago = form_reportes.fecha_pago.data
         pago_validado = False
 
         # VALIDO EL PAGO EN INSTAPAGO
-        resultado_val = validar_pago(phonenumberclient, clientId, bank, reference, amount, fecha_pago)
+        resultado_val = validar_pago(phonenumberclient, id_pagador, bank, reference, amount, fecha_pago)
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Se ha encontrado un pago, exitosamente":
@@ -102,8 +101,6 @@ def pagomovil_banesco():
             monto_pagado = resultado_val[1]['amount']
 
             result_buscarfacturas = buscar_facturas(id_cliente, monto_pagado)
-            logger.debug("USER: " + str(id_customer) +
-                         " TYPE: Respuesta MW buscando facturas: " + str(result_buscarfacturas))
 
             if result_buscarfacturas[0] == "success":
                 if result_buscarfacturas[1]["estado"] == "exito":
@@ -129,9 +126,6 @@ def pagomovil_banesco():
                 facturas = result_buscarfacturas[1]["facturas"]
                 medio_pago = "pm_instapago"
                 codigo_auth = form_reportes.order.data
-
-                logger.debug("USER: " + str(clientId) + " TYPE: pagando facturas: " + str(
-                    facturas) + "-" + codigo_auth + "-" + medio_pago)
 
                 pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado)
 

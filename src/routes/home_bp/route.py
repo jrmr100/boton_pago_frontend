@@ -40,7 +40,7 @@ def home():
         client_id = form.ci.data
 
         logger.info("USER: " + str(client_id) +
-                    " TYPE: Iniciando transacción con el correo: " + client_email + "\n")
+                    " TYPE: ########### Iniciando transacción con el correo: " + client_email + "###################\n")
 
         ################ Busco cliente en MW ##############
         resultado_apimw = buscar_cliente(client_id, client_email)

@@ -1,5 +1,5 @@
 
-from flask import render_template, Blueprint, session, redirect, url_for, flash
+from flask import session
 from src.routes.home_bp.templates.form_fields import User
 import os
 import src.utils.connect_api as connect_api
@@ -56,12 +56,15 @@ def buscar_facturas(id_cliente, monto_pagado):
 
     # Valido la longitud del ID del cliente
     if len(id_cliente) < 1 or len(id_cliente) > 7:
-        return "error", "idtraza muy largo"
+        logger.error("USER: " + str(id_cliente) + " TYPE: idcliente no valido" + "\n")
+        return "error", "idcliente no valido"
+
         # Valido si el monto pagado es inferior a la deuda
     elif float(monto_pagado) < float(monto_deuda):
-            return "error", f"Monto pagado (Bs.{monto_pagado}) esta por debajo de la deuda (Bs.{monto_deuda})\
-             debe contactarnos por WhatsApp al numero " + config.contacto_WhatsApp
-
+        msg = (f"Monto pagado (Bs.{monto_pagado}) esta por debajo de la deuda (Bs.{monto_deuda})"
+               f" debe contactarnos por WhatsApp al numero {config.contacto_WhatsApp}")
+        logger.error(f"USER: {str(id_cliente)} - TYPE: {msg}")
+        return "error", msg
     else:
         # Obtengo los codigos de las facturas pendientes por el cliente
         headers = {}

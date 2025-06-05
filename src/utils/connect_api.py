@@ -6,34 +6,34 @@ from src.utils.logger import logger
 def conectar(headers, body, params, endpoint, metodo, cedula):
     try:
         if metodo == "GET":
-            logger.debug(
-                "USER: " + cedula + " - Solicitud de API: " +
-                "Header: " + str(headers) + " / " +
-                "Body: " + str(body) + " / " +
-                "params" + str(params) +  " / " +
-                "Endpoint: " + endpoint + " / " +
-                "Metodo: " + metodo + "\n")
+            logger.debug(f"USER: {cedula} - Solicitud a la API: {endpoint}\n"
+                         f" - Header: {headers}"
+                         f" - Body: {body}"
+                         f" - params: {params}"
+                         f" - Metodo: {metodo}\n")
+
 
             response = requests.get(endpoint,
                                     headers=headers,
                                     params=params,
                                     timeout=15)
         elif metodo == "POST":
-            logger.debug(
-                "USER: " + cedula + " - Solicitud de API: " +
-                "Header: " + str(headers) + " / " +
-                "Body: " + str(body) + " / " +
-                "params" + str(params) + " / " +
-                "Endpoint: " + endpoint + " / " +
-                "Metodo: " + metodo + "\n")
+            logger.debug(f"USER: {cedula} - Solicitud a la API: {endpoint}\n"
+                         f" - Header: {headers}"
+                         f" - Body: {body}"
+                         f" - params: {params}"
+                         f" - Metodo: {metodo}\n")
+
             response = requests.post(endpoint,
                                      headers=headers, json=body, params=params,
                                      timeout=15)
 
         response_decode = response.content.decode("utf-8")
         api_response = json.loads(response_decode)
-        logger.debug("USER: " + cedula + " - Respuesta de API:" + str(api_response) + "\n")
+        logger.debug(f"USER: {cedula} - Respuesta de la API: {endpoint}\n"
+                     f" - Respuesta: {str(api_response)}\n")
         return "success", api_response
     except Exception as error:
-        logger.debug("USER: " + cedula + " - Except de conectar API:" + str(error) + "\n")
+        logger.debug(f"USER: {cedula} - Except de la API: {endpoint}\n"
+                     f" - Except: {str(error)}\n")
         return "except", str(error)

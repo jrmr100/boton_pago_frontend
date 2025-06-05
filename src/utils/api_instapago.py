@@ -1,10 +1,9 @@
-import requests
 import os
 import src.utils.connect_api as connect_api
-from src.utils.logger import now, logger
+from flask_login import current_user
 
 
-def validar_pago(phonenumberclient, clientId, bank, reference, amount, fecha_pago):
+def validar_pago(phonenumberclient, id_pagador, bank, reference, amount, fecha_pago):
     date = fecha_pago.strftime('%Y-%m-%d')
     endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_VALIDATEPM_IP")
     #endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_CONSULTAPM_IP")
@@ -21,7 +20,7 @@ def validar_pago(phonenumberclient, clientId, bank, reference, amount, fecha_pag
         "keyId": keyId,
         "publickeyid": publickeyid,
         "phonenumberclient": phonenumberclient,
-        "clientid": clientId,
+        "clientid": id_pagador,
         "bank": bank,
         "receiptbank": receiptbank,
         "date": date,
@@ -29,7 +28,7 @@ def validar_pago(phonenumberclient, clientId, bank, reference, amount, fecha_pag
         "amount": amount
     }
 
-    api_response = connect_api.conectar(headers, body, params, endpoint, "GET", clientId)
+    api_response = connect_api.conectar(headers, body, params, endpoint, "GET", current_user.id)
     if api_response[0] == "success":
             return "success", api_response[1]
     elif api_response[0] == "except":
