@@ -76,8 +76,7 @@ def pagos():
 # TODO: Validar si se puede usar en mw el campo client_tipo_id (tipo de id)
 # TODO: Agregar lista de correos en config
 # TODO: Revisar responsive en todo el proyecto
-# TODO: validar si es consulta o validate de pagos en instapago
-# TODO: acomodar todo el log y la secuencia
 # TODO: Resolver caso de abonar si el pago es por debajo del monto de la deuda
+# TODO: Colocar todos los montos en 0.00
 
 
