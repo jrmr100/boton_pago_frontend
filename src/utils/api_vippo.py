@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from src.utils.logger import logger, now
+from src.utils.logger import logger
 import os
 import src.utils.connect_api as connect_api
 import datetime
