@@ -16,7 +16,7 @@ def conectar(headers, body, params, endpoint, metodo, cedula):
             response = requests.get(endpoint,
                                     headers=headers,
                                     params=params,
-                                    timeout=15)
+                                    timeout=30)
         elif metodo == "POST":
             logger.debug(f"USER: {cedula} - Solicitud a la API: {endpoint}"
                          f" - Header: {headers}"
@@ -26,7 +26,7 @@ def conectar(headers, body, params, endpoint, metodo, cedula):
 
             response = requests.post(endpoint,
                                      headers=headers, json=body, params=params,
-                                     timeout=15)
+                                     timeout=30)
 
         response_decode = response.content.decode("utf-8")
         api_response = json.loads(response_decode)
