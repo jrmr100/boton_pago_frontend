@@ -29,7 +29,7 @@ def validar_pago(phonenumberclient, id_pagador, bank, reference, amount, fecha_p
     }
 
     api_response = connect_api.conectar(headers, body, params, endpoint, "GET", current_user.id)
-    if api_response[0] == "success":
+    if api_response[0]:
             return "success", api_response[1]
     elif api_response[0] == "except":
         return "except", api_response[1]

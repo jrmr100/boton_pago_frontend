@@ -1,7 +1,6 @@
 from flask import  Blueprint, jsonify
 from flask_login import current_user
 import src.utils.connect_api as connect_api
-import requests
 from flask_login import login_required
 import os
 
@@ -40,7 +39,7 @@ def generarqr(amount):
 
     api_response = connect_api.conectar(headers, body, params, endpoint, "GET", client_id)
 
-    if api_response[0] == "success":
+    if api_response[0]:
         if api_response[1]["code"] == "200":
             qr_image = api_response[1]["qrCode"]
             return jsonify({"qr_image": qr_image})

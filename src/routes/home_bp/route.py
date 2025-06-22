@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, redirect, url_for, flash
 from src.routes.home_bp.templates.form_fields import FormFields
-from src.utils.api_mw import buscar_cliente
+from src.utils.api_microwisp import Client
 import src.config as config
 from src.utils.logger import logger
 from flask_login import login_required, logout_user
@@ -43,18 +43,18 @@ def home():
                     " TYPE: ########### Iniciando transacción con el correo: " + client_email + "###################\n")
 
         ################ Busco cliente en MW ##############
-        resultado_apimw = buscar_cliente(client_id, client_email)
-        if resultado_apimw[0] == "success":
+        cliente = Client(client_id)
+        resultado_apimw = cliente.buscar_cliente(client_email)
+        if resultado_apimw[0]:
                 #### USUARIO AUTENTICADO Y VALIDADO####
                 return redirect(url_for('pagos.pagos'))
-        elif resultado_apimw[0] == "error":
-            flash(resultado_apimw[1], "failure")
-        #elif resultado_apimw[0] == "info":
-        #    flash(resultado_apimw[1], "info")
-        elif resultado_apimw[0] == "except":
-            return render_template("error_general.html", msg="Error API - MW", error=resultado_apimw[1],
-                                   type="503")
-
+        else:
+            if "Error -" in resultado_apimw[1]:
+                flash(resultado_apimw[1][7:], "failure")
+            else:
+                return render_template("error_general.html",
+                                       msg="Error API - MW", error=resultado_apimw[1],
+                                       type="503")
     return render_template("home.html", form=form)
 
 @blue_ruta.route('/logout/', methods=['GET', 'POST'])

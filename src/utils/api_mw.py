@@ -20,7 +20,7 @@ def buscar_cliente(client_id, client_email):
 
     api_response = connect_api.conectar(headers, body, params, endpoint,"POST", client_id)
 
-    if api_response[0] == "success":
+    if api_response[0]:
         if api_response[1]["estado"] == "exito":  # Cliente obtenido
             ###### VALIDO EL CORREO DEL CLIENTE ######
             email_mw = api_response[1]['datos'][0]['correo']
