@@ -64,6 +64,9 @@ def pagos():
         elif form.submit_tarjeta_credito.data:  # Si se presiona el boton de submit1
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil_bancos.pagomovil_bancos'))
+        elif form.submit_transferencia.data:  # Si se presiona el boton de submit1
+            session["monto_bs"] = monto_bs
+            return redirect(url_for('pagomovil_bancos.pagomovil_bancos'))
 
     if float(monto_bs) > 0:
         deuda = True

@@ -12,6 +12,7 @@ correos_tasa_bcv = ["jmonrroy@ifx.com.ve", "gjaramillo@ifx.com.ve", "zarelda.her
 metodos_pago_disabled = {
     "pagomovil_total": False,
     "tarjeta_credito_total": False,
+    "transferencias_total": False,
     "zelle_total": False
 }
 
