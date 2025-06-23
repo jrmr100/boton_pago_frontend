@@ -127,12 +127,7 @@
                     <h6>Seleccione la opción con la que desea pagar</h6>
                     {% include('_mensajes.html') %}
                 </div>
-                {% if card_disable == True %}
-                    {% include('pagos_card_disable.html') %}
-                {% else %}
-                    {% include('pagos_card_enable.html') %}
-                {% endif %}
-
+                {% include('pagos_card.html') %}
             </div>
 
             <div class="col-1">

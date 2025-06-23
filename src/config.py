@@ -8,10 +8,27 @@ lista_phone = ("0412", "0414", "0424", "0416", "0426")
 correos_tasa_bcv = ["jmonrroy@ifx.com.ve", "gjaramillo@ifx.com.ve", "zarelda.herbert@gmail.com",
                     "mariaespana2netvzla@gmail.com", "reinaldo.b@ifxnw.com.ve", "gerencia@sisca.co"]
 
-pm_bancoplaza = ("04241686275", "BANCO PLAZA", "J303390684", "img/logo_bancoplaza.png", False)
-#pm_bancoplaza = ("", "TEMPORALMENTE FUERA DE SERVICIO", "", "img/logo_bancoplaza.png", True)
+# Deshabilitar metodos de pago
+metodos_pago_disabled = {
+    "pagomovil_total": False,
+    "tarjeta_credito_total": False,
+    "zelle_total": False
+}
 
-pm_banesco = ("04143025855", "BANESCO", "J303390684", "img/logo_banesco.png", False)
-#pm_banesco = ("", "TEMPORALMENTE FUERA DE SERVICIO", "", "img/logo_banesco.png", True)
+pm_bancoplaza = {
+    "telefono": "04241686275",
+    "nombre_banco": "BANCO PLAZA",
+    "rif": "J303390684",
+    "logo": "img/logo_bancoplaza.png",
+    "disabled": False,
+}
+
+pm_banesco = {
+    "telefono": "04143025855",
+    "nombre_banco": "BANESCO",
+    "rif": "J303390684",
+    "logo": "img/logo_banesco.png",
+    "disabled": False,
+}
 
 contacto_WhatsApp = "04241686275"

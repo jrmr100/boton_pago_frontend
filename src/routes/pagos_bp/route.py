@@ -40,14 +40,16 @@ def pagos():
 
     # VALIDO CONDICIONES DEL CLIENTE
     if datos_cliente["estado"] == "RETIRADO":
-        card_disable = True
+        config.metodos_pago_disabled["pagomovil"] = True
+        config.metodos_pago_disabled["tarjeta_credito"] = True
+        config.metodos_pago_disabled["zelle"] = True
         flash("Cuenta \"RETIRADA\" debe contactar a nuestro centro de atención por WhatsApp - " +
               config.contacto_WhatsApp, "failure")
     elif float(datos_cliente["total_facturas"]) <= 0:
-        card_disable = True
+        config.metodos_pago_disabled["pagomovil"] = True
+        config.metodos_pago_disabled["tarjeta_credito"] = True
+        config.metodos_pago_disabled["zelle"] = True
         flash("La cuenta no presenta deudas", "info")
-    else:
-        card_disable = False
 
 
     # Calculo el monto en Bs
@@ -56,10 +58,12 @@ def pagos():
     monto_bs = f"{montobs_long:.2f}"
 
     if form.validate_on_submit():
-        if form.submit1.data:  # Si se presiona el boton de submit1
+        if form.submit_pagomovil.data:  # Si se presiona el boton de submit1
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil_bancos.pagomovil_bancos'))
-
+        elif form.submit_tarjeta_credito.data:  # Si se presiona el boton de submit1
+            session["monto_bs"] = monto_bs
+            return redirect(url_for('pagomovil_bancos.pagomovil_bancos'))
 
     if float(monto_bs) > 0:
         deuda = True
@@ -67,7 +71,8 @@ def pagos():
         deuda = False
 
     return render_template("pagos.html", datos_cliente=datos_cliente,
-                           monto_bs=monto_bs, form=form, monto_dls=monto_dls, card_disable=card_disable, deuda=deuda)
+                           monto_bs=monto_bs, form=form, monto_dls=monto_dls,
+                           metodos_pago=config.metodos_pago_disabled, deuda=deuda)
 
 # TODO: Modulo de Lukapay pago movil - apagable
 # TODO: Modulo de Lukapay zelle - apagable
