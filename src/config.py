@@ -2,7 +2,7 @@
 lista_id = ("V", "J", "G", "E", "P")
 
 # Lista de operadoras telefonicas
-lista_phone = ("0412", "0414", "0424", "0416", "0426")
+lista_phone = ("0412", "0422", "0414", "0424", "0416", "0426")
 
 # Lista de correos para enviar errores de tasa BCV y lista de bancos
 correos_tasa_bcv = ["jmonrroy@ifx.com.ve", "gjaramillo@ifx.com.ve", "zarelda.herbert@gmail.com",
