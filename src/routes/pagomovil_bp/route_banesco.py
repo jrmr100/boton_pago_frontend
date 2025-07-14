@@ -66,7 +66,7 @@ def pagomovil_banesco():
         # amount = session["monto_bs"]
         amount = f"{form_reportes.monto.data:.2f}"
         datos_cliente = current_user.datos_cliente
-        img_entity = config.pm_banesco[3]
+        img_entity = config.pm_banesco["logo"]
         id_cliente = str(datos_cliente["id"])
         id_pagador = str(form_reportes.tipo_id.data) + str(form_reportes.payerID.data)
         fecha_pago = form_reportes.fecha_pago.data

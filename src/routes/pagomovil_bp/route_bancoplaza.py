@@ -65,7 +65,7 @@ def pagomovil_bancoplaza():
         order = form_reportes.order.data
         montobs = f"{form_reportes.monto.data:.2f}"
         datos_cliente = current_user.datos_cliente
-        img_entity = config.pm_bancoplaza[3]
+        img_entity = config.pm_bancoplaza["logo"]
         id_cliente = str(datos_cliente["id"])
         client_id = str(datos_cliente["cedula"])
         fecha_pago = form_reportes.fecha_pago.data

@@ -63,7 +63,7 @@ def pagos():
         elif form.submit_tarjeta_credito.data:  # Si se presiona el boton de submit1
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil.pagomovil'))
-        elif form.submit_transferencia.data:  # Si se presiona el boton de submit1
+        elif form.submit_transferencias.data:  # Si se presiona el boton de submit1
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil.pagomovil'))
 

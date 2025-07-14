@@ -16,6 +16,7 @@ metodos_pago_disabled = {
     "zelle": False
 }
 
+# Config Banco Plaza
 pm_bancoplaza = {
     "telefono": "04241686275",
     "nombre_banco": "BANCO PLAZA",
@@ -24,6 +25,7 @@ pm_bancoplaza = {
     "disabled": False
 }
 
+# Config Banesco
 pm_banesco = {
     "telefono": "04143025855",
     "nombre_banco": "BANESCO",
