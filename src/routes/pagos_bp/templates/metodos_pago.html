@@ -5,27 +5,46 @@
             <div class="col-sm-3 d-flex justify-content-center align-items-center flex-column p-2">
                 <img src="{{ url_for('static', filename='img/pagomovil.png') }}"
                      alt="Pagomovil" style="width: 80px; height: 80px;"><br>
-                {{ form.submit_pagomovil(class="btn btn-outline-primary", style="width: 150px; height: 50px;") }}
+                {% if metodos_pago_disabled["pagomovil"] %}
+                    {{ form.submit_pagomovil(class="btn btn-outline-secondary", style="width: 150px; height: 50px;") }}
+                {% else %}
+                    {{ form.submit_pagomovil(class="btn btn-outline-primary", style="width: 150px; height: 50px;") }}
+                {% endif %}
             </div>
 
             <div class="col-sm-3 d-flex justify-content-center align-items-center flex-column p-2">
                 <img src="{{ url_for('static', filename='img/credit_card.png') }}"
                      alt="Tarjeta_credito" style="width: 80px; height: 80px;"><br>
-                {{ form.submit_tarjeta_credito(class="btn btn-outline-primary", style="width: 180px; height: 50px;") }}
+                {% if metodos_pago_disabled["tarjeta_credito"] %}
+                    {{ form.submit_tarjeta_credito(class="btn btn-outline-secondary", style="width: 180px; height: 50px;") }}
+                {% else %}
+                    {{ form.submit_tarjeta_credito(class="btn btn-outline-primary", style="width: 180px; height: 50px;") }}
+                {% endif %}
             </div>
 
             <div class="col-sm-3 d-flex justify-content-center align-items-center flex-column p-2">
                 <img src="{{ url_for('static', filename='img/transferencias.png') }}"
                      alt="Tarjeta_credito" style="width: 80px; height: 80px;"><br>
-                {{ form.submit_transferencia(class="btn btn-outline-primary", style="width: 180px; height: 50px;") }}
+                {% if metodos_pago_disabled["transferencias"] %}
+                    {{ form.submit_transferencias(class="btn btn-outline-secondary", style="width: 180px; height: 50px;") }}
+                {% else %}
+                    {{ form.submit_transferencias(class="btn btn-outline-primary", style="width: 180px; height: 50px;") }}
+                {% endif %}
             </div>
 
             <div class="col-sm-3 d-flex justify-content-center align-items-center flex-column p-2">
                 <img src="{{ url_for('static', filename='img/zelle.png') }}" alt="Zelle"
                      style="width: 80px; height: 80px;"><br>
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                {% if metodos_pago_disabled["zelle"] %}
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
+                        data-bs-target="#modal_zelle" style="width: 150px; height: 50px;" disabled>ZELLE
+                    </button>
+                {% else %}
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                         data-bs-target="#modal_zelle" style="width: 150px; height: 50px;">ZELLE
-                </button>
+                    </button>
+                {% endif %}
+
             </div>
         </div>
     </form>

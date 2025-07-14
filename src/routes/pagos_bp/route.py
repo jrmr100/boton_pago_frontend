@@ -42,14 +42,13 @@ def pagos():
     if datos_cliente["estado"] == "RETIRADO":
         config.metodos_pago_disabled["pagomovil"] = True
         config.metodos_pago_disabled["tarjeta_credito"] = True
+        config.metodos_pago_disabled["transferencias"] = True
         config.metodos_pago_disabled["zelle"] = True
         flash("Cuenta \"RETIRADA\" debe contactar a nuestro centro de atención por WhatsApp - " +
               config.contacto_WhatsApp, "failure")
     elif float(datos_cliente["total_facturas"]) <= 0:
-        config.metodos_pago_disabled["pagomovil"] = True
-        config.metodos_pago_disabled["tarjeta_credito"] = True
-        config.metodos_pago_disabled["zelle"] = True
         flash("La cuenta no presenta deudas", "info")
+
 
 
     # Calculo el monto en Bs
@@ -75,7 +74,7 @@ def pagos():
 
     return render_template("pagos.html", datos_cliente=datos_cliente,
                            monto_bs=monto_bs, form=form, monto_dls=monto_dls,
-                           metodos_pago=config.metodos_pago_disabled, deuda=deuda)
+                           metodos_pago_disabled=config.metodos_pago_disabled, deuda=deuda)
 
 # TODO: Modulo de Lukapay pago movil - apagable
 # TODO: Modulo de Lukapay zelle - apagable
