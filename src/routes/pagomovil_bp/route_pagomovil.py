@@ -4,7 +4,7 @@ from src.routes.pagomovil_bp.templates.form_fields_bancos import FormFieldsBanco
 from flask_login import login_required, current_user
 import src.config as config
 
-nombre_ruta = "pagomovil_bancos"
+nombre_ruta = "pagomovil"
 
 # Defino el Blueprint
 blue_ruta = Blueprint(
@@ -17,7 +17,7 @@ blue_ruta = Blueprint(
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 @login_required
-def pagomovil_bancos():
+def pagomovil():
     form_bancos = FormFieldsBancos()
     datos_cliente = current_user.datos_cliente
     montobs = session["monto_bs"]
@@ -32,7 +32,7 @@ def pagomovil_bancos():
             return redirect(url_for('pagomovil_banesco.pagomovil_banesco'))
 
     else:
-            return render_template('pagomovil_bancos.html', form=form_bancos, datos_cliente=datos_cliente,
+            return render_template('pagomovil.html', form=form_bancos, datos_cliente=datos_cliente,
                                pm_bancoplaza=config.pm_bancoplaza,
                                pm_banesco=config.pm_banesco,
                                montobs=montobs, qr_image=qr_image)

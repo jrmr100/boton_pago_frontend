@@ -30,23 +30,27 @@
                                         <div class="row g-0">
                                             <div class="col-4 d-flex justify-content-center align-items-center">
                                                 <img class="img-fluid rounded-start" alt="Logo_bancoplaza"
-                                                     src="{{ url_for('pagomovil_bancos.static', filename=pm_bancoplaza[3] ) }}">
+                                                     src="{{ url_for('pagomovil.static', filename=pm_bancoplaza["logo"] ) }}">
                                             </div>
                                             <div class="col-8">
                                                 <div class="card-body">
                                                     <div class="row g-0">
                                                         <div class="col-10">
-                                                            <h5 class="card-title"><b>{{ pm_bancoplaza[1] }}</b></h5>
-                                                            <p class="card-text"><b>TELÉFONO:</b> {{ pm_bancoplaza[0] }}<br>
-                                                                <b>RIF:</b> {{ pm_bancoplaza[2] }}
+                                                            <h5 class="card-title"><b>{{ pm_bancoplaza["nombre_banco"] }}</b></h5>
+                                                            <p class="card-text"><b>TELÉFONO:</b> {{ pm_bancoplaza["telefono"] }}<br>
+                                                                <b>RIF:</b> {{ pm_bancoplaza["rif"] }}
                                                             </p>
                                                             <div class="d-grid gap-2">
-                                                                {{ form.submit_bancoplaza(class="btn btn-outline-primary") }}
+                                                                {% if pm_bancoplaza["disabled"] %}
+                                                                    {{ form.submit_bancoplaza(class="btn btn-outline-secondary") }}
+                                                                {% else %}
+                                                                    {{ form.submit_bancoplaza(class="btn btn-outline-primary") }}
+                                                                {% endif %}
                                                             </div>
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="ms-2 d-flex justify-content-center">
-                                                                 <!--{% if pm_bancoplaza[4] == True %}
+                                                                 <!--{% if pm_bancoplaza["disabled"] == True %}
                                                                     <button type="button" id="generateQRbancoplaza"
                                                                             class="btn btn-outline-secondary" disabled>
                                                                         <i class="bi bi-qr-code fs-5"></i>
@@ -71,24 +75,28 @@
                                         <div class="row g-0">
                                             <div class="col-4 d-flex justify-content-center align-items-center">
                                                 <img class="img-fluid rounded-start" alt="Logo_banesco"
-                                                     src="{{ url_for('pagomovil_bancos.static', filename=pm_banesco[3] ) }}">
+                                                     src="{{ url_for('pagomovil.static', filename=pm_banesco["logo"] ) }}">
                                             </div>
                                             <div class="col-8">
                                                 <div class="card-body">
                                                     <div class="row g-0">
                                                         <div class="col-10">
-                                                            <h5 class="card-title"><b>{{ pm_banesco[1] }}</b></h5>
+                                                            <h5 class="card-title"><b>{{ pm_banesco["nombre_banco"] }}</b></h5>
                                                             <p class="card-text">
-                                                                <b>TELÉFONO:</b> {{ pm_banesco[0] }}<br>
-                                                                <b>RIF:</b> {{ pm_banesco[2] }}
+                                                                <b>TELÉFONO:</b> {{ pm_banesco["telefono"] }}<br>
+                                                                <b>RIF:</b> {{ pm_banesco["rif"] }}
                                                             </p>
                                                             <div class="d-grid gap-2">
-                                                                {{ form.submit_banesco(class="btn btn-outline-primary") }}
+                                                                {% if pm_banesco["disabled"] %}
+                                                                    {{ form.submit_banesco(class="btn btn-outline-secondary") }}
+                                                                {% else %}
+                                                                    {{ form.submit_banesco(class="btn btn-outline-primary") }}
+                                                                {% endif %}
                                                             </div>
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="ms-2 d-flex justify-content-center">
-                                                                {% if pm_banesco[4] == True %}
+                                                                {% if pm_banesco["qr_disabled"] or pm_banesco["disabled"] %}
                                                                     <button type="button" id="generateQRbanescoa"
                                                                             class="btn btn-outline-secondary" disabled>
                                                                         <i class="bi bi-qr-code fs-5"></i>

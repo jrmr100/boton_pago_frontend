@@ -21,7 +21,7 @@ pm_bancoplaza = {
     "nombre_banco": "BANCO PLAZA",
     "rif": "J303390684",
     "logo": "img/logo_bancoplaza.png",
-    "disabled": False,
+    "disabled": False
 }
 
 pm_banesco = {
@@ -29,7 +29,8 @@ pm_banesco = {
     "nombre_banco": "BANESCO",
     "rif": "J303390684",
     "logo": "img/logo_banesco.png",
-    "disabled": False,
+    "qr_disabled": False,
+    "disabled": False
 }
 
 contacto_WhatsApp = "04241686275"
