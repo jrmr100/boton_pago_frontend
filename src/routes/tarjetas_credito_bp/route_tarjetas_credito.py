@@ -26,9 +26,6 @@ def tarjetas_credito():
     # Carga de los tipos de ID al selectfield ID
     form_tc.tipo_id.choices = config.lista_id
 
-    # Carga de los tipos de telefonos al selectfield PHONE
-    form_tc.tipo_phone.choices = config.lista_phone
-
     ################## SUBMIT ##################
     if form_tc.validate_on_submit():
         id_pagador = form_tc.tipo_id.data + form_tc.payerID.data

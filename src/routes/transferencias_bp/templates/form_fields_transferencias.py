@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, DateField, FloatField
 from wtforms.validators import InputRequired, Length, DataRequired
-from src.utils.validaciones_form import only_numbers, passport, monto_pm
+from src.utils.validaciones_form import only_numbers, banco_emisor, passport, monto_pm
 from datetime import datetime
 
 
@@ -17,21 +17,20 @@ class FormFieldsTransferencias(FlaskForm):
                           render_kw={'placeholder': '123456789',
                                      "title": "Ingrese la información del ID"})
 
-    tipo_phone = SelectField('Teléfono del pagador: ',
-                             choices=[],
-                             validators=[InputRequired()],
-                             render_kw={'style': 'width: 80px; margin-right: 10px;'})
-
-    payerPhone = StringField('',
-                             validators=[DataRequired(),
-                                         Length(min=5, max=7), only_numbers],
-                             render_kw={'placeholder': '1234567', "title": "Solo números, ejem: 1234567"})
-    fecha_pago = DateField('Fecha del pago:',
-
+    fecha_pago = DateField('Fecha de la transferencia:',
                            default=datetime.now(),
                            validators=[DataRequired()])
 
-    monto = FloatField('Monto del pago:',
+    banco_emisor = SelectField('Banco Emisor: ',
+                         choices=[],
+                         validators=[InputRequired(),
+                                     banco_emisor])
+    referencia = StringField('Número de referencia:',
+                        validators=[DataRequired(), only_numbers,
+                                    Length(min=4)],
+                        render_kw={"title": "Mínimo 4 caracteres"})
+
+    monto = FloatField('Monto de la transferencia:',
                         validators=[DataRequired(), monto_pm],
                         render_kw={'disabled': False})
 

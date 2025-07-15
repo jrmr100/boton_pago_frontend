@@ -15,6 +15,21 @@ blue_ruta = Blueprint(
     static_url_path='/' + nombre_ruta
 )
 
+# Cargo la lista de bancos solo una vez cuando se acceda a la ruta transferencias
+listabancos = None
+
+
+@blue_ruta.before_request
+@login_required
+def cargar_listabancos():
+    global listabancos
+    if listabancos is None:
+        listabancos = leer_listabancos()
+        # Carga de los bancos emisores al selectfield ENTITY
+        if "error listabancos" in listabancos:
+            return render_template("error_general.html", msg="Error obteniendo la lista de bancos, intente mas tarde",
+                                   error="No es posible acceder a la lista de bancos emisores", type="500")
+
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 @login_required
@@ -22,12 +37,11 @@ def transferencias():
     form_transferencias = FormFieldsTransferencias()
     datos_cliente = current_user.datos_cliente
     montobs = session["monto_bs"]
+    form_transferencias.banco_emisor.choices = listabancos
 
     # Carga de los tipos de ID al selectfield ID
     form_transferencias.tipo_id.choices = config.lista_id
 
-    # Carga de los tipos de telefonos al selectfield PHONE
-    form_transferencias.tipo_phone.choices = config.lista_phone
 
     ################## SUBMIT ##################
     if form_transferencias.validate_on_submit():

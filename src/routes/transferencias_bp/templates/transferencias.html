@@ -19,11 +19,31 @@
             <div class="col-8 mt-2 card">
                 <form method="POST">
                     {{ form.hidden_tag() }}
-                    <div class="d-flex justify-content-center align-items-center mt-2">
-                        <img class="img-fluid rounded-start" alt="Logo_banco"
-                             src="{{ url_for('transferencias.static', filename=transferencias["logo"] ) }}"
-                             style="width: 150px; height: 150px;">
+                    <div class="row" id="fila_logo">
+                        <div class="col-4">
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="d-flex justify-content-center align-items-center">
+                                <img class="img-fluid rounded-start mt-2" alt="Logo_banco"
+                                     src="{{ url_for('transferencias.static', filename=transferencias["logo"] ) }}">
+                            </div>
+                        </div>
+                        <div class="col-lg-4 d-flex justify-content-center align-items-center">
+                            <div class="card mt-1" style="width: 18rem;">
+                                <div class="card-header text-center">
+                                    INFORMACIÓN DE LA CUENTA:
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item text-center"><b>Rif:</b> {{ transferencias["rif"] }}</li>
+                                    <li class="list-group-item text-center"><b>Cuenta corriente:</b><br> {{ transferencias["cuenta"] }}</li>
+                                </ul>
+                            </div>
+
+
+                        </div>
                     </div>
+
+
                     <div class="row">
                         <h4 class="text-center mt-2">REPORTE DE TRANSFERENCIAS</h4>
                         <div class="col-lg-12">
@@ -38,23 +58,30 @@
                                 {% endfor %}
                             </div>
 
-                            <div>
-                                <label><b>{{ form.tipo_phone.label }}</b></label>
-                                <div class="d-flex">
-                                    {{ form.tipo_phone(class="form-select", style="width: 90px;") }}
-                                    {{ form.payerPhone(class="form-control ms-2") }}
-                                </div>
-                                {% for error in form.payerPhone.errors %}
-                                    <span class="text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-
                             <div class="mt-3 mb-3">
                                 <label><b>{{ form.fecha_pago.label }}</b></label>
                                 <div class="d-flex">
                                     {{ form.fecha_pago(class="form-control ms-2") }}
                                 </div>
                                 {% for error in form.fecha_pago.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <b>{{ form.banco_emisor.label }}</b>
+                                {{ form.banco_emisor(class="form-select") }}
+                                {% for error in form.banco_emisor.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label><b>{{ form.referencia.label }}</b></label>
+                                <div>
+                                    {{ form.referencia(class="form-control") }}
+                                </div>
+                                {% for error in form.referencia.errors %}
                                     <span class="text-danger">{{ error }}</span>
                                 {% endfor %}
                             </div>

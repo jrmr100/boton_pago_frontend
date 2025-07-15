@@ -46,11 +46,10 @@ tarjetas_credito = {
 }
 
 transferencias = {
-    "telefono": "04143025855",
     "nombre_banco": "BANESCO",
     "rif": "J303390684",
-    "logo": "img/transferencias.png",
-    "qr_disabled": False,
+    "logo": "img/logo_banesco.png",
+    "cuenta": "0134-XXXX-XXXX-XXXX",
     "disabled": False
 }
 
