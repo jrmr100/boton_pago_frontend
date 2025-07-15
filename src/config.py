@@ -11,7 +11,7 @@ correos_tasa_bcv = ["jmonrroy@ifx.com.ve", "gjaramillo@ifx.com.ve", "zarelda.her
 # Deshabilitar metodos de pago
 metodos_pago_disabled = {
     "pagomovil": False,
-    "tarjeta_credito": False,
+    "tarjetas_credito": False,
     "transferencias": False,
     "zelle": False
 }
@@ -31,6 +31,25 @@ pm_banesco = {
     "nombre_banco": "BANESCO",
     "rif": "J303390684",
     "logo": "img/logo_banesco.png",
+    "qr_disabled": False,
+    "disabled": False
+}
+
+# Config Banesco
+tarjetas_credito = {
+    "telefono": "04143025855",
+    "nombre_banco": "BANESCO",
+    "rif": "J303390684",
+    "logo": "img/tarjetas_credito.png",
+    "qr_disabled": False,
+    "disabled": False
+}
+
+transferencias = {
+    "telefono": "04143025855",
+    "nombre_banco": "BANESCO",
+    "rif": "J303390684",
+    "logo": "img/transferencias.png",
     "qr_disabled": False,
     "disabled": False
 }

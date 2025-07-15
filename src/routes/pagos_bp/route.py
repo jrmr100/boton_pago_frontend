@@ -41,7 +41,7 @@ def pagos():
     # VALIDO CONDICIONES DEL CLIENTE
     if datos_cliente["estado"] == "RETIRADO":
         config.metodos_pago_disabled["pagomovil"] = True
-        config.metodos_pago_disabled["tarjeta_credito"] = True
+        config.metodos_pago_disabled["tarjetas_credito"] = True
         config.metodos_pago_disabled["transferencias"] = True
         config.metodos_pago_disabled["zelle"] = True
         flash("Cuenta \"RETIRADA\" debe contactar a nuestro centro de atención por WhatsApp - " +
@@ -60,12 +60,12 @@ def pagos():
         if form.submit_pagomovil.data:  # Si se presiona el boton de submit1
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil.pagomovil'))
-        elif form.submit_tarjeta_credito.data:  # Si se presiona el boton de submit1
+        elif form.submit_tarjetas_credito.data:  # Si se presiona el boton de submit1
             session["monto_bs"] = monto_bs
-            return redirect(url_for('pagomovil.pagomovil'))
+            return redirect(url_for('tarjetas_credito.tarjetas_credito'))
         elif form.submit_transferencias.data:  # Si se presiona el boton de submit1
             session["monto_bs"] = monto_bs
-            return redirect(url_for('pagomovil.pagomovil'))
+            return redirect(url_for('transferencias.transferencias'))
 
     if float(monto_bs) > 0:
         deuda = True
