@@ -1,7 +1,8 @@
 from flask import render_template, Blueprint, session
 from src.routes.transferencias_bp.templates.form_fields_transferencias import FormFieldsTransferencias
 from src.utils.api_mw import buscar_facturas, pagar_facturas
-from src.utils.api_vippo import leer_listabancos, validar_pago
+from src.utils.api_vippo import leer_listabancos
+from src.utils.api_instapago import InstaPago
 from flask_login import login_required, current_user
 import src.config as config
 

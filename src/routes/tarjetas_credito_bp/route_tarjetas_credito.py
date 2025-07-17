@@ -1,7 +1,7 @@
 from flask import render_template, Blueprint, session
 from src.routes.tarjetas_credito_bp.templates.form_fields_tc import FormFieldsTc
 from src.utils.api_mw import buscar_facturas, pagar_facturas
-from src.utils.api_vippo import leer_listabancos, validar_pago
+from src.utils.api_instapago import InstaPago
 from flask_login import login_required, current_user
 import src.config as config
 
@@ -28,19 +28,20 @@ def tarjetas_credito():
 
     ################## SUBMIT ##################
     if form_tc.validate_on_submit():
-        id_pagador = form_tc.tipo_id.data + form_tc.payerID.data
-        phone_payer = form_tc.tipo_phone.data[1:] + form_tc.payerPhone.data
-        entity = form_tc.entity.data[:4]
-        order = form_tc.order.data
+        id_pagador = form_tc.tipo_id.data + form_tc.ci.data
         montobs = f"{form_tc.monto.data:.2f}"
-        datos_cliente = current_user.datos_cliente
+        descripcion = form_tc.descripcion.data
+        nombre = form_tc.nombre.data
+        numero_tc = form_tc.numero_tc.data
+        codigo_seguridad = form_tc.codigo_seguridad.data
+        fecha_vencimiento = form_tc.fecha_vencimiento.data
+
+        # VALIDO EL PAGO EN INSTAPAGO
+        validar_pago = InstaPago()
+        resultado_val = validar_pago.validar_pm(id_pagador, montobs, descripcion, nombre, numero_tc, codigo_seguridad)
+
         img_entity = config.pm_bancoplaza["logo"]
         id_cliente = str(datos_cliente["id"])
-        client_id = str(datos_cliente["cedula"])
-        fecha_pago = form_tc.fecha_pago.data
-
-        # VALIDO EL PAGO EN VIPPO
-        resultado_val = validar_pago(id_pagador, phone_payer, entity, order, montobs, fecha_pago)
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Operación realizada con éxito.":

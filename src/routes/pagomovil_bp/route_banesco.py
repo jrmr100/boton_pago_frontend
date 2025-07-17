@@ -1,6 +1,6 @@
 from flask import render_template, Blueprint, session
 from src.routes.pagomovil_bp.templates.form_fields_reportes import FormFieldsReportes
-from src.utils.api_instapago import validar_pago
+from src.utils.api_instapago import InstaPago
 from src.utils.api_vippo import leer_listabancos
 from flask_login import login_required, current_user
 import src.config as config
@@ -73,7 +73,8 @@ def pagomovil_banesco():
         pago_validado = False
 
         # VALIDO EL PAGO EN INSTAPAGO
-        resultado_val = validar_pago(phonenumberclient, id_pagador, bank, reference, amount, fecha_pago)
+        validar_pago = InstaPago()
+        resultado_val = validar_pago.validar_pm(phonenumberclient, id_pagador, bank, reference, amount, fecha_pago)
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Se ha encontrado un pago, exitosamente":
