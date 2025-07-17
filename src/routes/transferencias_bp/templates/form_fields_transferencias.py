@@ -12,7 +12,7 @@ class FormFieldsTransferencias(FlaskForm):
                           validators=[InputRequired()],
                           render_kw={'style': 'width: 80px; margin-right: 10px;'})
 
-    payerID = StringField("", validators=[DataRequired(),
+    ci = StringField("", validators=[DataRequired(),
                                           Length(min=2, max=20), passport],
                           render_kw={'placeholder': '123456789',
                                      "title": "Ingrese la información del ID"})

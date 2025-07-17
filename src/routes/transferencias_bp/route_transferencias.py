@@ -46,30 +46,30 @@ def transferencias():
 
     ################## SUBMIT ##################
     if form_transferencias.validate_on_submit():
-        id_pagador = form_transferencias.tipo_id.data + form_transferencias.payerID.data
-        phone_payer = form_transferencias.tipo_phone.data[1:] + form_transferencias.payerPhone.data
-        entity = form_transferencias.entity.data[:4]
-        order = form_transferencias.order.data
+        id_pagador = form_transferencias.tipo_id.data + form_transferencias.ci.data
+        fecha_pago = form_transferencias.fecha_pago.data
+        banco_emisor = form_transferencias.banco_emisor.data
         montobs = f"{form_transferencias.monto.data:.2f}"
+        montobs="10.00"
+        referencia = form_transferencias.referencia.data
         datos_cliente = current_user.datos_cliente
-        img_entity = config.pm_bancoplaza["logo"]
+        logo = config.pm_bancoplaza["logo"]
         id_cliente = str(datos_cliente["id"])
         client_id = str(datos_cliente["cedula"])
-        fecha_pago = form_transferencias.fecha_pago.data
 
-        # VALIDO EL PAGO EN VIPPO
-        resultado_val = validar_pago(id_pagador, phone_payer, entity, order, montobs, fecha_pago)
+        # VALIDO EL PAGO EN INSTAPAGO
+        validar_pago = InstaPago()
+        resultado_val = validar_pago.validar_transfer(fecha_pago, referencia, id_pagador, banco_emisor[:4], montobs)
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Operación realizada con éxito.":
                 pago_validado = True
             else:
                 img_result = 'img/error.png'
-                return render_template('pagomovil_result.html', msg=resultado_val[1]["result"]["label"],
-                                       img_entity=img_entity,
-                                       id_customer=id_pagador,
-                                       phone_payer=form_transferencias.tipo_phone.data + form_transferencias.payerPhone.data,
-                                       entity=form_transferencias.entity.data[6:], order=order, monto_bs=montobs,
+                return render_template('transferencias.html', msg=resultado_val[1]["result"]["label"],
+                                       logo=logo,
+                                       id_pagador=id_pagador,
+                                       banco_emisor=form_transferencias.banco_emisor.data[6:], referencia=referencia, monto_bs=montobs,
                                        img_result=img_result, datos_cliente=datos_cliente)
         else:
             return render_template("error_general.html", msg="Error validando el pago, intente mas tarde",
@@ -91,7 +91,7 @@ def transferencias():
             elif result_buscarfacturas[0] == "error":
                 img_result = 'img/error.png'
                 return render_template('pagomovil_result.html', msg=result_buscarfacturas[1],
-                                       img_entity=img_entity,
+                                       img_entity=logo,
                                        id_customer=id_pagador,
                                        phone_payer=form_transferencias.tipo_phone.data + form_transferencias.payerPhone.data,
                                        entity=form_transferencias.entity.data[6:], order=order, monto_bs=montobs,
@@ -113,18 +113,18 @@ def transferencias():
                     if pago_facturas[1]["estado"] == "exito":
                         img_result = 'img/exito.png'
                         return render_template('pagomovil_result.html', msg="Pago realizado con éxito",
-                                               img_entity=img_entity,
+                                               img_entity=logo,
                                                id_customer=id_pagador,
                                                phone_payer=form_transferencias.tipo_phone.data + form_transferencias.payerPhone.data,
-                                               entity=form_transferencias.entity.data[6:], order=order, monto_bs=0,
+                                               entity=form_transferencias.entity.data[6:], order=referencia, monto_bs=0,
                                                img_result=img_result, datos_cliente=datos_cliente)
                     else:
                         img_result = 'img/error.png'
                         return render_template('pagomovil_result.html', msg="Error pagando factura",
-                                               img_entity=img_entity,
+                                               img_entity=logo,
                                                id_customer=id_pagador,
                                                phone_payer=form_transferencias.tipo_phone.data + form_transferencias.payerPhone.data,
-                                               entity=form_transferencias.entity.data[6:], order=order, monto_bs=montobs,
+                                               entity=form_transferencias.entity.data[6:], order=referencia, monto_bs=montobs,
                                                img_result=img_result, datos_cliente=datos_cliente)
                 else:
                     return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",

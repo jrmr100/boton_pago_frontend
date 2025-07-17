@@ -51,9 +51,9 @@
                                 <label><b>{{ form.tipo_id.label }}</b></label>
                                 <div class="d-flex">
                                     {{ form.tipo_id(class="form-select") }}
-                                    {{ form.payerID(class="form-control", autofocus=true) }}
+                                    {{ form.ci(class="form-control", autofocus=true) }}
                                 </div>
-                                {% for error in form.payerID.errors %}
+                                {% for error in form.ci.errors %}
                                     <span class="text-danger">{{ error }}</span>
                                 {% endfor %}
                             </div>

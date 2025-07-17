@@ -38,15 +38,15 @@ class InstaPago:
         else:
             return None
 
-    def validar_transfer(self, fecha, referencia, id_cliente, banco_emisor, monto):
+    def validar_transfer(self, fecha_pago, referencia, id_cliente, banco_emisor, montobs):
         keyid = self.keyId
         publickeyid = self.publickeyid
-        fecha = fecha.strftime('%Y-%m-%d')
+        fecha_pago = fecha_pago.strftime('%Y-%m-%d')
         referencia = referencia
         id_cliente = id_cliente
         banco_receptor = os.getenv("RECEIPTBANK_IP")
         banco_emisor = banco_emisor
-        monto = monto
+        montobs = montobs
         endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_VALIDATETRANF_IP")
 
         # Creo el header y el body para validar la transferecnia
@@ -54,15 +54,15 @@ class InstaPago:
         # Body produccion
         body = {"keyId": keyid,
                 "publickeyid": publickeyid,
-                "date": fecha,
+                "date": fecha_pago,
                 "reference": referencia,
                 "clientid": id_cliente,
                 "receiptbank": banco_receptor,
                 "bank": banco_emisor,
-                "amount": monto
+                "amount": montobs
                 }
         params = {}
-        api_response = connect_api.conectar(headers, body, params, endpoint, "GET", current_user.id)
+        api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
         if api_response[0]:
             return "success", api_response[1]
         elif api_response[0] == "except":
