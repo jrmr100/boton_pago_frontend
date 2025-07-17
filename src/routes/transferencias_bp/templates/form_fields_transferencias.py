@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, DateField, FloatField
 from wtforms.validators import InputRequired, Length, DataRequired
-from src.utils.validaciones_form import only_numbers, banco_emisor, passport, monto_pm
+from src.utils.validaciones_form import only_numbers, banco_emisor, passport, monto_deuda
 from datetime import datetime
 
 
@@ -31,7 +31,7 @@ class FormFieldsTransferencias(FlaskForm):
                         render_kw={"title": "Mínimo 4 caracteres"})
 
     monto = FloatField('Monto de la transferencia:',
-                        validators=[DataRequired(), monto_pm],
-                        render_kw={'disabled': False})
+                       validators=[DataRequired(), monto_deuda],
+                       render_kw={'disabled': False})
 
     submit_transferencias = SubmitField('Validar pago')

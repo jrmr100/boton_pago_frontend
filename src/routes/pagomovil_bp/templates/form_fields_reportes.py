@@ -2,7 +2,7 @@ from flask import session
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, DateField, FloatField
 from wtforms.validators import InputRequired, Length, DataRequired
-from src.utils.validaciones_form import only_numbers, banco_emisor, passport, monto_pm
+from src.utils.validaciones_form import only_numbers, banco_emisor, passport, monto_deuda
 from datetime import datetime
 
 
@@ -42,7 +42,7 @@ class FormFieldsReportes(FlaskForm):
                                     Length(min=6, max=6)],
                         render_kw={"title": "Ultimos 6 digitos"})
     monto = FloatField('Monto del pago:',
-                        validators=[DataRequired(), monto_pm],
-                        render_kw={'disabled': False})
+                       validators=[DataRequired(), monto_deuda],
+                       render_kw={'disabled': False})
 
     submit_reportes = SubmitField('Validar pago')

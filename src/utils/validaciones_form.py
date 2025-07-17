@@ -16,6 +16,6 @@ def passport(form, field):
     if form["tipo_id"].data != "P":
         only_numbers(form, field)
 
-def monto_pm(form, field):
+def monto_deuda(form, field):
     if field.data < float(session["monto_bs"]):
         raise ValidationError(f'El monto debe ser igual o mayor a la deuda: Bs.{session["monto_bs"]}')

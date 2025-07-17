@@ -31,37 +31,49 @@
                                 <label><b>{{ form.tipo_id.label }}</b></label>
                                 <div class="d-flex">
                                     {{ form.tipo_id(class="form-select") }}
-                                    {{ form.payerID(class="form-control", autofocus=true) }}
+                                    {{ form.ci(class="form-control", autofocus=true) }}
                                 </div>
-                                {% for error in form.payerID.errors %}
+                                {% for error in form.ci.errors %}
                                     <span class="text-danger">{{ error }}</span>
                                 {% endfor %}
                             </div>
 
                             <div class="mt-3 mb-3">
-                                <label><b>{{ form.fecha_pago.label }}</b></label>
-                                <div class="d-flex">
-                                    {{ form.fecha_pago(class="form-control ms-2") }}
-                                </div>
-                                {% for error in form.fecha_pago.errors %}
-                                    <span class="text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-
-                            <div class="mt-3 mb-3">
-                                <b>{{ form.banco_emisor.label }}</b>
-                                {{ form.banco_emisor(class="form-select") }}
-                                {% for error in form.banco_emisor.errors %}
-                                    <span class="text-danger">{{ error }}</span>
-                                {% endfor %}
-                            </div>
-
-                            <div class="mt-3 mb-3">
-                                <label><b>{{ form.referencia.label }}</b></label>
+                                <label><b>{{ form.nombre.label }}</b></label>
                                 <div>
-                                    {{ form.referencia(class="form-control") }}
+                                    {{ form.nombre(class="form-control") }}
                                 </div>
-                                {% for error in form.referencia.errors %}
+                                {% for error in form.nombre.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label><b>{{ form.numero_tc.label }}</b></label>
+                                <div>
+                                    {{ form.numero_tc(class="form-control") }}
+                                </div>
+                                {% for error in form.numero_tc.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label><b>{{ form.fecha_vencimiento.label }}</b></label>
+                                <div class="d-flex">
+                                    {{ form.fecha_vencimiento(class="form-control ms-2") }}
+                                </div>
+                                {% for error in form.fecha_vencimiento.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label><b>{{ form.codigo_seguridad.label }}</b></label>
+                                <div>
+                                    {{ form.codigo_seguridad(class="form-control") }}
+                                </div>
+                                {% for error in form.codigo_seguridad.errors %}
                                     <span class="text-danger">{{ error }}</span>
                                 {% endfor %}
                             </div>
@@ -72,6 +84,16 @@
                                     {{ form.monto(class="form-control", value=montobs) }}
                                 </div>
                                 {% for error in form.monto.errors %}
+                                    <span class="text-danger">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+
+                            <div class="mt-3 mb-3">
+                                <label><b>{{ form.descripcion.label }}</b></label>
+                                <div>
+                                    {{ form.descripcion(class="form-control") }}
+                                </div>
+                                {% for error in form.descripcion.errors %}
                                     <span class="text-danger">{{ error }}</span>
                                 {% endfor %}
                             </div>

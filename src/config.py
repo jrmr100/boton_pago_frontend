@@ -49,7 +49,7 @@ transferencias = {
     "nombre_banco": "BANESCO",
     "rif": "J303390684",
     "logo": "img/logo_banesco.png",
-    "cuenta": "0134-XXXX-XXXX-XXXX",
+    "cuenta": "0134-0008-39-0081094553",
     "disabled": False
 }
 
