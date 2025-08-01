@@ -129,6 +129,7 @@ def buscar_listabancos_vippo():
             for banks in api_response[1]["result"]["banks"]:
                 lista_bancos.append(banks["code"] + " - " + banks["name"])
             lista_bancos_sorted = sorted(lista_bancos)
+            lista_bancos_sorted.insert(0, "Seleccione un banco")
             with open(archivo_lista_bancos, "w", encoding="utf-8") as archivo:
                 for banco in lista_bancos_sorted:
                     archivo.write(banco + "\n")
