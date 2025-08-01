@@ -112,10 +112,10 @@ def buscar_tasabcv():
 
 def buscar_listabancos_vippo():
     archivo_lista_bancos = os.getenv("PATH_BASE") + os.getenv("FILE_LISTABANCOS_VIPPO")
-    endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_BANCOS_VIPPO")
+    endpoint = os.getenv("ENDPOINT_BASE_VIPPO") + os.getenv("URL_BANCOS_VIPPO") + "/" + os.getenv("BRANCH_COMMERCE")
     headers = {
         'apikey': os.getenv("APIKEY_VIPPO"),
-        'accountMerchant': os.getenv("ACCOUNT_VIPPO")
+
     }
     body = {}
     params = {}
@@ -127,7 +127,7 @@ def buscar_listabancos_vippo():
         try:
             logger.info("USER: Crontab - TYPE: Respuesta obtenida de lista de bancos:" + str(api_response[1]))
             for banks in api_response[1]["result"]["banks"]:
-                lista_bancos.append(banks["codigo"] + " - " + banks["nombre"])
+                lista_bancos.append(banks["code"] + " - " + banks["name"])
             lista_bancos_sorted = sorted(lista_bancos)
             with open(archivo_lista_bancos, "w", encoding="utf-8") as archivo:
                 for banco in lista_bancos_sorted:
