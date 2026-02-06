@@ -53,14 +53,25 @@ def buscar_cliente(client_id, client_email):
 
 def buscar_facturas(id_cliente, monto_pagado):
     monto_deuda = session["monto_bs"]
+    porcentaje_deuda = os.getenv("PORCENTAJE_DEUDA_MINIMA")
+    if float(porcentaje_deuda) > 0 and float(porcentaje_deuda) < 100:
+        factor_pago = round(1 - (float(porcentaje_deuda) / 100), 2)
+        deuda_minima = round(float(monto_deuda) * factor_pago, 2)  # Deuda con el porcentaje tolerable por debajo
+    else:
+        deuda_minima = monto_deuda
+    session["deuda_minima"] = deuda_minima
+
+    # Registro el log de la aprobacion del pago por debajo de la deuda
+    if monto_pagado < monto_deuda and monto_pagado >= deuda_minima:
+        logger.warning(f"USER: {str(id_cliente)} TYPE: Pago realizado ({monto_pagado}) esta por debajo de la deuda ({monto_deuda})\n")
 
     # Valido la longitud del ID del cliente
     if len(id_cliente) < 1 or len(id_cliente) > 7:
         logger.error("USER: " + str(id_cliente) + " TYPE: idcliente no valido" + "\n")
         return "error", "id-cliente no valido"
 
-        # Valido si el monto pagado es inferior a la deuda
-    elif float(monto_pagado) < float(monto_deuda):
+    # Valido si el monto pagado es inferior a la deuda minima
+    elif float(monto_pagado) < float(deuda_minima):
         msg = (f"Monto pagado (Bs.{monto_pagado}) esta por debajo de la deuda (Bs.{monto_deuda})"
                f" debe contactarnos por WhatsApp al numero {config.contacto_WhatsApp}")
         logger.error(f"USER: {str(id_cliente)} - TYPE: {msg}")
@@ -79,10 +90,19 @@ def pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado):
     params = {}
     headers = {"Content-Type": "application/json"}
     endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_PAGAR")
-    monto_deuda = session["monto_bs"]
-    diff_pago = float(monto_pagado) - float(monto_deuda)
+    monto_deuda = float(session["monto_bs"])
+    deuda_minima = float(session["deuda_minima"]) #obtenida en buscar_facturas
+    pago = float(monto_pagado)
 
-    if diff_pago == 0:  # indica que el pago es exacto
+    diff_pago = pago - monto_deuda  # Para validar si el pago es exacto
+
+    pago_aceptado = False
+    if pago >= deuda_minima and pago < monto_deuda:
+        pago_aceptado = True
+    elif diff_pago == 0:
+        pago_aceptado = True
+
+    if pago_aceptado:  # indica que el pago es exacto
         for factura in facturas:
             body = {"token": os.getenv("TOKEN_MW"),
                        "idfactura": factura["id"],
@@ -90,7 +110,7 @@ def pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado):
                        "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
             api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
             cod_factura = cod_factura + 1
-    else:  # Indica que el pago esta por encima de la deuda
+    else:  # Indica que el pago esta por encima de la deuda (si esta por debajo lo valida buscar_facturas)
         diff_pago_dls = diff_pago / float(session["tasa_bcv"])
         ultima_factura = len(facturas) - 1
 
