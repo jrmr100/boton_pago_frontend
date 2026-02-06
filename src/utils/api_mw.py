@@ -52,7 +52,7 @@ def buscar_cliente(client_id, client_email):
 
 
 def buscar_facturas(id_cliente, monto_pagado):
-    monto_deuda = session["monto_bs"]
+    monto_deuda = float(session["monto_bs"])
     porcentaje_deuda = os.getenv("PORCENTAJE_DEUDA_MINIMA")
     if float(porcentaje_deuda) > 0 and float(porcentaje_deuda) < 100:
         factor_pago = round(1 - (float(porcentaje_deuda) / 100), 2)
@@ -62,7 +62,7 @@ def buscar_facturas(id_cliente, monto_pagado):
     session["deuda_minima"] = deuda_minima
 
     # Registro el log de la aprobacion del pago por debajo de la deuda
-    if monto_pagado < monto_deuda and monto_pagado >= deuda_minima:
+    if float(monto_pagado) < monto_deuda and monto_pagado >= deuda_minima:
         logger.warning(f"USER: {str(id_cliente)} TYPE: Pago realizado ({monto_pagado}) esta por debajo de la deuda ({monto_deuda})\n")
 
     # Valido la longitud del ID del cliente
