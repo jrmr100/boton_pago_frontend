@@ -65,21 +65,22 @@ def pagos():
         elif form.submit2.data:  # TDC
             fecha_hora = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
             order_number = f"{datos_cliente["cedula"]}_{fecha_hora}"
-            api_response = orden_pago_tdc(monto_bs, "VES", order_number, f"PAGO DEL SERVICIO DE {datos_cliente['nombre'].upper()}")
+            api_response = orden_pago_tdc(monto_bs, "VES", order_number,
+                                          f"PAGO DEL SERVICIO DE {datos_cliente['nombre'].upper()}")
             if api_response[0] == "success":
                 if api_response[1]["success"] == True:
                     logger.info(f"USER:{current_user.id}: Redireccionado al portal de TDC: {api_response[1]}")
+                    payment_request_id = api_response[1]["data"]["Id"]
                     url_orden_pago = api_response[1]["data"]["URL"]
                     return redirect(url_orden_pago)
                 else:
                     logger.error(f"USER:{current_user.id}: Error al crear la orden de pago: {api_response[1]}")
                     flash("Error al crear la orden de pago", "failure")
                     return redirect(url_for("pagos.pagos"))
-
             elif api_response[0] == "except":
-                return "except", api_response[1]
-            else:
-                return None
+                logger.error(f"USER:{current_user.id}: Error al crear la orden de pago: {api_response[1]}")
+                flash("Error al crear la orden de pago: EXCEPT", "failure")
+                return redirect(url_for("pagos.pagos"))
 
 
     if float(monto_bs) > 0:
