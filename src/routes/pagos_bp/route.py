@@ -1,7 +1,10 @@
 from flask import render_template, Blueprint, session, redirect, url_for, flash
+from datetime import datetime
 from src.utils.api_vippo import leer_tasa_bcv
 from src.routes.pagos_bp.templates.form_fields import FormFields
 from flask_login import login_required, current_user
+from src.utils.api_instapago import orden_pago_tdc
+from utils.logger import logger
 import src.config as config
 
 
@@ -56,9 +59,27 @@ def pagos():
     monto_bs = f"{montobs_long:.2f}"
 
     if form.validate_on_submit():
-        if form.submit1.data:  # Si se presiona el boton de submit1
+        if form.submit1.data:  # PagoMovil
             session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil_bancos.pagomovil_bancos'))
+        elif form.submit2.data:  # TDC
+            fecha_hora = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
+            order_number = f"{datos_cliente["cedula"]}_{fecha_hora}"
+            api_response = orden_pago_tdc(monto_bs, "VES", order_number, f"PAGO DEL SERVICIO DE {datos_cliente['nombre'].upper()}")
+            if api_response[0] == "success":
+                if api_response[1]["success"] == True:
+                    logger.info(f"USER:{current_user.id}: Redireccionado al portal de TDC: {api_response[1]}")
+                    url_orden_pago = api_response[1]["data"]["URL"]
+                    return redirect(url_orden_pago)
+                else:
+                    logger.error(f"USER:{current_user.id}: Error al crear la orden de pago: {api_response[1]}")
+                    flash("Error al crear la orden de pago", "failure")
+                    return redirect(url_for("pagos.pagos"))
+
+            elif api_response[0] == "except":
+                return "except", api_response[1]
+            else:
+                return None
 
 
     if float(monto_bs) > 0:
