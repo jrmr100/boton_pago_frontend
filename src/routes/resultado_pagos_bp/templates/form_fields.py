@@ -3,5 +3,5 @@ from wtforms import SubmitField
 
 
 class FormFields(FlaskForm):
-    submit1 = SubmitField('PAGO MOVIL')
-    submit2 = SubmitField('TARJETA DE CRÉDITO')
+    submit1 = SubmitField('ACEPTAR')
+    submit2 = SubmitField('CANCELAR')

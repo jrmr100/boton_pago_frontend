@@ -24,14 +24,13 @@ def resultado_pagos():
     form = FormFields()
     datos_cliente = current_user.datos_cliente
 
-    # 1. Capturar el ID que envía el portal de instapago
+    # 1. Capturar el payment_request_id que envía el portal de instapago
     payment_request_id = request.args.get('PaymentRequestId')
     if not payment_request_id:
         logger.warning(f"USER:{current_user.id}: Intento de acceso a resultado_pagos sin ID.")
         return redirect(url_for('pagos.pagos'))
 
-    """# 2. Consultar la API de I-Gateway para ver el estatus real (Paso 4 del manual)
-    # Esta función debe llamar a GET /api/payment/GetPayment?PaymentRequestId=...
+    """# 2. Consultar la API de instapago para validar el resultado del pago
     api_response = consultar_estado_pago(payment_request_id)
 
     status_final = "REJECTED"
@@ -63,4 +62,5 @@ def resultado_pagos():
     else:
         flash("El pago fue rechazado o falló. Intente nuevamente.", "failure")"""
 
-    return render_template("resultado_pagos.html", datos_cliente=datos_cliente, paymentid=payment_request_id)
+    return render_template("resultado_pagos.html", datos_cliente=datos_cliente,
+                           paymentid=payment_request_id, form=form)
