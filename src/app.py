@@ -43,6 +43,8 @@ from src.routes.pagomovil_bp.route_bancos import blue_ruta as pagomovil_bancos
 from src.routes.pagomovil_bp.route_bancoplaza import blue_ruta as pagomovil_bancoplaza
 from src.routes.pagomovil_bp.route_banesco import blue_ruta as pagomovil_banesco
 from src.routes.pagomovil_bp.route_generarqr import blue_ruta as pagomovil_generarqr
+from src.routes.resultado_pagos_bp.route import blue_ruta as resultado_pagos
+
 
 
 
@@ -55,6 +57,8 @@ app.register_blueprint(pagomovil_bancos)
 app.register_blueprint(pagomovil_bancoplaza)
 app.register_blueprint(pagomovil_banesco)
 app.register_blueprint(pagomovil_generarqr)
+app.register_blueprint(resultado_pagos)
+
 
 if __name__ == '__main__':
     context = ('src/cert.pem', 'src/key.pem')

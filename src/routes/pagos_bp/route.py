@@ -109,5 +109,6 @@ def pagos():
 # TODO: Revisar responsive en todo el proyecto
 # TODO: Resolver caso de abonar si el pago es por debajo del monto de la deuda
 # TODO: Colocar todos los montos en 0.00
+# TODO: Eliminar la tasa bcv global (se comporta mal en multihilos)
 
 

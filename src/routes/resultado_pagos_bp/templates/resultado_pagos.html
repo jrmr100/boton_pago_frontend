@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block head %}
+    <title>2NET - Resultados de Pagos </title>
+
+{% endblock %}
+
+<body>
+{% block body %}
+    {% include '_nav-bar.html' %}
+
+
+    <div class="container-fluid bg-secondary-subtle min-vh-100">
+        <div class="row">
+            <div class="col-1">
+            </div>
+
+            <div class="col-10">
+                <h3>RESULTADO PAGOS: {{paymentid}}</h3>
+            </div>
+
+            <div class="col-1">
+            </div>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+</body>
