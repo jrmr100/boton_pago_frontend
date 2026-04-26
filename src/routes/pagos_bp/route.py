@@ -65,7 +65,7 @@ def pagos():
             return redirect(url_for('pagomovil_bancos.pagomovil_bancos'))
         elif form.submit2.data:  # TDC
             fecha_hora = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
-            order_number = f"{datos_cliente["cedula"]}_{fecha_hora}"
+            order_number = f"{datos_cliente['cedula']}_{fecha_hora}"
             api_response = orden_pago_tdc(monto_bs, "VES", order_number,
                                           f"PAGO DEL SERVICIO DE {datos_cliente['nombre'].upper()}")
             if api_response[0] == "success":
