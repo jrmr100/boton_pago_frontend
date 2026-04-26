@@ -5,7 +5,7 @@ from src.routes.pagos_bp.templates.form_fields import FormFields
 from flask_login import login_required, current_user
 from src.utils.api_instapago import orden_pago_tdc
 from src.utils.database import pagos_db
-from utils.logger import logger
+from src.utils.logger import logger
 import src.config as config
 
 
