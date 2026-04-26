@@ -14,9 +14,6 @@ blue_ruta = Blueprint(
     static_url_path='/' + nombre_ruta
 )
 
-# Cargo la lista de bancos solo una vez cuando se acceda a la ruta pagomovil
-tasa_bcv = None
-
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET"])
 @login_required
@@ -29,6 +26,7 @@ def resultado_pagos():
     if not payment_request_id:
         logger.warning(f"USER:{current_user.id}: Intento de acceso a resultado_pagos sin ID.")
         return redirect(url_for('pagos.pagos'))
+    logger.info(f"USER:{current_user.id}: Se recibio payment_request_id: {payment_request_id}")
 
     """# 2. Consultar la API de instapago para validar el resultado del pago
     api_response = consultar_estado_pago(payment_request_id)
