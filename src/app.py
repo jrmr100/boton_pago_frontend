@@ -11,7 +11,13 @@ app_dir = os.path.join(os.path.dirname(__file__))
 load_dotenv(app_dir + "/.env")
 
 from src.utils.logger import logger
+from src.utils.database import init_database
+
 logger.info("Iniciando aplicacion app\n")
+
+# Inicializar la base de datos
+init_database()
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("FLASK_SECRET_KEY")
 app.config['ENV'] = '.venv'
