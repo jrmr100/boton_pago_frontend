@@ -2,7 +2,7 @@ from flask import render_template, Blueprint, session, redirect, url_for, flash,
 from datetime import datetime
 from src.routes.pagos_bp.templates.form_fields import FormFields
 from flask_login import login_required, current_user
-from utils.logger import logger
+from src.utils.logger import logger
 
 nombre_ruta = "resultado_pagos"
 
