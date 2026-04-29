@@ -1,8 +1,8 @@
 from flask import render_template, Blueprint, session, redirect, url_for, flash, request
-from datetime import datetime
 from src.routes.pagos_bp.templates.form_fields import FormFields
 from flask_login import login_required, current_user
 from src.utils.logger import logger
+from src.utils.api_instapago import validar_pago_tdc
 
 nombre_ruta = "resultado_pagos"
 
@@ -28,9 +28,70 @@ def resultado_pagos():
         return redirect(url_for('pagos.pagos'))
     logger.info(f"USER:{current_user.id}: Se recibio payment_request_id: {payment_request_id}")
 
-    """# 2. Consultar la API de instapago para validar el resultado del pago
-    api_response = consultar_estado_pago(payment_request_id)
+    # 2. Consultar la API de instapago para validar el resultado del pago
+    api_response = validar_pago_tdc(payment_request_id)
 
+    if api_response[0] == "success":
+        if api_response[1].get("success"):
+            data = api_response[1].get("data", {})
+            processed = data.get("paymentProcessed")
+            request_info = data.get("paymentRequest")
+
+            # Regla clave del manual: Si hay paymentProcessed, usar ese. Si no, usar paymentRequest.
+            if processed:
+                status_final = processed.get("processedStatus")  # APPROVED o REJECTED
+                detalles = processed
+            elif request_info:
+                status_final = request_info.get("requestStatus")  # INPROCESS o REJECTED
+                detalles = request_info
+
+            # 3. Actualizar tu base de datos local (Persistencia)
+            #from src.utils.database import actualizar_pago_db
+            #actualizar_pago_db(payment_request_id, status_final)
+
+            # 4. Lógica de respuesta al usuario
+            if status_final == "APPROVED":
+                flash("¡Pago procesado exitosamente!", "success")
+                return render_template("resultado_pagos.html", datos_cliente=datos_cliente,
+                                       paymentid=payment_request_id, form=form)
+                # Aquí podrías disparar lógica adicional: enviar correo, activar servicio, etc.
+            elif status_final == "INPROCESS":
+                flash("El pago aún está en proceso o fue abandonado.", "info")
+                return render_template("resultado_pagos.html", datos_cliente=datos_cliente,
+                                       paymentid=payment_request_id, form=form)
+            else:
+                flash("El pago fue rechazado o falló. Intente nuevamente.", "failure")
+                return render_template("resultado_pagos.html", datos_cliente=datos_cliente,
+                                       paymentid=payment_request_id, form=form)
+        elif api_response[0] == "except":
+            logger.error(f"USER:{current_user.id}: Error al validar el pago: {api_response[1]}")
+            flash("Error al validar el pago: EXCEPT", "failure")
+            return redirect(url_for("pagos.pagos"))
+
+
+
+
+
+
+        """
+
+        return render_template("resultado_pagos.html", datos_cliente=datos_cliente,
+                               paymentid=payment_request_id, form=form)
+
+        
+
+        return redirect(url_orden_pago)
+    else:
+        logger.error(f"USER:{current_user.id}: Error al crear la orden de pago: {api_response[1]}")
+        flash("Error al crear la orden de pago", "failure")
+        return redirect(url_for("pagos.pagos"))
+
+    elif api_response[0] == "except":
+    logger.error(f"USER:{current_user.id}: Error al crear la orden de pago: {api_response[1]}")
+    flash("Error al crear la orden de pago: EXCEPT", "failure")
+    return redirect(url_for("pagos.pagos"))
+
+    
     status_final = "REJECTED"
     detalles = {}
 
@@ -58,7 +119,9 @@ def resultado_pagos():
     elif status_final == "INPROCESS":
         flash("El pago aún está en proceso o fue abandonado.", "info")
     else:
-        flash("El pago fue rechazado o falló. Intente nuevamente.", "failure")"""
-
-    return render_template("resultado_pagos.html", datos_cliente=datos_cliente,
-                           paymentid=payment_request_id, form=form)
+        flash("El pago fue rechazado o falló. Intente nuevamente.", "failure")
+        
+        
+            return render_template("resultado_pagos.html", datos_cliente=datos_cliente,
+                                   paymentid=payment_request_id, form=form)
+"""
