@@ -79,7 +79,7 @@ def pagos():
                     if not db_result:
                         logger.error(f"USER:{current_user.id}: Error guardando en BD - Order: {order_number}")
                         flash("Error guardando datos del pago", "failure")
-                        # Continue anyway since payment was created
+                        # Continue anyway sinc  e payment was created
                     
                     return redirect(url_orden_pago)
                 else:

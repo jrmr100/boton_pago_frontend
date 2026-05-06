@@ -83,3 +83,23 @@ def validar_pago_tdc(payment_request_id):
         return "except", api_response[1]
     else:
         return None
+
+def validar_pago_tdc(paymentRequestid):
+    commerce_id = os.getenv("COMMERCE_ID")
+    tipo_contenido = "application/json"
+    endpoint = os.getenv("URL_VALIDAR_TDC_IP")
+
+    # Creo el header y el body para crear la orden de pago
+    headers = {"CommerceId":commerce_id, "Content-Type": tipo_contenido}
+
+    # Body produccion
+    body = {}
+    params = {"PaymentRequestId": paymentRequestid }
+
+    api_response = connect_api.conectar(headers, body, params, endpoint, "GET", current_user.id)
+    if api_response[0] == "success":
+            return "success", api_response[1]
+    elif api_response[0] == "except":
+        return "except", api_response[1]
+    else:
+        return None
