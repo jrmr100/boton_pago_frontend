@@ -39,10 +39,13 @@ def validar_pago(phonenumberclient, id_pagador, bank, reference, amount, fecha_p
 def orden_pago_tdc(amount, currency, order_number, concept):
     commerce_id = os.getenv("COMMERCE_ID")
     tipo_contenido = "application/json"
-    endpoint = os.getenv("URL_TDC_IP")
+
+    base = os.getenv("ENDPOINT_BASE_IP_TDC", "")
+    path = os.getenv("URL_TDC_IP", "")
+    endpoint = f"{base}{path}"
 
     # Creo el header y el body para crear la orden de pago
-    headers = {"CommerceId":commerce_id, "Content-Type": tipo_contenido}
+    headers = {"CommerceId": commerce_id, "Content-Type": tipo_contenido}
 
     # Body produccion
     body = {"amount": amount,
@@ -53,6 +56,27 @@ def orden_pago_tdc(amount, currency, order_number, concept):
     params = {}
 
     api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
+    if api_response[0] == "success":
+        return "success", api_response[1]
+    elif api_response[0] == "except":
+        return "except", api_response[1]
+    else:
+        return None
+
+def validar_pago_tdc(payment_request_id):
+    commerce_id = os.getenv("COMMERCE_ID")
+    tipo_contenido = "application/json"
+
+    base = os.getenv("ENDPOINT_BASE_IP_TDC", "")
+    path = os.getenv("URL_TDC_VALIDAR_PAGO", "")
+    endpoint = f"{base}{path}"
+
+    # Creo el header y el body para crear la orden de pago
+    headers = {"CommerceId":commerce_id, "Content-Type": tipo_contenido}
+    body = {}
+    params = {"PaymentRequestId": payment_request_id}
+
+    api_response = connect_api.conectar(headers, body, params, endpoint, "GET", current_user.id)
     if api_response[0] == "success":
             return "success", api_response[1]
     elif api_response[0] == "except":

@@ -3,6 +3,7 @@ from datetime import datetime
 from src.routes.pagos_bp.templates.form_fields import FormFields
 from flask_login import login_required, current_user
 from src.utils.logger import logger
+from src.utils.api_instapago import validar_pago_tdc
 
 nombre_ruta = "resultado_pagos"
 
@@ -24,18 +25,19 @@ def resultado_pagos():
     # 1. Capturar el payment_request_id que envía el portal de instapago
     payment_request_id = request.args.get('PaymentRequestId')
     if not payment_request_id:
-        logger.warning(f"USER:{current_user.id}: Intento de acceso a resultado_pagos sin ID.")
+        logger.error(f"USER:{current_user.id}: Intento de acceso a resultado_pagos sin ID.")
         return redirect(url_for('pagos.pagos'))
     logger.info(f"USER:{current_user.id}: Se recibio payment_request_id: {payment_request_id}")
 
-    """# 2. Consultar la API de instapago para validar el resultado del pago
-    api_response = consultar_estado_pago(payment_request_id)
+    # 2. Consultar la API de instapago para validar el resultado del pago
+    api_response = validar_pago_tdc(payment_request_id)
+
 
     status_final = "REJECTED"
     detalles = {}
 
-    if api_response.get("success"):
-        data = api_response.get("data", {})
+    if api_response[0] == "success":
+        data = api_response[1].get("data", {})
         processed = data.get("paymentProcessed")
         request_info = data.get("paymentRequest")
 
@@ -47,7 +49,7 @@ def resultado_pagos():
             status_final = request_info.get("requestStatus")  # INPROCESS o REJECTED
             detalles = request_info
 
-    # 3. Actualizar tu base de datos local (Persistencia)
+    """# 3. Actualizar tu base de datos local (Persistencia)
     from src.utils.database import actualizar_pago_db
     actualizar_pago_db(payment_request_id, status_final)
 
