@@ -78,12 +78,12 @@ def pagomovil_bancoplaza():
                 pago_validado = True
             else:
                 img_result = 'img/error.png'
-                return render_template('pagomovil_result.html', msg=resultado_val[1]["result"]["label"],
+                return render_template('resultado_pago.html', msg=resultado_val[1]["result"]["label"],
                                        img_entity=img_entity,
                                        id_customer=id_pagador,
                                        phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
                                        entity=form_reportes.entity.data[6:], order=order, monto_bs=montobs,
-                                       img_result=img_result, datos_cliente=datos_cliente)
+                                       img_result=img_result, datos_cliente=datos_cliente, medio_pago="pagomovil")
         else:
             return render_template("error_general.html", msg="Error validando el pago, intente mas tarde",
                                    error=resultado_val[1], type="500")
@@ -103,12 +103,12 @@ def pagomovil_bancoplaza():
                                            error=str(resultado_val[1]), type="500")
             elif result_buscarfacturas[0] == "error":
                 img_result = 'img/error.png'
-                return render_template('pagomovil_result.html', msg=result_buscarfacturas[1],
+                return render_template('resultado_pago.html', msg=result_buscarfacturas[1],
                                        img_entity=img_entity,
                                        id_customer=id_pagador,
                                        phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
                                        entity=form_reportes.entity.data[6:], order=order, monto_bs=montobs,
-                                       img_result=img_result, datos_cliente=datos_cliente)
+                                       img_result=img_result, datos_cliente=datos_cliente, medio_pago="pagomovil")
             else:
                 return render_template("error_general.html",
                                        msg="Error buscando facturas del cliente, intente mas tarde",
@@ -125,20 +125,20 @@ def pagomovil_bancoplaza():
                 if pago_facturas[0] == "success":
                     if pago_facturas[1]["estado"] == "exito":
                         img_result = 'img/exito.png'
-                        return render_template('pagomovil_result.html', msg="Pago realizado con éxito",
+                        return render_template('resultado_pago.html', msg="Pago realizado con éxito",
                                                img_entity=img_entity,
                                                id_customer=id_pagador,
                                                phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
                                                entity=form_reportes.entity.data[6:], order=order, monto_bs=0,
-                                               img_result=img_result, datos_cliente=datos_cliente)
+                                               img_result=img_result, datos_cliente=datos_cliente, medio_pago="pagomovil")
                     else:
                         img_result = 'img/error.png'
-                        return render_template('pagomovil_result.html', msg="Error pagando factura",
+                        return render_template('resultado_pago.html', msg="Error pagando factura",
                                                img_entity=img_entity,
                                                id_customer=id_pagador,
                                                phone_payer=form_reportes.tipo_phone.data + form_reportes.payerPhone.data,
                                                entity=form_reportes.entity.data[6:], order=order, monto_bs=montobs,
-                                               img_result=img_result, datos_cliente=datos_cliente)
+                                               img_result=img_result, datos_cliente=datos_cliente, medio_pago="pagomovil")
                 else:
                     return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
                                            error=pago_facturas[1], type="500")

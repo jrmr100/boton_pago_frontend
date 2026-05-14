@@ -3,6 +3,7 @@ from src.routes.pagos_bp.templates.form_fields import FormFields
 from flask_login import login_required, current_user
 from src.utils.logger import logger
 from src.utils.api_instapago import validar_pago_tdc
+from src.utils.api_mw import buscar_facturas, pagar_facturas
 
 nombre_ruta = "resultado_pagos"
 
@@ -24,7 +25,7 @@ def resultado_pagos():
     # 1. Capturar el payment_request_id que envía el portal de instapago
     payment_request_id = request.args.get('PaymentRequestId')
     if not payment_request_id:
-        logger.warning(f"USER:{current_user.id}: Intento de acceso a resultado_pagos sin ID.")
+        logger.warning(f"USER:{current_user.id}: Intento de acceso a resultado_pagos sin PaymentRequestId.")
         return redirect(url_for('pagos.pagos'))
     logger.info(f"USER:{current_user.id}: Se recibio payment_request_id: {payment_request_id}")
 
@@ -50,15 +51,86 @@ def resultado_pagos():
     """# 3. Actualizar tu base de datos local (Persistencia)
     from src.utils.database import actualizar_pago_db
     actualizar_pago_db(payment_request_id, status_final)
+    """
 
     # 4. Lógica de respuesta al usuario
     if status_final == "APPROVED":
-        flash("¡Pago procesado exitosamente!", "success")
-        # Aquí podrías disparar lógica adicional: enviar correo, activar servicio, etc.
-    elif status_final == "INPROCESS":
-        flash("El pago aún está en proceso o fue abandonado.", "info")
-    else:
-        flash("El pago fue rechazado o falló. Intente nuevamente.", "failure")"""
+        logger.info(f"USER:{current_user.id}: Pago {payment_request_id} en estado APPROVED")
 
-    return render_template("resultado_pagos.html", datos_cliente=datos_cliente,
-                           paymentid=payment_request_id, form=form)
+        # BUSCO LAS FACTURAS EN MW SI SE APRUEBA EL PAGO
+        monto_pagado = detalles.get("amount")
+        result_buscarfacturas = buscar_facturas(datos_cliente["id"], monto_pagado)
+
+        if result_buscarfacturas[0] == "success":
+            if result_buscarfacturas[1]["estado"] == "exito":
+                facturas_ubicadas = "True"
+                logger.info(f"USER:{current_user.id}: Facturas {datos_cliente['id']} ubicadas exitosamente")
+            else:
+                logger.error(f"USER:{current_user.id}: Error buscando facturas del cliente: {result_buscarfacturas[1]}")
+                return render_template("error_general.html",
+                                       msg="Error buscando facturas del cliente, intente mas tarde",
+                                       error=str(result_buscarfacturas[1]), type="500")
+        elif result_buscarfacturas[0] == "error":
+            logger.error(f"USER:{current_user.id}: Error buscando facturas del cliente: {result_buscarfacturas[1]}")
+            img_result = 'img/error.png'
+            img_entity = 'img/credit-card.png'
+            order = session["order_number"]
+            return render_template('resultado_pago.html', msg="ESTADO DEL PAGO: ERROR",
+                                   img_entity=img_entity, order=order, monto_bs=datos_cliente["total_facturas"],
+                                   img_result=img_result, datos_cliente=datos_cliente, medio_pago="TDC")
+
+        else:
+            logger.error(f"USER:{current_user.id}: Error buscando facturas del cliente: {result_buscarfacturas[1]}")
+            return render_template("error_general.html",
+                                   msg="Error buscando facturas del cliente, intente mas tarde",
+                                   error=result_buscarfacturas[1], type="500")
+        # PAGO LAS FACTURAS PENDIENTES
+        if facturas_ubicadas:
+            logger.info(f"USER:{current_user.id}: Facturas {datos_cliente['id']} ubicadas exitosamente")
+            facturas = result_buscarfacturas[1]["facturas"]
+            medio_pago = "tdc_instapago"
+            codigo_auth = detalles.get("approvalNumber")
+
+            pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado)
+
+            if pago_facturas[0] == "success":
+                if pago_facturas[1]["estado"] == "exito":
+                    logger.info(f"USER:{current_user.id}: Facturas {datos_cliente['id']} pagadas exitosamente")
+                    img_result = 'img/exito.png'
+                    img_entity = 'img/credit-card.png'
+                    order = session["order_number"]
+                    return render_template('resultado_pago.html', msg="ESTADO DEL PAGO: EXITOSO",
+                                           img_entity=img_entity, order=order, monto_bs=datos_cliente["total_facturas"],
+                                           img_result=img_result, datos_cliente=datos_cliente, medio_pago="TDC")
+                else:
+                    logger.error(f"USER:{current_user.id}: Error pagando facturas: {pago_facturas[1]}")
+                    img_result = 'img/error.png'
+                    return render_template("error_general.html",
+                                           msg="Error buscando facturas del cliente, intente mas tarde",
+                                           error=str(result_buscarfacturas[1]), type="500")
+            else:
+                logger.error(f"USER:{current_user.id}: Error pagando facturas: {pago_facturas[1]}")
+                return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
+                                       error=pago_facturas[1], type="500")
+        else:
+            logger.error(f"USER:{current_user.id}: Error pagando facturas: Facturas ubicadas is not true")
+            return render_template("error_general.html", msg="Error pagando facturas, intente mas tarde",
+                                   error="Facturas ubicadas is not true", type="500")
+
+    elif status_final == "INPROCESS":
+        logger.info(f"USER:{current_user.id}: Pago {payment_request_id} en estado INPROCESS")
+        img_result = 'img/informacion.jpg'
+        img_entity = 'img/credit-card.png'
+        order = session["order_number"]
+        return render_template('resultado_pago.html', msg="ESTADO DEL PAGO: EN PROCESO",
+                               img_entity=img_entity, order=order, monto_bs=datos_cliente["total_facturas"],
+                               img_result=img_result, datos_cliente=datos_cliente, medio_pago="TDC")
+
+    else:
+        logger.info(f"USER:{current_user.id}: Pago {payment_request_id} en estado ERROR")
+        img_result = 'img/error.png'
+        img_entity = 'img/credit-card.png'
+        order = session["order_number"]
+        return render_template('resultado_pago.html', msg="ESTADO DEL PAGO: ERROR",
+                               img_entity=img_entity, order=order, monto_bs=datos_cliente["total_facturas"],
+                               img_result=img_result, datos_cliente=datos_cliente, medio_pago="TDC")

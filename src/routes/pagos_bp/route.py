@@ -4,7 +4,7 @@ from src.utils.api_vippo import leer_tasa_bcv
 from src.routes.pagos_bp.templates.form_fields import FormFields
 from flask_login import login_required, current_user
 from src.utils.api_instapago import orden_pago_tdc
-from src.utils.database import pagos_db
+from src.utils.database import registrar_pago
 from src.utils.logger import logger
 import src.config as config
 
@@ -75,11 +75,12 @@ def pagos():
                     url_orden_pago = api_response[1]["data"]["URL"]
                     
                     # Guardar datos del pago en la base de datos
-                    db_result = pagos_db(url_orden_pago, payment_request_id, fecha_hora, order_number, monto_bs)
+                    db_result = registrar_pago(url_orden_pago, payment_request_id, fecha_hora, order_number, monto_bs)
                     if not db_result:
                         logger.error(f"USER:{current_user.id}: Error guardando en BD - Order: {order_number}")
                         flash("Error guardando datos del pago", "failure")
-                        # Continue anyway sinc  e payment was created
+                        # Continue anyway since payment was created
+                    session["order_number"] = order_number
                     
                     return redirect(url_orden_pago)
                 else:
