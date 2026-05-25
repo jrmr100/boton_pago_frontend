@@ -66,6 +66,8 @@ def pagos():
         elif form.submit2.data:  # TDC
             fecha_hora = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
             order_number = f"{datos_cliente['cedula']}_{fecha_hora}"
+
+            # PASO 1 - Generar orden de pago
             api_response = orden_pago_tdc(monto_bs, "VES", order_number,
                                           f"PAGO DEL SERVICIO DE {datos_cliente['nombre'].upper()}")
             if api_response[0] == "success":
@@ -81,7 +83,8 @@ def pagos():
                         flash("Error guardando datos del pago", "failure")
                         # Continue anyway since payment was created
                     session["order_number"] = order_number
-                    
+
+                    # PASO 2 - Redireccionar al portal de TDC
                     return redirect(url_orden_pago)
                 else:
                     logger.error(f"USER:{current_user.id}: Error al crear la orden de pago: {api_response[1]}")

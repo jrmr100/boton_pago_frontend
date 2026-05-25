@@ -73,6 +73,8 @@ def init_database():
             columns = [info[1] for info in cursor.execute("PRAGMA table_info(pagos_tdc)")]
             if "monto_bs" not in columns:
                 cursor.execute("ALTER TABLE pagos_tdc ADD COLUMN monto_bs REAL")
+            if "status" not in columns:
+                cursor.execute("ALTER TABLE pagos_tdc ADD COLUMN status TEXT")
 
             conn.commit()
             logger.info("Base de datos verificada/inicializada")
@@ -97,4 +99,25 @@ def registrar_pago(url_orden_pago, payment_id, fecha_transaccion, order_number, 
             return True
     except Exception as e:
         logger.error(f"Fallo al registrar pago {order_number}: {e}")
+        return False
+
+
+def actualizar_pago_db(payment_request_id, status):
+    """
+    Actualiza el estado de un pago en la base de datos.
+    """
+    sql = 'UPDATE pagos_tdc SET status = ? WHERE payment_request_id = ?'
+    try:
+        with get_db() as conn:
+            cursor = conn.cursor()
+            cursor.execute(sql, (status, payment_request_id))
+            conn.commit()
+            if cursor.rowcount > 0:
+                logger.info(f"Éxito: Pago {payment_request_id} actualizado a status {status}.")
+                return True
+            else:
+                logger.warning(f"Advertencia: No se encontró pago {payment_request_id} para actualizar.")
+                return False
+    except Exception as e:
+        logger.error(f"Fallo al actualizar pago {payment_request_id}: {e}")
         return False

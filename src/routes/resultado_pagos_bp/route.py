@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from src.utils.logger import logger
 from src.utils.api_instapago import validar_pago_tdc
 from src.utils.api_mw import buscar_facturas, pagar_facturas
+from src.utils.database import actualizar_pago_db
 
 nombre_ruta = "resultado_pagos"
 
@@ -19,17 +20,18 @@ blue_ruta = Blueprint(
 @blue_ruta.route('/' + nombre_ruta, methods=["GET"])
 @login_required
 def resultado_pagos():
+    # PASO 3 - Retorno al comercio
     form = FormFields()
     datos_cliente = current_user.datos_cliente
 
-    # 1. Capturar el payment_request_id que envía el portal de instapago
+    # Capturar el payment_request_id que envía el portal de instapago
     payment_request_id = request.args.get('PaymentRequestId')
     if not payment_request_id:
         logger.warning(f"USER:{current_user.id}: Intento de acceso a resultado_pagos sin PaymentRequestId.")
         return redirect(url_for('pagos.pagos'))
     logger.info(f"USER:{current_user.id}: Se recibio payment_request_id: {payment_request_id}")
 
-    # 2. Consultar la API de instapago para validar el resultado del pago
+    # PASO 4 - Consultat el estado del pago
     api_response = validar_pago_tdc(payment_request_id)
 
     status_final = "REJECTED"
@@ -37,22 +39,22 @@ def resultado_pagos():
 
     if api_response[0] == "success":
         data = api_response[1].get("data", {})
-        processed = data.get("paymentProcessed")
+        payment_processed = data.get("paymentProcessed")
         request_info = data.get("paymentRequest")
 
         # Regla clave del manual: Si hay paymentProcessed, usar ese. Si no, usar paymentRequest.
-        if processed:
-            status_final = processed.get("processedStatus")  # APPROVED o REJECTED
-            detalles = processed
-        elif request_info:
+        if payment_processed:
+            status_final = payment_processed.get("processedStatus")  # APPROVED o REJECTED
+            detalles = payment_processed
+        else:
             status_final = request_info.get("requestStatus")  # INPROCESS o REJECTED
             detalles = request_info
 
-    """# 3. Actualizar tu base de datos local (Persistencia)
+    # 3. Actualizar tu base de datos local (Persistencia)
     from src.utils.database import actualizar_pago_db
     actualizar_pago_db(payment_request_id, status_final)
-    """
 
+    status_final = "APPROVED"
     # 4. Lógica de respuesta al usuario
     if status_final == "APPROVED":
         logger.info(f"USER:{current_user.id}: Pago {payment_request_id} en estado APPROVED")
@@ -127,10 +129,20 @@ def resultado_pagos():
                                img_result=img_result, datos_cliente=datos_cliente, medio_pago="TDC")
 
     else:
-        logger.info(f"USER:{current_user.id}: Pago {payment_request_id} en estado ERROR")
+        logger.info(f"USER:{current_user.id}: Pago {payment_request_id} en estado RECHAZADO")
         img_result = 'img/error.png'
         img_entity = 'img/credit-card.png'
         order = session["order_number"]
-        return render_template('resultado_pago.html', msg="ESTADO DEL PAGO: ERROR",
-                               img_entity=img_entity, order=order, monto_bs=datos_cliente["total_facturas"],
-                               img_result=img_result, datos_cliente=datos_cliente, medio_pago="TDC")
+        actualizar_pago = actualizar_pago_db(payment_request_id, status_final)
+        if actualizar_pago is True:
+            logger.error(
+                f"USER:{current_user.id}: Pago actualizado en BD: {payment_request_id} con status {status_final}")
+            return render_template('resultado_pago.html', msg="ESTADO DEL PAGO: RECHAZADO",
+                                   img_entity=img_entity, order=order, monto_bs=datos_cliente["total_facturas"],
+                                   img_result=img_result, datos_cliente=datos_cliente, medio_pago="TDC")
+        else:
+            logger.error(
+                f"USER:{current_user.id}: Error al actualizar el pago en BD {payment_request_id} con status {status_final}")
+            return render_template('resultado_pago.html', msg="ESTADO DEL PAGO: RECHAZADO",
+                                   img_entity=img_entity, order=order, monto_bs=datos_cliente["total_facturas"],
+                                   img_result=img_result, datos_cliente=datos_cliente, medio_pago="TDC")
