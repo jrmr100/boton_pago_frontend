@@ -1,5 +1,6 @@
+from dbm import error
 
-from flask import session
+from flask import session, render_template
 from src.routes.home_bp.templates.form_fields import User
 import os
 import src.utils.connect_api as connect_api
@@ -52,38 +53,42 @@ def buscar_cliente(client_id, client_email):
 
 
 def buscar_facturas(id_cliente, monto_pagado):
-    monto_deuda = float(session["monto_bs"])
-    porcentaje_deuda = os.getenv("PORCENTAJE_DEUDA_MINIMA")
-    if float(porcentaje_deuda) > 0 and float(porcentaje_deuda) < 100:
-        factor_pago = round(1 - (float(porcentaje_deuda) / 100), 2)
-        deuda_minima = round(float(monto_deuda) * factor_pago, 2)  # Deuda con el porcentaje tolerable por debajo
-    else:
-        deuda_minima = monto_deuda
-    session["deuda_minima"] = deuda_minima
+    try:
+        monto_deuda = float(session["monto_bs"])
+        porcentaje_deuda = os.getenv("PORCENTAJE_DEUDA_MINIMA")
+        if float(porcentaje_deuda) > 0 and float(porcentaje_deuda) < 100:
+            factor_pago = round(1 - (float(porcentaje_deuda) / 100), 2)
+            deuda_minima = round(float(monto_deuda) * factor_pago, 2)  # Deuda con el porcentaje tolerable por debajo
+        else:
+            deuda_minima = monto_deuda
+        session["deuda_minima"] = deuda_minima
 
-    # Registro el log de la aprobacion del pago por debajo de la deuda
-    if float(monto_pagado) < monto_deuda and monto_pagado >= deuda_minima:
-        logger.warning(f"USER: {str(id_cliente)} TYPE: Pago realizado ({monto_pagado}) esta por debajo de la deuda ({monto_deuda})\n")
+        # Registro el log de la aprobacion del pago por debajo de la deuda
+        if float(monto_pagado) < monto_deuda and monto_pagado >= deuda_minima:
+            logger.warning(f"USER: {str(id_cliente)} TYPE: Pago realizado ({monto_pagado}) esta por debajo de la deuda ({monto_deuda})\n")
 
-    # Valido la longitud del ID del cliente
-    if len(id_cliente) < 1 or len(id_cliente) > 7:
-        logger.error("USER: " + str(id_cliente) + " TYPE: idcliente no valido" + "\n")
-        return "error", "id-cliente no valido"
+        # Valido la longitud del ID del cliente
+        if len(str(id_cliente)) < 1 or len(str(id_cliente)) > 7:
+            logger.error("USER: " + str(id_cliente) + " TYPE: idcliente no valido" + "\n")
+            return "error", "id-cliente no valido"
 
-    # Valido si el monto pagado es inferior a la deuda minima
-    elif float(monto_pagado) < float(deuda_minima):
-        msg = (f"Monto pagado (Bs.{monto_pagado}) esta por debajo de la deuda (Bs.{monto_deuda})"
-               f" debe contactarnos por WhatsApp al numero {config.contacto_WhatsApp}")
-        logger.error(f"USER: {str(id_cliente)} - TYPE: {msg}")
-        return "error", msg
-    else:
-        # Obtengo los codigos de las facturas pendientes por el cliente
-        headers = {}
-        params = {}
-        body = {"token": os.getenv("TOKEN_MW"), "idcliente": id_cliente, "estado": "1"}
-        endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_BUSCAR_FACTURAS")
-        api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
-        return api_response
+        # Valido si el monto pagado es inferior a la deuda minima
+        elif float(monto_pagado) < float(deuda_minima):
+            msg = (f"Monto pagado (Bs.{monto_pagado}) esta por debajo de la deuda (Bs.{monto_deuda})"
+                   f" debe contactarnos por WhatsApp al numero {config.contacto_WhatsApp}")
+            logger.error(f"USER: {str(id_cliente)} - TYPE: {msg}")
+            return "error", msg
+        else:
+            # Obtengo los codigos de las facturas pendientes por el cliente
+            headers = {}
+            params = {}
+            body = {"token": os.getenv("TOKEN_MW"), "idcliente": id_cliente, "estado": "1"}
+            endpoint = os.getenv("ENDPOINT_BASE") + os.getenv("ENDPOINT_BUSCAR_FACTURAS")
+            api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
+            return "success",api_response
+    except Exception as e:
+        logger.error(f"USER:{current_user.id}: Except buscando facturas del cliente: {str(e)}")
+        return "except", str(e)
 
 def pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado):
     cod_factura = 1
@@ -134,4 +139,38 @@ def pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado):
                 api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
                 cod_factura = cod_factura + 1
     return api_response
+
+
+def procesar_pagos(id_cliente, monto_pagado, medio_pago, codigo_auth):
+    ############## PASO1: BUSCO FACTURAS ######################
+    result_buscarfacturas = buscar_facturas(id_cliente, monto_pagado)
+    if result_buscarfacturas[0] == "success":
+        if result_buscarfacturas[1][1]["estado"] == "exito":
+            logger.info(f"USER:{current_user.id}: Facturas {id_cliente} ubicadas exitosamente")
+
+            #############3 PAGO LAS FACTURAS PENDIENTES################
+            facturas = result_buscarfacturas[1][1]["facturas"]
+            pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado)
+
+            if pago_facturas[0] == "success":
+                if pago_facturas[1]["estado"] == "exito":
+                    return "success", pago_facturas[1]
+                else:
+                    logger.error(f"USER:{current_user.id}: Error pagando facturas: {pago_facturas[1]}")
+                    img_result = 'img/error.png'
+                    return "error", pago_facturas[1]
+            else:
+                logger.error(f"USER:{current_user.id}: Error pagando facturas: {pago_facturas[1]}")
+                return "error", pago_facturas[1]
+        else:
+            logger.error(
+                f"USER:{current_user.id}: Error buscando facturas del cliente: {result_buscarfacturas[1]}")
+            return "error", result_buscarfacturas[1]
+    elif result_buscarfacturas[0] == "error":
+        logger.error(f"USER:{current_user.id}: Error buscando facturas del cliente: {result_buscarfacturas[1]}")
+        return "error", result_buscarfacturas[1]
+
+    else:
+        logger.error(f"USER:{current_user.id}: Except buscando facturas del cliente: {result_buscarfacturas[1]}")
+        return "error", result_buscarfacturas[1]
 

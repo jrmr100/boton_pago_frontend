@@ -58,10 +58,10 @@ def pagos():
     monto_dls = float(datos_cliente["total_facturas"])
     montobs_long = float(monto_dls) * float(tasa_bcv)
     monto_bs = f"{montobs_long:.2f}"
+    session["monto_bs"] = monto_bs
 
     if form.validate_on_submit():
         if form.submit1.data:  # PagoMovil
-            session["monto_bs"] = monto_bs
             return redirect(url_for('pagomovil_bancos.pagomovil_bancos'))
         elif form.submit2.data:  # TDC
             fecha_hora = datetime.now().strftime("%Y%m%d_%H%M%S_%f")[:-3]
@@ -73,15 +73,7 @@ def pagos():
             if api_response[0] == "success":
                 if api_response[1]["success"] == True:
                     logger.info(f"USER:{current_user.id}: Redireccionado al portal de TDC: {api_response[1]}")
-                    payment_request_id = api_response[1]["data"]["Id"]
                     url_orden_pago = api_response[1]["data"]["URL"]
-                    
-                    # Guardar datos del pago en la base de datos
-                    db_result = registrar_pago(url_orden_pago, payment_request_id, fecha_hora, order_number, monto_bs)
-                    if not db_result:
-                        logger.error(f"USER:{current_user.id}: Error guardando en BD - Order: {order_number}")
-                        flash("Error guardando datos del pago", "failure")
-                        # Continue anyway since payment was created
                     session["order_number"] = order_number
 
                     # PASO 2 - Redireccionar al portal de TDC
@@ -92,7 +84,7 @@ def pagos():
                     return redirect(url_for("pagos.pagos"))
             elif api_response[0] == "except":
                 logger.error(f"USER:{current_user.id}: Error al crear la orden de pago: {api_response[1]}")
-                flash("Error al crear la orden de pago: EXCEPT", "failure")
+                flash("Error al crear la orden de pago en TDC: EXCEPT", "failure")
                 return redirect(url_for("pagos.pagos"))
 
 
