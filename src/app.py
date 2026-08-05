@@ -51,5 +51,6 @@ app.register_blueprint(pagomovil_banesco)
 app.register_blueprint(pagomovil_generarqr)
 
 if __name__ == '__main__':
-    context = ('src/cert.pem', 'src/key.pem')
-    app.run(debug=True, host='0.0.0.0', port=8000, ssl_context=context)
+    #context = ('src/cert.pem', 'src/key.pem')
+    #app.run(debug=True, host='0.0.0.0', port=8000, ssl_context=context)
+    app.run(debug=True, host='0.0.0.0', port=8000)
