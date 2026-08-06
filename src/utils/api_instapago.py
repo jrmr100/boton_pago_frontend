@@ -3,13 +3,12 @@ import src.utils.connect_api as connect_api
 from flask_login import current_user
 
 
-def validar_pago(phonenumberclient, id_pagador, bank, reference, amount, fecha_pago):
+def validar_pago(phonenumberclient, id_pagador, bank, reference, amount, fecha_pago, receiptbank):
     date = fecha_pago.strftime('%Y-%m-%d')
     endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_VALIDATEPM_IP")
     #endpoint = os.getenv("ENDPOINT_BASE_IP") + os.getenv("URL_CONSULTAPM_IP")
     keyId = os.getenv("KEYID_IP")
     publickeyid = os.getenv("PUBLICKEYID_IP")
-    receiptbank = os.getenv("RECEIPTBANK_IP")
 
 
     # Creo el header y el body para validar el pago movil

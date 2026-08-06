@@ -31,8 +31,12 @@ def pagomovil_bancos():
         elif form_bancos.submit_banesco.data:
             return redirect(url_for('pagomovil_banesco.pagomovil_banesco'))
 
+        elif form_bancos.submit_mercantil.data:
+            return redirect(url_for('pagomovil_mercantil.pagomovil_mercantil'))
+
     else:
             return render_template('pagomovil_bancos.html', form=form_bancos, datos_cliente=datos_cliente,
                                pm_bancoplaza=config.pm_bancoplaza,
                                pm_banesco=config.pm_banesco,
+                               pm_mercantil=config.pm_mercantil,
                                montobs=montobs, qr_image=qr_image)

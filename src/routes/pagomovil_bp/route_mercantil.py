@@ -8,7 +8,7 @@ from src.utils.api_mw import buscar_facturas, pagar_facturas
 import os
 
 
-nombre_ruta = "pagomovil_banesco"
+nombre_ruta = "pagomovil_mercantil"
 
 # Defino el Blueprint
 blue_ruta = Blueprint(
@@ -47,7 +47,7 @@ def add_header(response):
 
 @blue_ruta.route('/' + nombre_ruta, methods=["GET", "POST"])
 @login_required
-def pagomovil_banesco():
+def pagomovil_mercantil():
     form_reportes = FormFieldsReportes()
     datos_cliente = current_user.datos_cliente
     montobs = session["monto_bs"]
@@ -67,7 +67,7 @@ def pagomovil_banesco():
         # amount = session["monto_bs"]
         amount = f"{form_reportes.monto.data:.2f}"
         datos_cliente = current_user.datos_cliente
-        img_entity = config.pm_banesco[3]
+        img_entity = config.pm_mercantil[3]
         id_cliente = str(datos_cliente["id"])
         id_pagador = str(form_reportes.tipo_id.data) + str(form_reportes.payerID.data)
         fecha_pago = form_reportes.fecha_pago.data
@@ -75,7 +75,7 @@ def pagomovil_banesco():
 
         # VALIDO EL PAGO EN INSTAPAGO
         resultado_val = validar_pago(phonenumberclient, id_pagador, bank, reference, amount, fecha_pago,
-                                     os.getenv("RECEIPTBANK_IP"))
+                                     os.getenv("RECEIPTBANK_MERCANTIL_IP"))
 
         if resultado_val[0] == "success":
             if resultado_val[1]["message"] == "Se ha encontrado un pago, exitosamente":
@@ -126,7 +126,7 @@ def pagomovil_banesco():
             # PAGO LAS FACTURAS PENDIENTES
             if facturas_ubicadas:
                 facturas = result_buscarfacturas[1]["facturas"]
-                medio_pago = "pm_instapago_banesco"
+                medio_pago = "pm_instapago_mercantil"
                 codigo_auth = form_reportes.order.data
 
                 pago_facturas = pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado)
@@ -161,4 +161,4 @@ def pagomovil_banesco():
 
     else:
         return render_template('pagomovil_reportes.html', form=form_reportes, datos_cliente=datos_cliente,
-                           pm_pagomovil=config.pm_banesco, montobs=montobs)
+                           pm_pagomovil=config.pm_mercantil, montobs=montobs)

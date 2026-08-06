@@ -14,4 +14,7 @@ pm_bancoplaza = ("04241686275", "BANCO PLAZA", "J303390684", "img/logo_bancoplaz
 pm_banesco = ("04143025855", "BANESCO", "J303390684", "img/logo_banesco.png", False)
 #pm_banesco = ("", "TEMPORALMENTE FUERA DE SERVICIO", "", "img/logo_banesco.png", True)
 
+pm_mercantil = ("04166206963", "MERCANTIL", "J303390684", "img/logo_mercantil.png", False)
+#pm_mercantil = ("", "TEMPORALMENTE FUERA DE SERVICIO", "", "img/logo_mercantil.png", True)
+
 contacto_WhatsApp = "04241686275"
