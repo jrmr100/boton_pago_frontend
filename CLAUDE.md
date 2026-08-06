@@ -50,8 +50,8 @@ lists in the other:
 
 - **`src/config.py`** — static, non-secret Python constants: `lista_id` (CI/RIF prefixes),
   `lista_phone` (mobile operator prefixes), `correos_tasa_bcv` (alert email recipients),
-  `pm_bancoplaza` / `pm_banesco` (receiving-account tuples: phone, bank name, RIF, logo, disabled
-  flag — set the last element `True` to take a bank offline), `contacto_WhatsApp`.
+  `pm_bancoplaza` / `pm_banesco` / `pm_mercantil` (receiving-account tuples: phone, bank name, RIF,
+  logo, disabled flag — set the last element `True` to take a bank offline), `contacto_WhatsApp`.
 - **`src/.env`** (loaded once, early, in `src/app.py` before any `src.*` submodules are imported) —
   all secrets and environment-specific values: `FLASK_SECRET_KEY`, `PATH_BASE`, Mikrowisp
   (`TOKEN_MW`, `ENDPOINT_*`), Vippo (`APIKEY_VIPPO`, `ACCOUNT_VIPPO`, `ENDPOINT_BASE_VIPPO`, ...),
@@ -82,20 +82,28 @@ state threaded via `flask.session`:
    `RETIRADO` or has no debt. On submit, stores `monto_bs` in the session and redirects to bank
    selection.
 3. **`pagomovil_bp/route_bancos.py`** (`/pagomovil_bancos`) — picks which Pago Móvil receiving bank
-   (Banco Plaza vs Banesco), driven by `config.pm_bancoplaza` / `config.pm_banesco`.
-4. **`pagomovil_bp/route_bancoplaza.py`** and **`route_banesco.py`** — each collects the payer's
-   Pago Móvil transfer details (payer ID, phone, issuing bank, reference, amount, date) and:
-   - validates the transfer against the respective gateway (`api_vippo.validar_pago` for Banco
-     Plaza, `api_instapago.validar_pago` for Banesco — different request/response shapes per
-     gateway, handled with near-duplicate but not shared logic in each route file),
+   (Mercantil, Banesco, or Banco Plaza — displayed in that order), driven by `config.pm_mercantil` /
+   `config.pm_banesco` / `config.pm_bancoplaza` and one `SubmitField` per bank in
+   `form_fields_bancos.py`.
+4. **`pagomovil_bp/route_bancoplaza.py`**, **`route_banesco.py`**, **`route_mercantil.py`** — one
+   near-identical route module per receiving bank; each collects the payer's Pago Móvil transfer
+   details (payer ID, phone, issuing bank, reference, amount, date) via the shared
+   `templates/form_fields_reportes.py` / `pagomovil_reportes.html`, then:
+   - validates the transfer against the bank's gateway — Banco Plaza uses `api_vippo.validar_pago`;
+     Banesco and Mercantil share `api_instapago.validar_pago`, which takes the merchant's own
+     receiving-bank code as a `receiptbank` argument (`RECEIPTBANK_IP` for Banesco,
+     `RECEIPTBANK_MERCANTIL_IP` for Mercantil) since both go through the same Instapago account,
    - on success, looks up unpaid invoices via `api_mw.buscar_facturas`,
    - pays them via `api_mw.pagar_facturas`, distributing any overpayment onto the last invoice and
-     tagging each MW payment with `idtransaccion = "<order>-<yyyymmddhhmmss>-<n>"` and
-     `pasarela = "API-pm_vippo"` / `"API-pm_instapago"`.
-   - Both route files duplicate this validate→search→pay sequence; when fixing a bug in one, check
-     whether the same bug exists in the other.
+     tagging each MW payment with `idtransaccion = "<order>-<yyyymmddhhmmss>-<n>"` and a
+     bank-specific `pasarela`: `"API-pm_vippo"` (Banco Plaza), `"API-pm_instapago_banesco"`,
+     `"API-pm_instapago_mercantil"`.
+   - These three route files duplicate the validate→search→pay sequence; when fixing a bug in one,
+     check whether the same bug exists in the others. `tools/claude/nuevopm.md` documents the recipe
+     that was followed to add Mercantil as a third bank — reuse/update it when adding another one.
 5. **`pagomovil_bp/route_generarqr.py`** — separate JSON endpoint that generates an Instapago QR
-   code for a given amount (used by the QR modal in the UI).
+   code for a given amount (used by the QR modal in the UI, currently wired up for Banesco only, via
+   the flat `RECEIPTBANK_IP` env var rather than the per-bank `receiptbank` param above).
 
 `src/utils/connect_api.py` (`conectar(headers, body, params, endpoint, metodo, cedula)`) is the
 single HTTP wrapper used by every API integration; it logs request/response/exception at DEBUG and
