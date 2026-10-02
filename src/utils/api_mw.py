@@ -62,7 +62,7 @@ def buscar_facturas(id_cliente, monto_pagado):
     session["deuda_minima"] = deuda_minima
 
     # Registro el log de la aprobacion del pago por debajo de la deuda
-    if float(monto_pagado) < monto_deuda and monto_pagado >= deuda_minima:
+    if float(monto_pagado) < monto_deuda and float(monto_pagado) >= deuda_minima:
         logger.warning(f"USER: {str(id_cliente)} TYPE: Pago realizado ({monto_pagado}) esta por debajo de la deuda ({monto_deuda})\n")
 
     # Valido la longitud del ID del cliente
