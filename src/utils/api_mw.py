@@ -3,13 +3,10 @@ from flask import session
 from src.routes.home_bp.templates.form_fields import User
 import os
 import src.utils.connect_api as connect_api
-from src.utils.logger import now, logger
+from src.utils.logger import logger
 from flask_login import current_user, login_user
 import src.config as config
-
-
-
-today = now.strftime('%Y%m%d%H%M%S')
+from datetime import datetime
 
 
 def buscar_cliente(client_id, client_email):
@@ -93,6 +90,13 @@ def pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado):
     monto_deuda = float(session["monto_bs"])
     deuda_minima = float(session["deuda_minima"]) #obtenida en buscar_facturas
     pago = float(monto_pagado)
+    today = datetime.now().strftime('%Y%m%d%H%M%S')  # Fecha del pago, no del arranque del proceso
+
+    # Sin facturas pendientes el pago validado no se puede aplicar, debe revisarse manualmente
+    if not facturas:
+        msg = f"No hay facturas pendientes para aplicar el pago {codigo_auth} (Bs.{monto_pagado})"
+        logger.error(f"USER: {current_user.id} - TYPE: {msg}\n")
+        return "error", msg
 
     diff_pago = pago - monto_deuda  # Para validar si el pago es exacto
 
@@ -102,36 +106,32 @@ def pagar_facturas(facturas, codigo_auth, medio_pago, monto_pagado):
     elif diff_pago == 0:
         pago_aceptado = True
 
-    if pago_aceptado:  # indica que el pago es exacto
-        for factura in facturas:
-            body = {"token": os.getenv("TOKEN_MW"),
-                       "idfactura": factura["id"],
-                       "pasarela": "API-" + medio_pago,
-                       "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
-            api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
-            cod_factura = cod_factura + 1
-    else:  # Indica que el pago esta por encima de la deuda (si esta por debajo lo valida buscar_facturas)
+    if not pago_aceptado:  # Indica que el pago esta por encima de la deuda (si esta por debajo lo valida buscar_facturas)
         diff_pago_dls = diff_pago / float(session["tasa_bcv"])
-        ultima_factura = len(facturas) - 1
+    ultima_factura = len(facturas) - 1
 
-        for i in range(len(facturas)):   # Reviso todas las facturas
-            if i == ultima_factura:   # Solo a la ultima factura le sumo la diferencia
-                cantidad = float(facturas[i]["total"]) + diff_pago_dls
-                cantidad = f"{cantidad:.2f}"
+    primer_fallo = None
+    for i in range(len(facturas)):   # Reviso todas las facturas
+        body = {"token": os.getenv("TOKEN_MW"),
+                "idfactura": facturas[i]["id"],
+                "pasarela": "API-" + medio_pago,
+                "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
+        if not pago_aceptado and i == ultima_factura:   # Solo a la ultima factura le sumo la diferencia
+            cantidad = float(facturas[i]["total"]) + diff_pago_dls
+            body["cantidad"] = float(f"{cantidad:.2f}")
+        # Si no agrego cantidad se paga completa la factura
 
-                body = {"token": os.getenv("TOKEN_MW"),
-                           "idfactura": facturas[i]["id"],
-                           "pasarela": "API-" + medio_pago,
-                           "cantidad": float(cantidad),
-                           "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
-                api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
-                cod_factura = cod_factura + 1
-            else:  # No agrego cantidad para que se pague completa la factura
-                body = {"token": os.getenv("TOKEN_MW"),
-                           "idfactura": facturas[i]["id"],
-                           "pasarela": "API-" + medio_pago,
-                           "idtransaccion": codigo_auth + "-" + today + "-" + str(cod_factura)}
-                api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
-                cod_factura = cod_factura + 1
+        api_response = connect_api.conectar(headers, body, params, endpoint, "POST", current_user.id)
+        cod_factura = cod_factura + 1
+
+        # Continuo con las demas facturas pero recuerdo el primer fallo para no reportar exito
+        if api_response[0] != "success" or api_response[1].get("estado") != "exito":
+            logger.error(f"USER: {current_user.id} - TYPE: Error pagando factura {facturas[i]['id']}"
+                         f" del pago {codigo_auth}: {api_response[1]}\n")
+            if primer_fallo is None:
+                primer_fallo = api_response
+
+    if primer_fallo is not None:
+        return primer_fallo
     return api_response
 
