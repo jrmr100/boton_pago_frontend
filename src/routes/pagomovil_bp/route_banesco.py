@@ -100,7 +100,8 @@ def pagomovil_banesco():
 
         # BUSCO LAS FACTURAS EN MW SI SE VALIDA EL PAGO
         if pago_validado is True:
-            monto_pagado = resultado_val[1]['amount']
+            # Instapago devuelve el monto con separador de miles ("32,686.46"), lo normalizo para float()
+            monto_pagado = str(resultado_val[1]['amount']).replace(',', '')
 
             result_buscarfacturas = buscar_facturas(id_cliente, monto_pagado)
 
